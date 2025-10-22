@@ -445,6 +445,97 @@
             color: #2c3e50;
         }
 
+        /* Tips Modal */
+        .tips-modal-content {
+            max-width: 600px;
+        }
+
+        .tips-modal-content h3 {
+            color: #5c7c5d;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .tips-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tip-step {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #5c7c5d;
+        }
+
+        .tip-number {
+            background: #5c7c5d;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .tip-content h4 {
+            margin: 0 0 5px 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .tip-content p {
+            margin: 0;
+            color: #495057;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .tips-footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tips-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #5c7c5d;
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            transition: all 0.3s;
+        }
+
+        .help-button:hover {
+            transform: scale(1.1);
+            background: #4a6249;
+        }
+
         .modal-alliances {
             display: flex;
             flex-direction: column;
@@ -540,6 +631,29 @@
 
             .action-buttons button {
                 width: 100%;
+            }
+
+            /* Tips modal adjustments for mobile */
+            .tips-modal-content {
+                max-width: 90%;
+                max-height: 85vh;
+                overflow-y: auto;
+            }
+
+            .tips-modal-content h3 {
+                font-size: 20px;
+            }
+
+            .tip-step {
+                padding: 12px;
+            }
+
+            .help-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+                bottom: 15px;
+                right: 15px;
             }
         }
 
@@ -679,6 +793,53 @@
         </div>
     </div>
 
+    <!-- Tips Modal -->
+    <div class="modal" id="tips-modal">
+        <div class="modal-content tips-modal-content">
+            <h3>🏰 How to Use the Castle Battle Scheduler</h3>
+            <div class="tips-steps">
+                <div class="tip-step">
+                    <div class="tip-number">1</div>
+                    <div class="tip-content">
+                        <h4>Add Alliances</h4>
+                        <p>Enter alliance names (like FTP, WUW, 686) and pick colors from the dropdown. Click "Add Alliance" for each one. Add "FFA" if you want Free-For-All slots.</p>
+                    </div>
+                </div>
+                <div class="tip-step">
+                    <div class="tip-number">2</div>
+                    <div class="tip-content">
+                        <h4>Build Your Schedule</h4>
+                        <p>Click on any cell in the timeline grid to assign an alliance to that time slot. Each cell represents your selected time interval (15, 30, or 60 minutes).</p>
+                    </div>
+                </div>
+                <div class="tip-step">
+                    <div class="tip-number">3</div>
+                    <div class="tip-content">
+                        <h4>Preview the Battle</h4>
+                        <p>Use the time slider under the Castle Map to scrub through the timeline. Watch the castle and turrets change colors to see who holds what at each time.</p>
+                    </div>
+                </div>
+                <div class="tip-step">
+                    <div class="tip-number">4</div>
+                    <div class="tip-content">
+                        <h4>Generate & Copy Notes</h4>
+                        <p>Click "Generate Schedule" to create formatted text parts. Copy individual parts or all parts to paste into Kingshot's in-game chat!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tips-footer">
+                <label class="tips-checkbox">
+                    <input type="checkbox" id="dont-show-tips" onchange="saveTipsPreference()">
+                    <span>Don't show this again</span>
+                </label>
+                <button class="btn-primary" onclick="closeTipsModal()">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Button -->
+    <button class="help-button" onclick="openTipsModal()" title="Show Tips">?</button>
+
     <script>
         // State Management
         let alliances = [];
@@ -698,7 +859,33 @@
             generateTimeline();
             renderAlliances();
             updateVisualMap(0);
+            
+            // Show tips on first visit
+            const dontShowTips = localStorage.getItem('kingshot_dont_show_tips');
+            if (!dontShowTips) {
+                setTimeout(() => {
+                    openTipsModal();
+                }, 500);
+            }
         });
+
+        // Tips Modal Functions
+        function openTipsModal() {
+            document.getElementById('tips-modal').style.display = 'flex';
+        }
+
+        function closeTipsModal() {
+            document.getElementById('tips-modal').style.display = 'none';
+        }
+
+        function saveTipsPreference() {
+            const dontShow = document.getElementById('dont-show-tips').checked;
+            if (dontShow) {
+                localStorage.setItem('kingshot_dont_show_tips', 'true');
+            } else {
+                localStorage.removeItem('kingshot_dont_show_tips');
+            }
+        }
 
         // Auto-save on changes
         function saveToLocalStorage() {
@@ -1065,7 +1252,9 @@
                 if (change.structure === 'castle') {
                     allianceGroups[change.alliance].castle = true;
                 } else {
-                    allianceGroups[change.alliance].turrets.push(change.structure);
+                    // Get turret name (I, II, III, IV)
+                    const turretName = change.structure.replace('turret-', '').toUpperCase();
+                    allianceGroups[change.alliance].turrets.push(turretName);
                 }
             });
 
@@ -1075,11 +1264,15 @@
                 let line = `${time} – ${allianceName} ${group.verb}`;
 
                 if (group.castle && group.turrets.length > 0) {
-                    line += ` Castle + ${group.turrets.length} Turret${group.turrets.length > 1 ? 's' : ''}`;
+                    // Has castle and turrets - specify which turrets
+                    const turretList = group.turrets.join(', ');
+                    line += ` Castle + Turret${group.turrets.length > 1 ? 's' : ''} ${turretList}`;
                 } else if (group.castle) {
                     line += ' Castle';
                 } else if (group.turrets.length > 0) {
-                    line += ` ${group.turrets.length} Turret${group.turrets.length > 1 ? 's' : ''}`;
+                    // Only turrets - list them
+                    const turretList = group.turrets.join(', ');
+                    line += ` Turret${group.turrets.length > 1 ? 's' : ''} ${turretList}`;
                 }
 
                 lines.push(line);
