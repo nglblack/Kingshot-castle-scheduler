@@ -479,6 +479,70 @@
             }
         }
 
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            /* Remove boxes on mobile */
+            .alliance-section,
+            .castle-visual,
+            .timeline-section,
+            .output-section {
+                background: transparent;
+                border: none;
+                border-bottom: 2px solid #e0e0e0;
+                border-radius: 0;
+                padding: 20px 0;
+                margin-bottom: 20px;
+            }
+
+            .output-section {
+                border-bottom: none;
+            }
+
+            /* Adjust timeline grid for mobile */
+            .timeline-grid {
+                background: transparent;
+                border: 1px solid #e0e0e0;
+                padding: 5px;
+            }
+
+            /* Adjust castle container for mobile */
+            .castle-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .castle {
+                width: 80px;
+                height: 80px;
+            }
+
+            .turret {
+                width: 50px;
+                height: 50px;
+            }
+
+            /* Adjust output parts for mobile */
+            .output-part {
+                background: #f8f9fa;
+            }
+
+            /* Stack action buttons vertically on mobile */
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons button {
+                width: 100%;
+            }
+        }
+
         .time-preview {
             margin-top: 30px;
             text-align: center;
