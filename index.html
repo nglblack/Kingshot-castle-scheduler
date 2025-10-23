@@ -793,6 +793,41 @@
         </div>
     </div>
 
+    <!-- Edit Alliance Modal -->
+    <div class="modal" id="edit-alliance-modal">
+        <div class="modal-content">
+            <h3>Edit Alliance</h3>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; color: #2c3e50; font-weight: bold;">Alliance Name:</label>
+                <input type="text" id="edit-alliance-name" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; font-size: 16px;" readonly>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; color: #2c3e50; font-weight: bold;">Change Color:</label>
+                <select id="edit-alliance-color" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; font-size: 16px; cursor: pointer;">
+                    <option value="#ff6b6b" style="background-color: #ff6b6b;">Red</option>
+                    <option value="#4ecdc4" style="background-color: #4ecdc4;">Teal</option>
+                    <option value="#45b7d1" style="background-color: #45b7d1;">Blue</option>
+                    <option value="#f9ca24" style="background-color: #f9ca24;">Yellow</option>
+                    <option value="#6c5ce7" style="background-color: #6c5ce7;">Purple</option>
+                    <option value="#a29bfe" style="background-color: #a29bfe;">Lavender</option>
+                    <option value="#fd79a8" style="background-color: #fd79a8;">Pink</option>
+                    <option value="#fdcb6e" style="background-color: #fdcb6e;">Orange</option>
+                    <option value="#00b894" style="background-color: #00b894;">Green</option>
+                    <option value="#e17055" style="background-color: #e17055;">Coral</option>
+                    <option value="#0984e3" style="background-color: #0984e3;">Ocean Blue</option>
+                    <option value="#d63031" style="background-color: #d63031;">Dark Red</option>
+                    <option value="#e84393" style="background-color: #e84393;">Magenta</option>
+                    <option value="#74b9ff" style="background-color: #74b9ff;">Light Blue</option>
+                    <option value="#a29bfe" style="background-color: #a29bfe;">Periwinkle</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-primary" onclick="saveAllianceEdit()" style="flex: 1;">Save Changes</button>
+                <button class="btn-danger" onclick="closeEditAllianceModal()" style="flex: 1;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Tips Modal -->
     <div class="modal" id="tips-modal">
         <div class="modal-content tips-modal-content">
@@ -887,6 +922,45 @@
             }
         }
 
+        // Edit Alliance Functions
+        let editingAllianceIndex = null;
+
+        function openEditAllianceModal(index) {
+            editingAllianceIndex = index;
+            const alliance = alliances[index];
+            
+            // Don't allow editing FFA
+            if (alliance.isFFA) {
+                alert('FFA alliance cannot be edited');
+                return;
+            }
+
+            document.getElementById('edit-alliance-name').value = alliance.name;
+            document.getElementById('edit-alliance-color').value = alliance.color;
+            document.getElementById('edit-alliance-modal').style.display = 'flex';
+        }
+
+        function closeEditAllianceModal() {
+            document.getElementById('edit-alliance-modal').style.display = 'none';
+            editingAllianceIndex = null;
+        }
+
+        function saveAllianceEdit() {
+            if (editingAllianceIndex === null) return;
+
+            const newColor = document.getElementById('edit-alliance-color').value;
+            alliances[editingAllianceIndex].color = newColor;
+
+            closeEditAllianceModal();
+            renderAlliances();
+            generateTimeline();
+            saveToLocalStorage();
+            
+            // Update visual map
+            const slider = document.getElementById('time-slider');
+            updatePreview();
+        }
+
         // Auto-save on changes
         function saveToLocalStorage() {
             localStorage.setItem('kingshot_alliances', JSON.stringify(alliances));
@@ -952,8 +1026,8 @@
             const list = document.getElementById('alliance-list');
             list.innerHTML = alliances.map((alliance, index) => `
                 <div class="alliance-tag" style="background-color: ${alliance.color}; color: ${getContrastColor(alliance.color)};">
-                    <div class="color-box" style="background-color: ${alliance.color};"></div>
-                    <span>${alliance.name}</span>
+                    <div class="color-box" style="background-color: ${alliance.color};" onclick="openEditAllianceModal(${index})"></div>
+                    <span onclick="openEditAllianceModal(${index})" style="cursor: pointer;">${alliance.name}</span>
                     <button class="remove-btn" onclick="removeAlliance(${index})">×</button>
                 </div>
             `).join('');
@@ -1159,7 +1233,6 @@
             }
         }
 
-        // Output Generation
         function generateOutput() {
             const interval = parseInt(document.getElementById('interval-select').value);
             const timeSlots = [];
@@ -1192,14 +1265,15 @@
 
             structures.forEach(structureId => {
                 const currentAlliance = schedule[structureId][time];
-                const prevAlliance = timeIndex > 0 ? getActiveAllianceAt(structureId, timeSlots[timeIndex - 1], timeSlots) : null;
+                const prevAlliance = timeIndex > 0 ? schedule[structureId][timeSlots[timeIndex - 1]] : null;
 
                 if (currentAlliance && currentAlliance !== prevAlliance) {
                     const verb = (prevAlliance === null || prevAlliance === 'FFA') ? 'holds' : 'takes';
                     changes.push({
                         structure: structureId,
                         alliance: currentAlliance,
-                        verb: verb
+                        verb: verb,
+                        isFFA: currentAlliance === 'FFA'
                     });
                 }
             });
@@ -1237,46 +1311,70 @@
             const { time, changes } = event;
             const lines = [];
 
-            // Group by alliance
+            // Separate FFA and regular alliances
             const allianceGroups = {};
+            const ffaStructures = {
+                castle: false,
+                turrets: []
+            };
             
             changes.forEach(change => {
-                if (!allianceGroups[change.alliance]) {
-                    allianceGroups[change.alliance] = {
-                        castle: false,
-                        turrets: [],
-                        verb: change.verb
-                    };
-                }
-
-                if (change.structure === 'castle') {
-                    allianceGroups[change.alliance].castle = true;
+                if (change.isFFA) {
+                    // Handle FFA
+                    if (change.structure === 'castle') {
+                        ffaStructures.castle = true;
+                    } else {
+                        const turretName = change.structure.replace('turret-', '').toUpperCase();
+                        ffaStructures.turrets.push(turretName);
+                    }
                 } else {
-                    // Get turret name (I, II, III, IV)
-                    const turretName = change.structure.replace('turret-', '').toUpperCase();
-                    allianceGroups[change.alliance].turrets.push(turretName);
+                    // Handle regular alliances
+                    if (!allianceGroups[change.alliance]) {
+                        allianceGroups[change.alliance] = {
+                            castle: false,
+                            turrets: [],
+                            verb: change.verb
+                        };
+                    }
+
+                    if (change.structure === 'castle') {
+                        allianceGroups[change.alliance].castle = true;
+                    } else {
+                        const turretName = change.structure.replace('turret-', '').toUpperCase();
+                        allianceGroups[change.alliance].turrets.push(turretName);
+                    }
                 }
             });
 
-            // Format output
+            // Format regular alliance output
             Object.keys(allianceGroups).forEach(allianceName => {
                 const group = allianceGroups[allianceName];
                 let line = `${time} – ${allianceName} ${group.verb}`;
 
                 if (group.castle && group.turrets.length > 0) {
-                    // Has castle and turrets - specify which turrets
                     const turretList = group.turrets.join(', ');
                     line += ` Castle + Turret${group.turrets.length > 1 ? 's' : ''} ${turretList}`;
                 } else if (group.castle) {
                     line += ' Castle';
                 } else if (group.turrets.length > 0) {
-                    // Only turrets - list them
                     const turretList = group.turrets.join(', ');
                     line += ` Turret${group.turrets.length > 1 ? 's' : ''} ${turretList}`;
                 }
 
                 lines.push(line);
             });
+
+            // Format FFA output
+            if (ffaStructures.castle && ffaStructures.turrets.length > 0) {
+                // Castle and turrets FFA
+                const turretList = ffaStructures.turrets.join(', ');
+                lines.push(`${time} – Castle + Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
+            } else if (ffaStructures.castle) {
+                lines.push(`${time} – Castle FFA`);
+            } else if (ffaStructures.turrets.length > 0) {
+                const turretList = ffaStructures.turrets.join(', ');
+                lines.push(`${time} – Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
+            }
 
             return lines.join('\n');
         }
