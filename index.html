@@ -1082,20 +1082,9 @@
         }
 
         function loadFromLocalStorage() {
-            const savedAlliances = localStorage.getItem('kingshot_alliances');
-            const savedSchedule = localStorage.getItem('kingshot_schedule');
-            
-            if (savedAlliances && savedSchedule) {
-                // Load saved data
-                alliances = JSON.parse(savedAlliances);
-                schedule = JSON.parse(savedSchedule);
-            } else {
-                // First visit - load default example schedule
-                alliances = defaultSchedule.alliances;
-                schedule = defaultSchedule.schedule;
-                // Save it so they have something to start with
-                saveToLocalStorage();
-            }
+            // Always load the default example schedule on startup
+            alliances = JSON.parse(JSON.stringify(defaultSchedule.alliances));
+            schedule = JSON.parse(JSON.stringify(defaultSchedule.schedule));
         }
 
         // Alliance Management
