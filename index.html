@@ -1267,14 +1267,18 @@
                 const currentAlliance = schedule[structureId][time];
                 const prevAlliance = timeIndex > 0 ? schedule[structureId][timeSlots[timeIndex - 1]] : null;
 
-                if (currentAlliance && currentAlliance !== prevAlliance) {
-                    const verb = (prevAlliance === null || prevAlliance === 'FFA') ? 'holds' : 'takes';
-                    changes.push({
-                        structure: structureId,
-                        alliance: currentAlliance,
-                        verb: verb,
-                        isFFA: currentAlliance === 'FFA'
-                    });
+                // Only include if there's a change from previous time slot
+                if (currentAlliance !== prevAlliance) {
+                    // Only add if current is not null (something is assigned now)
+                    if (currentAlliance) {
+                        const verb = (prevAlliance === null || prevAlliance === 'FFA') ? 'holds' : 'takes';
+                        changes.push({
+                            structure: structureId,
+                            alliance: currentAlliance,
+                            verb: verb,
+                            isFFA: currentAlliance === 'FFA'
+                        });
+                    }
                 }
             });
 
