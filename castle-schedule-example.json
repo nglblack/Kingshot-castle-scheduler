@@ -1,0 +1,81 @@
+{
+  "alliances": [
+    {
+      "name": "686",
+      "color": "#45b7d1",
+      "isFFA": false
+    },
+    {
+      "name": "FTP",
+      "color": "#ff6b6b",
+      "isFFA": false
+    },
+    {
+      "name": "wuw",
+      "color": "#4ecdc4",
+      "isFFA": false
+    },
+    {
+      "name": "DrG",
+      "color": "#fd79a8",
+      "isFFA": false
+    },
+    {
+      "name": "MYS",
+      "color": "#6c5ce7",
+      "isFFA": false
+    },
+    {
+      "name": "EUR",
+      "color": "#00b894",
+      "isFFA": false
+    },
+    {
+      "name": "FFA",
+      "color": "#888888",
+      "isFFA": true
+    }
+  ],
+  "schedule": {
+    "castle": {
+      "12:00": "FTP",
+      "13:30": "686",
+      "14:30": "wuw",
+      "15:30": "FTP",
+      "16:00": "DrG",
+      "16:30": "MYS",
+      "17:00": "EUR",
+      "17:30": "FFA"
+    },
+    "turret-i": {
+      "12:00": "686",
+      "14:30": "EUR",
+      "15:30": "686",
+      "16:00": "FFA",
+      "17:00": "EUR",
+      "17:30": "FFA"
+    },
+    "turret-ii": {
+      "12:00": "FTP",
+      "13:30": "686",
+      "14:30": "FTP",
+      "16:00": "FFA"
+    },
+    "turret-iii": {
+      "12:00": "FTP",
+      "13:30": "DrG",
+      "14:30": "wuw",
+      "15:30": "FTP",
+      "16:00": "DrG",
+      "16:30": "FFA"
+    },
+    "turret-iv": {
+      "12:00": "wuw",
+      "13:30": "MYS",
+      "14:30": "wuw",
+      "16:00": "FFA",
+      "16:30": "MYS",
+      "17:00": "FFA"
+    }
+  }
+}

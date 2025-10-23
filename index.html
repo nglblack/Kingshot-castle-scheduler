@@ -777,6 +777,7 @@
             </div>
             <div class="action-buttons">
                 <button class="btn-primary" onclick="copyAllParts()">Copy All Parts</button>
+                <button class="btn-secondary" onclick="loadExampleSchedule()">Load Example</button>
                 <button class="btn-secondary" onclick="exportSchedule()">Export JSON</button>
                 <button class="btn-secondary" onclick="importSchedule()">Import JSON</button>
                 <button class="btn-danger" onclick="clearSchedule()">Clear All</button>
@@ -888,6 +889,119 @@
         let currentStructure = null;
         let currentTime = null;
 
+        // Default example schedule
+        const defaultSchedule = {
+            "alliances": [
+                {
+                    "name": "FTP",
+                    "color": "#ff6b6b",
+                    "isFFA": false
+                },
+                {
+                    "name": "686",
+                    "color": "#4ecdc4",
+                    "isFFA": false
+                },
+                {
+                    "name": "DrG",
+                    "color": "#45b7d1",
+                    "isFFA": false
+                },
+                {
+                    "name": "MYS",
+                    "color": "#fd79a8",
+                    "isFFA": false
+                },
+                {
+                    "name": "EUR",
+                    "color": "#a29bfe",
+                    "isFFA": false
+                },
+                {
+                    "name": "wuw",
+                    "color": "#0984e3",
+                    "isFFA": false
+                },
+                {
+                    "name": "FFA",
+                    "color": "#888888",
+                    "isFFA": true
+                }
+            ],
+            "schedule": {
+                "castle": {
+                    "12:00": "FTP",
+                    "12:30": "FTP",
+                    "13:00": "FTP",
+                    "13:30": "FTP",
+                    "14:00": "686",
+                    "14:30": "686",
+                    "15:00": "wuw",
+                    "15:30": "wuw",
+                    "16:00": "DrG",
+                    "16:30": "MYS",
+                    "17:00": "EUR",
+                    "17:30": "FFA"
+                },
+                "turret-i": {
+                    "12:00": "686",
+                    "12:30": "686",
+                    "13:00": "686",
+                    "13:30": "FTP",
+                    "14:00": "686",
+                    "14:30": "686",
+                    "15:00": "wuw",
+                    "15:30": "wuw",
+                    "16:00": "FFA",
+                    "16:30": "MYS",
+                    "17:00": "FFA",
+                    "17:30": "FFA"
+                },
+                "turret-ii": {
+                    "12:00": "FTP",
+                    "12:30": "FTP",
+                    "13:00": "FTP",
+                    "13:30": "FTP",
+                    "14:00": "686",
+                    "14:30": "686",
+                    "15:00": "FTP",
+                    "15:30": "686",
+                    "16:00": "FFA",
+                    "16:30": "FFA",
+                    "17:00": "FFA",
+                    "17:30": "FFA"
+                },
+                "turret-iii": {
+                    "12:00": "FTP",
+                    "12:30": "FTP",
+                    "13:00": "FTP",
+                    "13:30": "MYS",
+                    "14:00": "MYS",
+                    "14:30": "EUR",
+                    "15:00": "EUR",
+                    "15:30": "FTP",
+                    "16:00": "DrG",
+                    "16:30": "FFA",
+                    "17:00": "EUR",
+                    "17:30": "FFA"
+                },
+                "turret-iv": {
+                    "12:00": "wuw",
+                    "12:30": "wuw",
+                    "13:00": "wuw",
+                    "13:30": "DrG",
+                    "14:00": "DrG",
+                    "14:30": "wuw",
+                    "15:00": "wuw",
+                    "15:30": "wuw",
+                    "16:00": "FFA",
+                    "16:30": "FFA",
+                    "17:00": "FFA",
+                    "17:30": "FFA"
+                }
+            }
+        };
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadFromLocalStorage();
@@ -971,11 +1085,16 @@
             const savedAlliances = localStorage.getItem('kingshot_alliances');
             const savedSchedule = localStorage.getItem('kingshot_schedule');
             
-            if (savedAlliances) {
+            if (savedAlliances && savedSchedule) {
+                // Load saved data
                 alliances = JSON.parse(savedAlliances);
-            }
-            if (savedSchedule) {
                 schedule = JSON.parse(savedSchedule);
+            } else {
+                // First visit - load default example schedule
+                alliances = defaultSchedule.alliances;
+                schedule = defaultSchedule.schedule;
+                // Save it so they have something to start with
+                saveToLocalStorage();
             }
         }
 
@@ -1447,6 +1566,18 @@
         }
 
         // Import/Export
+        function loadExampleSchedule() {
+            if (confirm('Load the example schedule? This will replace your current schedule.')) {
+                alliances = JSON.parse(JSON.stringify(defaultSchedule.alliances));
+                schedule = JSON.parse(JSON.stringify(defaultSchedule.schedule));
+                renderAlliances();
+                generateTimeline();
+                saveToLocalStorage();
+                updateVisualMap(0);
+                alert('Example schedule loaded! Click "Generate Schedule" to see the output.');
+            }
+        }
+
         function exportSchedule() {
             const data = {
                 alliances: alliances,
