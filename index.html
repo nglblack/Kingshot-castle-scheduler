@@ -687,8 +687,8 @@
         <div class="alliance-section">
             <h2 style="margin-bottom: 15px;">📋 Alliances</h2>
             <div class="alliance-input">
-                <input type="text" id="alliance-name" placeholder="Alliance Name (e.g., FTP, WUW)" maxlength="10">
-                <select id="alliance-color" style="padding: 10px; border-radius: 5px; border: none; font-size: 16px; cursor: pointer;">
+                <input type="text" id="alliance-name" placeholder="Alliance Name (e.g., FTP, WUW)" maxlength="10" title="Enter the short name for your alliance (max 10 characters)">
+                <select id="alliance-color" style="padding: 10px; border-radius: 5px; border: none; font-size: 16px; cursor: pointer;" title="Choose a color to represent this alliance">
                     <option value="#ff6b6b" style="background-color: #ff6b6b;">Red</option>
                     <option value="#4ecdc4" style="background-color: #4ecdc4;">Teal</option>
                     <option value="#45b7d1" style="background-color: #45b7d1;">Blue</option>
@@ -705,8 +705,8 @@
                     <option value="#74b9ff" style="background-color: #74b9ff;">Light Blue</option>
                     <option value="#a29bfe" style="background-color: #a29bfe;">Periwinkle</option>
                 </select>
-                <button class="btn-primary" onclick="addAlliance()">Add Alliance</button>
-                <button class="btn-secondary" onclick="addFFA()">Add FFA</button>
+                <button class="btn-primary" onclick="addAlliance()" title="Add this alliance to your schedule">Add Alliance</button>
+                <button class="btn-secondary" onclick="addFFA()" title="Add Free-For-All option for open battle times">Add FFA</button>
             </div>
             <div class="alliance-list" id="alliance-list"></div>
         </div>
@@ -749,11 +749,12 @@
                 <h3 style="margin-bottom: 15px;">⏰ Timeline (12:00 - 18:00 UTC)</h3>
                 <div class="timeline-controls">
                     <label for="interval-select">Time Interval:</label>
-                    <select id="interval-select" onchange="generateTimeline()">
+                    <select id="interval-select" onchange="generateTimeline()" title="Choose how long each time block should be">
                         <option value="15">15 minutes</option>
                         <option value="30" selected>30 minutes</option>
                         <option value="60">60 minutes</option>
                     </select>
+                    <button class="btn-secondary" onclick="exportTimelineAsImage()" title="Download the timeline as an image to share on Discord" style="margin-left: 15px;">📸 Export as Image</button>
                 </div>
                 <div class="timeline-grid">
                     <table class="timeline-table" id="timeline-table">
@@ -770,17 +771,17 @@
         <div class="output-section">
             <div class="output-header">
                 <h2>📝 Battle Schedule Output</h2>
-                <button class="btn-secondary" onclick="generateOutput()">Generate Schedule</button>
+                <button class="btn-secondary" onclick="generateOutput()" title="Create formatted text from your schedule to copy into Kingshot chat">Generate Schedule</button>
             </div>
             <div class="output-parts" id="output-parts">
                 <p style="text-align: center; opacity: 0.7;">Click "Generate Schedule" to create the battle plan</p>
             </div>
             <div class="action-buttons">
-                <button class="btn-primary" onclick="copyAllParts()">Copy All Parts</button>
-                <button class="btn-secondary" onclick="loadExampleSchedule()">Load Example</button>
-                <button class="btn-secondary" onclick="exportSchedule()">Export JSON</button>
-                <button class="btn-secondary" onclick="importSchedule()">Import JSON</button>
-                <button class="btn-danger" onclick="clearSchedule()">Clear All</button>
+                <button class="btn-primary" onclick="copyAllParts()" title="Copy all parts of the schedule to paste in-game">Copy All Parts</button>
+                <button class="btn-secondary" onclick="loadExampleSchedule()" title="Reset to the default example schedule">Load Example</button>
+                <button class="btn-secondary" onclick="exportSchedule()" title="Download your schedule as a JSON file to share with others">Export JSON</button>
+                <button class="btn-secondary" onclick="importSchedule()" title="Load a schedule from a JSON file someone shared with you">Import JSON</button>
+                <button class="btn-danger" onclick="clearSchedule()" title="Delete all alliances and schedules (cannot be undone)">Clear All</button>
             </div>
         </div>
     </div>
@@ -837,29 +838,40 @@
                 <div class="tip-step">
                     <div class="tip-number">1</div>
                     <div class="tip-content">
-                        <h4>Add Alliances</h4>
-                        <p>Enter alliance names (like FTP, WUW, 686) and pick colors from the dropdown. Click "Add Alliance" for each one. Add "FFA" if you want Free-For-All slots.</p>
+                        <h4>📋 Add Your Alliances</h4>
+                        <p>At the top of the page, enter alliance names (like FTP, WUW, 686) in the text box. Pick a color from the dropdown menu, then click the green "Add Alliance" button. Repeat for each alliance. Click "Add FFA" if you want Free-For-All time slots.</p>
+                        <p style="margin-top: 8px; font-style: italic; font-size: 13px;">💡 Tip: Click any alliance tag to change its color later!</p>
                     </div>
                 </div>
                 <div class="tip-step">
                     <div class="tip-number">2</div>
                     <div class="tip-content">
-                        <h4>Build Your Schedule</h4>
-                        <p>Click on any cell in the timeline grid to assign an alliance to that time slot. Each cell represents your selected time interval (15, 30, or 60 minutes).</p>
+                        <h4>📅 Build Your Schedule</h4>
+                        <p>In the timeline grid on the right, click any cell to assign an alliance. Each row is a structure (Castle, Turret I-IV), and each column is a time slot. Choose your time interval (15, 30, or 60 minutes) from the dropdown above the grid.</p>
+                        <p style="margin-top: 8px; font-style: italic; font-size: 13px;">💡 Tip: Click a cell again to change or clear the assignment!</p>
                     </div>
                 </div>
                 <div class="tip-step">
                     <div class="tip-number">3</div>
                     <div class="tip-content">
-                        <h4>Preview the Battle</h4>
-                        <p>Use the time slider under the Castle Map to scrub through the timeline. Watch the castle and turrets change colors to see who holds what at each time.</p>
+                        <h4>👁️ Preview the Battle</h4>
+                        <p>On the left, use the slider under "Castle Battle Map" to scrub through time. Watch the diamond castle and circles (turrets) change colors to see who controls what at each moment.</p>
                     </div>
                 </div>
                 <div class="tip-step">
                     <div class="tip-number">4</div>
                     <div class="tip-content">
-                        <h4>Generate & Copy Notes</h4>
-                        <p>Click "Generate Schedule" to create formatted text parts. Copy individual parts or all parts to paste into Kingshot's in-game chat!</p>
+                        <h4>📝 Generate Battle Notes</h4>
+                        <p>Click the blue "Generate Schedule" button at the bottom. Your formatted battle plan appears below, split into easy-to-read parts. Click "Copy Part 1", "Copy Part 2", etc. to copy each section and paste it into Kingshot's in-game chat!</p>
+                    </div>
+                </div>
+                <div class="tip-step">
+                    <div class="tip-number">5</div>
+                    <div class="tip-content">
+                        <h4>💾 Share with Your Alliance</h4>
+                        <p><strong>Export:</strong> Click the "Export JSON" button to download your schedule as a file. Share this file with your alliance members via Discord, WhatsApp, etc.</p>
+                        <p style="margin-top: 8px;"><strong>Import:</strong> Click "Import JSON" to load a schedule someone else created. This lets everyone work from the same battle plan!</p>
+                        <p style="margin-top: 8px; font-style: italic; font-size: 13px;">💡 JSON files are the key to collaboration!</p>
                     </div>
                 </div>
             </div>
@@ -875,6 +887,9 @@
 
     <!-- Help Button -->
     <button class="help-button" onclick="openTipsModal()" title="Show Tips">?</button>
+
+    <!-- html2canvas library for image export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
         // State Management
@@ -1604,6 +1619,64 @@
                 reader.readAsText(file);
             };
             input.click();
+        }
+
+        function exportTimelineAsImage() {
+            const timelineTable = document.getElementById('timeline-table');
+            const timelineGrid = document.querySelector('.timeline-grid');
+            
+            // Show loading message
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏳ Generating...';
+            button.disabled = true;
+            
+            // Temporarily remove scroll and show full width
+            const originalOverflow = timelineGrid.style.overflow;
+            const originalMaxWidth = timelineGrid.style.maxWidth;
+            timelineGrid.style.overflow = 'visible';
+            timelineGrid.style.maxWidth = 'none';
+            
+            // Use html2canvas to capture just the table
+            html2canvas(timelineTable, {
+                backgroundColor: '#ffffff',
+                scale: 2, // Higher quality
+                logging: false,
+                scrollX: 0,
+                scrollY: 0,
+                windowWidth: timelineTable.scrollWidth,
+                windowHeight: timelineTable.scrollHeight,
+                width: timelineTable.scrollWidth,
+                height: timelineTable.scrollHeight
+            }).then(canvas => {
+                // Restore original styles
+                timelineGrid.style.overflow = originalOverflow;
+                timelineGrid.style.maxWidth = originalMaxWidth;
+                
+                // Convert to blob and download
+                canvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'castle-battle-schedule.png';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    
+                    // Reset button
+                    button.textContent = originalText;
+                    button.disabled = false;
+                });
+            }).catch(error => {
+                console.error('Error generating image:', error);
+                alert('Error generating image. Please try again.');
+                
+                // Restore original styles
+                timelineGrid.style.overflow = originalOverflow;
+                timelineGrid.style.maxWidth = originalMaxWidth;
+                
+                button.textContent = originalText;
+                button.disabled = false;
+            });
         }
 
         function clearSchedule() {
