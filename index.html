@@ -891,6 +891,9 @@
 
     <!-- html2canvas library for image export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- LZString for URL compression -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
 
     <script>
         // State Management
@@ -1022,14 +1025,90 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Check for shared schedule in URL first
             const urlParams = new URLSearchParams(window.location.search);
-            const sharedData = urlParams.get('schedule');
+            const lzData = urlParams.get('d'); // New LZString compressed format
+            const oldData = urlParams.get('s') || urlParams.get('schedule'); // Old formats
             
-            if (sharedData) {
+            if (lzData) {
                 try {
-                    // Decode the shared schedule from URL
-                    const decodedData = JSON.parse(atob(sharedData));
-                    alliances = decodedData.alliances;
-                    schedule = decodedData.schedule;
+                    // Decompress LZString data
+                    const jsonStr = LZString.decompressFromEncodedURIComponent(lzData);
+                    const decodedData = JSON.parse(jsonStr);
+                    
+                    // Decompress alliances
+                    alliances = decodedData.a.map(a => ({
+                        name: a.n,
+                        color: '#' + a.c, // Add # back
+                        isFFA: a.f === 1
+                    }));
+                    
+                    // Decompress schedule
+                    const structureMap = {
+                        'c': 'castle',
+                        '1': 'turret-i',
+                        '2': 'turret-ii',
+                        '3': 'turret-iii',
+                        '4': 'turret-iv'
+                    };
+                    
+                    schedule = {
+                        castle: {},
+                        'turret-i': {},
+                        'turret-ii': {},
+                        'turret-iii': {},
+                        'turret-iv': {}
+                    };
+                    
+                    Object.keys(decodedData.s).forEach(key => {
+                        const times = decodedData.s[key];
+                        const expandedTimes = {};
+                        Object.keys(times).forEach(shortTime => {
+                            // Expand time: "1200" -> "12:00"
+                            const fullTime = shortTime.slice(0, 2) + ':' + shortTime.slice(2);
+                            expandedTimes[fullTime] = times[shortTime];
+                        });
+                        schedule[structureMap[key]] = expandedTimes;
+                    });
+                } catch (e) {
+                    console.error('Error loading shared schedule:', e);
+                    loadFromLocalStorage();
+                }
+            } else if (oldData) {
+                try {
+                    // Decode old format
+                    const decodedData = JSON.parse(atob(oldData));
+                    
+                    if (decodedData.a && decodedData.s) {
+                        // Old compressed format
+                        alliances = decodedData.a.map(a => ({
+                            name: a.n,
+                            color: a.c,
+                            isFFA: a.f === 1
+                        }));
+                        
+                        const structureMap = {
+                            'c': 'castle',
+                            '1': 'turret-i',
+                            '2': 'turret-ii',
+                            '3': 'turret-iii',
+                            '4': 'turret-iv'
+                        };
+                        
+                        schedule = {
+                            castle: {},
+                            'turret-i': {},
+                            'turret-ii': {},
+                            'turret-iii': {},
+                            'turret-iv': {}
+                        };
+                        
+                        Object.keys(decodedData.s).forEach(key => {
+                            schedule[structureMap[key]] = decodedData.s[key];
+                        });
+                    } else {
+                        // Original uncompressed format
+                        alliances = decodedData.alliances;
+                        schedule = decodedData.schedule;
+                    }
                 } catch (e) {
                     console.error('Error loading shared schedule:', e);
                     loadFromLocalStorage();
@@ -1646,12 +1725,43 @@
                 schedule: schedule
             };
             
-            // Encode to base64
-            const encodedData = btoa(JSON.stringify(data));
+            // Compress the data by shortening keys
+            const compressedData = {
+                a: data.alliances.map(a => ({
+                    n: a.name,
+                    c: a.color.replace('#', ''), // Remove # to save chars
+                    f: a.isFFA ? 1 : 0
+                })),
+                s: {}
+            };
+            
+            // Compress schedule keys and time format
+            const structureMap = {
+                'castle': 'c',
+                'turret-i': '1',
+                'turret-ii': '2',
+                'turret-iii': '3',
+                'turret-iv': '4'
+            };
+            
+            Object.keys(data.schedule).forEach(key => {
+                const times = data.schedule[key];
+                const compressedTimes = {};
+                Object.keys(times).forEach(time => {
+                    // Compress time: "12:00" -> "1200"
+                    const shortTime = time.replace(':', '');
+                    compressedTimes[shortTime] = times[time];
+                });
+                compressedData.s[structureMap[key]] = compressedTimes;
+            });
+            
+            // Use LZString to compress and make URL-safe
+            const jsonStr = JSON.stringify(compressedData);
+            const compressed = LZString.compressToEncodedURIComponent(jsonStr);
             
             // Create URL with the current page location
             const baseUrl = window.location.origin + window.location.pathname;
-            const shareUrl = `${baseUrl}?schedule=${encodedData}`;
+            const shareUrl = `${baseUrl}?d=${compressed}`;
             
             // Check if URL is too long
             if (shareUrl.length > 8000) {
@@ -1659,43 +1769,19 @@
                 return;
             }
             
-            // Show loading state
-            const button = event.target;
-            const originalText = button.textContent;
-            button.textContent = '⏳ Shortening...';
-            button.disabled = true;
-            
-            // Use TinyURL to shorten the link
-            fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(shareUrl)}`)
-                .then(response => response.text())
-                .then(shortUrl => {
-                    // Copy shortened URL to clipboard
-                    navigator.clipboard.writeText(shortUrl).then(() => {
-                        alert(`Short link copied to clipboard!\n\n${shortUrl}\n\nAnyone with this link will see your current schedule.`);
-                    }).catch(() => {
-                        // Fallback for older browsers
-                        const textArea = document.createElement('textarea');
-                        textArea.value = shortUrl;
-                        document.body.appendChild(textArea);
-                        textArea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textArea);
-                        alert(`Short link copied to clipboard!\n\n${shortUrl}\n\nAnyone with this link will see your current schedule.`);
-                    });
-                    
-                    // Reset button
-                    button.textContent = originalText;
-                    button.disabled = false;
-                })
-                .catch(error => {
-                    console.error('Error shortening URL:', error);
-                    // Fallback to long URL
-                    navigator.clipboard.writeText(shareUrl).then(() => {
-                        alert(`Could not shorten link. Long link copied instead.\n\nLink length: ${shareUrl.length} characters`);
-                    });
-                    button.textContent = originalText;
-                    button.disabled = false;
-                });
+            // Copy to clipboard
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert(`Share link copied to clipboard!\n\nLink length: ${shareUrl.length} characters\n\nAnyone with this link will see your schedule instantly.`);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = shareUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert(`Share link copied to clipboard!\n\nLink length: ${shareUrl.length} characters\n\nAnyone with this link will see your schedule instantly.`);
+            });
         }
 
         function exportTimelineAsImage() {
