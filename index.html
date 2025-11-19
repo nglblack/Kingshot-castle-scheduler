@@ -778,6 +778,7 @@
             </div>
             <div class="action-buttons">
                 <button class="btn-primary" onclick="copyAllParts()" title="Copy all parts of the schedule to paste in-game">Copy All Parts</button>
+                <button class="btn-primary" onclick="generateShareLink()" title="Create a shareable link with your current schedule">🔗 Share Link</button>
                 <button class="btn-secondary" onclick="loadExampleSchedule()" title="Reset to the default example schedule">Load Example</button>
                 <button class="btn-secondary" onclick="exportSchedule()" title="Download your schedule as a JSON file to share with others">Export JSON</button>
                 <button class="btn-secondary" onclick="importSchedule()" title="Load a schedule from a JSON file someone shared with you">Import JSON</button>
@@ -869,9 +870,9 @@
                     <div class="tip-number">5</div>
                     <div class="tip-content">
                         <h4>💾 Share with Your Alliance</h4>
-                        <p><strong>Export:</strong> Click the "Export JSON" button to download your schedule as a file. Share this file with your alliance members via Discord, WhatsApp, etc.</p>
-                        <p style="margin-top: 8px;"><strong>Import:</strong> Click "Import JSON" to load a schedule someone else created. This lets everyone work from the same battle plan!</p>
-                        <p style="margin-top: 8px; font-style: italic; font-size: 13px;">💡 JSON files are the key to collaboration!</p>
+                        <p><strong>🔗 Share Link:</strong> Click the "Share Link" button to generate a URL. Copy and paste this link in Discord - anyone who opens it will see your exact schedule!</p>
+                        <p style="margin-top: 8px;"><strong>Export/Import JSON:</strong> For backup or complex schedules, use "Export JSON" to download a file. Others can load it with "Import JSON".</p>
+                        <p style="margin-top: 8px; font-style: italic; font-size: 13px;">💡 Share Link is the fastest way to collaborate!</p>
                     </div>
                 </div>
             </div>
@@ -908,79 +909,79 @@
         const defaultSchedule = {
             "alliances": [
                 {
-                    "name": "FTP",
+                    "name": "FFA",
+                    "color": "#888888",
+                    "isFFA": true
+                },
+                {
+                    "name": "DrG",
                     "color": "#ff6b6b",
                     "isFFA": false
                 },
                 {
                     "name": "686",
-                    "color": "#4ecdc4",
-                    "isFFA": false
-                },
-                {
-                    "name": "DrG",
-                    "color": "#45b7d1",
-                    "isFFA": false
-                },
-                {
-                    "name": "MYS",
-                    "color": "#fd79a8",
-                    "isFFA": false
-                },
-                {
-                    "name": "EUR",
                     "color": "#a29bfe",
                     "isFFA": false
                 },
                 {
-                    "name": "wuw",
-                    "color": "#0984e3",
+                    "name": "MYS",
+                    "color": "#00b894",
                     "isFFA": false
                 },
                 {
-                    "name": "FFA",
-                    "color": "#888888",
-                    "isFFA": true
+                    "name": "FTP",
+                    "color": "#fdcb6e",
+                    "isFFA": false
+                },
+                {
+                    "name": "KLR",
+                    "color": "#45b7d1",
+                    "isFFA": false
+                },
+                {
+                    "name": "EUR",
+                    "color": "#74b9ff",
+                    "isFFA": false
                 }
             ],
             "schedule": {
                 "castle": {
-                    "12:00": "FTP",
-                    "12:30": "FTP",
-                    "13:00": "FTP",
-                    "13:30": "FTP",
+                    "12:00": "DrG",
+                    "12:30": "DrG",
+                    "13:00": "DrG",
+                    "13:30": "686",
                     "14:00": "686",
-                    "14:30": "686",
-                    "15:00": "wuw",
-                    "15:30": "wuw",
-                    "16:00": "DrG",
+                    "14:30": "FTP",
+                    "15:00": "FTP",
+                    "15:30": "KLR",
+                    "16:00": "KLR",
                     "16:30": "MYS",
-                    "17:00": "EUR",
-                    "17:30": "FFA"
+                    "17:00": "MYS",
+                    "17:30": "EUR"
                 },
                 "turret-i": {
                     "12:00": "686",
                     "12:30": "686",
                     "13:00": "686",
-                    "13:30": "FTP",
+                    "13:30": "686",
                     "14:00": "686",
-                    "14:30": "686",
-                    "15:00": "wuw",
-                    "15:30": "wuw",
-                    "16:00": "FFA",
+                    "14:30": "FTP",
+                    "15:00": "FTP",
+                    "15:30": "KLR",
+                    "16:00": "KLR",
                     "16:30": "MYS",
-                    "17:00": "FFA",
-                    "17:30": "FFA"
+                    "17:00": "MYS",
+                    "17:30": "EUR"
                 },
                 "turret-ii": {
-                    "12:00": "FTP",
-                    "12:30": "FTP",
-                    "13:00": "FTP",
-                    "13:30": "FTP",
-                    "14:00": "686",
-                    "14:30": "686",
-                    "15:00": "FTP",
-                    "15:30": "686",
+                    "12:00": "KLR",
+                    "12:30": "KLR",
+                    "13:00": "KLR",
+                    "13:30": "KLR",
+                    "14:00": "MYS",
+                    "14:30": "MYS",
+                    "15:00": "DrG",
+                    "15:30": "DrG",
                     "16:00": "FFA",
                     "16:30": "FFA",
                     "17:00": "FFA",
@@ -990,25 +991,25 @@
                     "12:00": "FTP",
                     "12:30": "FTP",
                     "13:00": "FTP",
-                    "13:30": "MYS",
+                    "13:30": "FTP",
                     "14:00": "MYS",
-                    "14:30": "EUR",
+                    "14:30": "MYS",
                     "15:00": "EUR",
-                    "15:30": "FTP",
-                    "16:00": "DrG",
+                    "15:30": "EUR",
+                    "16:00": "FFA",
                     "16:30": "FFA",
-                    "17:00": "EUR",
+                    "17:00": "FFA",
                     "17:30": "FFA"
                 },
                 "turret-iv": {
-                    "12:00": "wuw",
-                    "12:30": "wuw",
-                    "13:00": "wuw",
-                    "13:30": "DrG",
-                    "14:00": "DrG",
-                    "14:30": "wuw",
-                    "15:00": "wuw",
-                    "15:30": "wuw",
+                    "12:00": "DrG",
+                    "12:30": "DrG",
+                    "13:00": "DrG",
+                    "13:30": "EUR",
+                    "14:00": "EUR",
+                    "14:30": "686",
+                    "15:00": "EUR",
+                    "15:30": "EUR",
                     "16:00": "FFA",
                     "16:30": "FFA",
                     "17:00": "FFA",
@@ -1019,7 +1020,24 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            loadFromLocalStorage();
+            // Check for shared schedule in URL first
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedData = urlParams.get('schedule');
+            
+            if (sharedData) {
+                try {
+                    // Decode the shared schedule from URL
+                    const decodedData = JSON.parse(atob(sharedData));
+                    alliances = decodedData.alliances;
+                    schedule = decodedData.schedule;
+                } catch (e) {
+                    console.error('Error loading shared schedule:', e);
+                    loadFromLocalStorage();
+                }
+            } else {
+                loadFromLocalStorage();
+            }
+            
             generateTimeline();
             renderAlliances();
             updateVisualMap(0);
@@ -1619,6 +1637,41 @@
                 reader.readAsText(file);
             };
             input.click();
+        }
+
+        // Share Link Generation
+        function generateShareLink() {
+            const data = {
+                alliances: alliances,
+                schedule: schedule
+            };
+            
+            // Encode to base64
+            const encodedData = btoa(JSON.stringify(data));
+            
+            // Create URL with the current page location
+            const baseUrl = window.location.origin + window.location.pathname;
+            const shareUrl = `${baseUrl}?schedule=${encodedData}`;
+            
+            // Check if URL is too long
+            if (shareUrl.length > 8000) {
+                alert('Schedule is too complex for URL sharing. Please use Export JSON instead.');
+                return;
+            }
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert(`Share link copied to clipboard!\n\nLink length: ${shareUrl.length} characters\n\nAnyone with this link will see your current schedule.`);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = shareUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert(`Share link copied to clipboard!\n\nLink length: ${shareUrl.length} characters\n\nAnyone with this link will see your current schedule.`);
+            });
         }
 
         function exportTimelineAsImage() {
