@@ -782,7 +782,7 @@
                 <button class="btn-secondary" onclick="loadExampleSchedule()" title="Reset to the default example schedule">Load Example</button>
                 <button class="btn-secondary" onclick="exportSchedule()" title="Download your schedule as a JSON file to share with others">Export JSON</button>
                 <button class="btn-secondary" onclick="importSchedule()" title="Load a schedule from a JSON file someone shared with you">Import JSON</button>
-                <button class="btn-danger" onclick="clearSchedule()" title="Delete all alliances and schedules (cannot be undone)">Clear All</button>
+                <button class="btn-danger" onclick="clearSchedule()" title="Clear all schedule assignments (keeps your alliances)">Clear Schedule</button>
             </div>
         </div>
     </div>
@@ -1733,8 +1733,7 @@
         }
 
         function clearSchedule() {
-            if (confirm('Clear all schedules and alliances? This cannot be undone.')) {
-                alliances = [];
+            if (confirm('Clear all schedule assignments? Your alliances will be kept.')) {
                 schedule = {
                     castle: {},
                     'turret-i': {},
@@ -1742,7 +1741,6 @@
                     'turret-iii': {},
                     'turret-iv': {}
                 };
-                renderAlliances();
                 generateTimeline();
                 saveToLocalStorage();
                 document.getElementById('output-parts').innerHTML = '<p style="text-align: center; opacity: 0.7;">Click "Generate Schedule" to create the battle plan</p>';
