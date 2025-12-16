@@ -286,6 +286,7 @@
             gap: 15px;
             margin-bottom: 20px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .timeline-controls label {
@@ -298,6 +299,38 @@
             border-radius: 5px;
             border: none;
             font-size: 14px;
+        }
+
+        /* Alliance Stats */
+        .alliance-stats {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-start;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .stat-value {
+            color: #2c3e50;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
         }
 
         .timeline-grid {
@@ -755,6 +788,10 @@
                         <option value="60">60 minutes</option>
                     </select>
                     <button class="btn-secondary" onclick="exportTimelineAsImage()" title="Download the timeline as an image to share on Discord" style="margin-left: 15px;">📸 Export as Image</button>
+                    <div class="alliance-stats" id="alliance-stats">
+                        <span class="stat-label">Total Time:</span>
+                        <span class="stat-value" id="total-stats">Calculating...</span>
+                    </div>
                 </div>
                 <div class="timeline-grid">
                     <table class="timeline-table" id="timeline-table">
@@ -1339,6 +1376,9 @@
                     ${cells}
                 </tr>`;
             }).join('');
+            
+            // Update alliance stats
+            updateAllianceStats();
         }
 
         // Get the active alliance for a specific cell
@@ -1404,11 +1444,57 @@
             
             closeModal();
             generateTimeline();
+            updateAllianceStats();
             saveToLocalStorage();
             
             // Update visual map to current preview time
             const slider = document.getElementById('time-slider');
             updatePreview();
+        }
+
+        // Calculate and display alliance statistics
+        function updateAllianceStats() {
+            const stats = {};
+            
+            // Initialize stats for all alliances
+            alliances.forEach(alliance => {
+                stats[alliance.name] = {
+                    castle: 0,
+                    turrets: 0,
+                    total: 0
+                };
+            });
+            
+            // Count time slots for each structure
+            Object.keys(schedule).forEach(structureId => {
+                Object.keys(schedule[structureId]).forEach(time => {
+                    const allianceName = schedule[structureId][time];
+                    if (allianceName && stats[allianceName]) {
+                        const interval = parseInt(document.getElementById('interval-select').value);
+                        if (structureId === 'castle') {
+                            stats[allianceName].castle += interval;
+                        } else {
+                            stats[allianceName].turrets += interval;
+                        }
+                        stats[allianceName].total += interval;
+                    }
+                });
+            });
+            
+            // Build display for all alliances with time
+            const statsElement = document.getElementById('total-stats');
+            const allianceStats = [];
+            
+            Object.keys(stats).forEach(name => {
+                const s = stats[name];
+                if (s.total > 0) {
+                    const castleHours = (s.castle / 60).toFixed(1);
+                    const turretsHours = (s.turrets / 60).toFixed(1);
+                    allianceStats.push(`<div>${name}: ${castleHours}h castle, ${turretsHours}h turrets</div>`);
+                }
+            });
+            
+            statsElement.innerHTML = allianceStats.length > 0 ? allianceStats.join('') : 'No assignments';
         }
 
         function selectStructure(structureId) {
