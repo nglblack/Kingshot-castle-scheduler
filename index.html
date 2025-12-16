@@ -802,7 +802,7 @@
             <h3>Edit Alliance</h3>
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 10px; color: #2c3e50; font-weight: bold;">Alliance Name:</label>
-                <input type="text" id="edit-alliance-name" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; font-size: 16px;" readonly>
+                <input type="text" id="edit-alliance-name" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; font-size: 16px;">
             </div>
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 10px; color: #2c3e50; font-weight: bold;">Change Color:</label>
@@ -1174,8 +1174,37 @@
         function saveAllianceEdit() {
             if (editingAllianceIndex === null) return;
 
+            const newName = document.getElementById('edit-alliance-name').value.trim();
             const newColor = document.getElementById('edit-alliance-color').value;
+            
+            // Validate name
+            if (!newName) {
+                alert('Alliance name cannot be empty');
+                return;
+            }
+            
+            // Check if name already exists (excluding current alliance)
+            if (alliances.some((a, i) => i !== editingAllianceIndex && a.name === newName)) {
+                alert('An alliance with this name already exists');
+                return;
+            }
+            
+            const oldName = alliances[editingAllianceIndex].name;
+            
+            // Update alliance name and color
+            alliances[editingAllianceIndex].name = newName;
             alliances[editingAllianceIndex].color = newColor;
+            
+            // Update schedule if name changed
+            if (oldName !== newName) {
+                Object.keys(schedule).forEach(structure => {
+                    Object.keys(schedule[structure]).forEach(time => {
+                        if (schedule[structure][time] === oldName) {
+                            schedule[structure][time] = newName;
+                        }
+                    });
+                });
+            }
 
             closeEditAllianceModal();
             renderAlliances();
