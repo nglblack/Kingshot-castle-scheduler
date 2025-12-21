@@ -43,6 +43,13 @@ h1 {
     paint-order: stroke fill;
 }
 
+/* Remove text effects from emojis */
+h1::first-letter {
+    text-shadow: none;
+    -webkit-text-stroke: 0;
+    color: inherit;
+}
+
 h2, h3 {
     color: #6b4423;
     text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
@@ -67,7 +74,7 @@ h2, h3 {
     text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
     font-size: 15px;
     border-bottom: 1px solid #c89563;
-    font-weight: 600;
+    font-weight: 800;
 }
 
 .alliance-section > div {
@@ -237,7 +244,7 @@ button:active {
     width: 100%;
     text-align: center;
     border-bottom: 1px solid #c89563;
-    font-weight: 600;
+    font-weight: 800;
 }
 
 .castle-container {
@@ -360,7 +367,7 @@ button:active {
     text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
     font-size: 15px;
     border-bottom: 1px solid #c89563;
-    font-weight: 600;
+    font-weight: 800;
 }
 
 .timeline-controls {
@@ -621,7 +628,7 @@ button:active {
     text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
     font-size: 15px;
     border-bottom: 1px solid #c89563;
-    font-weight: 600;
+    font-weight: 800;
 }
 
 .output-header {
@@ -806,6 +813,7 @@ button:active {
     gap: 10px;
     max-height: 500px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .modal-alliance-btn {
@@ -820,8 +828,8 @@ button:active {
 }
 
 .modal-alliance-btn:hover {
-    transform: scale(1.02);
     box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+    opacity: 0.95;
 }
 
 .modal-close {
@@ -861,39 +869,102 @@ button:active {
 }
 
 @media (max-width: 768px) {
+    /* Remove outer container padding/border for full-width sections */
+    body {
+        padding: 0;
+        background: #f5ebe0;
+    }
+
     .container {
-        padding: 15px;
-        border: 4px solid #8b6f47;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        background: transparent;
     }
 
     h1 {
         font-size: 2em;
+        padding: 20px 15px 15px;
+        margin-bottom: 0;
+        background: #f5ebe0;
     }
 
+    /* Make sections full-width with no gaps */
     .alliance-section,
     .castle-visual,
     .timeline-section,
     .output-section,
     .statistics-section {
-        border: 3px solid #d4a574;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        margin-bottom: 0;
+        box-shadow: none;
+    }
+
+    /* Adjust section headers to fill width */
+    .alliance-section h2,
+    .castle-visual h3,
+    .timeline-section h3,
+    .output-section h3 {
+        padding: 12px 15px;
+        border-radius: 0;
+    }
+
+    /* Remove extra padding from section content */
+    .alliance-section > div {
         padding: 15px;
     }
 
+    .timeline-section > div,
+    .output-section > div {
+        padding: 15px;
+    }
+
+    .castle-visual {
+        padding: 0;
+    }
+
+    .castle-visual > div {
+        padding: 15px;
+    }
+
+    /* Optimize castle map size */
     .castle-container {
-        width: 200px;
-        height: 200px;
+        width: 180px;
+        height: 180px;
     }
 
     .castle {
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
     }
 
     .turret {
-        width: 50px;
-        height: 50px;
+        width: 45px;
+        height: 45px;
     }
 
+    .turret-label {
+        font-size: 9px;
+    }
+
+    .turret-number {
+        font-size: 11px;
+    }
+
+    .castle-label {
+        font-size: 10px;
+    }
+
+    /* Adjust time preview */
+    .time-preview {
+        margin-top: 20px;
+        padding: 0 15px;
+    }
+
+    /* Full-width action buttons */
     .action-buttons {
         flex-direction: column;
     }
@@ -902,6 +973,34 @@ button:active {
         width: 100%;
     }
 
+    /* Alliance stats optimization */
+    .alliance-stats {
+        font-size: 12px;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .stat-label {
+        font-size: 12px;
+    }
+
+    .stat-value {
+        font-size: 11px;
+    }
+
+    /* Timeline controls */
+    .timeline-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* Optimize export button for mobile */
+    .btn-secondary {
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+
+    /* Modal adjustments */
     .tips-modal-content {
         max-width: 90%;
         max-height: 85vh;
@@ -914,5 +1013,15 @@ button:active {
         font-size: 24px;
         bottom: 15px;
         right: 15px;
+    }
+
+    /* Timeline table adjustments */
+    .timeline-table {
+        font-size: 12px;
+    }
+
+    .timeline-table th,
+    .timeline-table td {
+        padding: 8px 4px;
     }
 }

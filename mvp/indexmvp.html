@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingshot Castle Battle Scheduler</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            color: #2c3e50;
+        }
+
+        h2, h3 {
+            color: #2c3e50;
+        }
+
+        /* Alliance Management */
+        .alliance-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .alliance-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .alliance-input input[type="text"] {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .alliance-input input[type="color"] {
+            width: 60px;
+            height: 42px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #5c7c5d;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4a6249;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #a0504b;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #8b3f3b;
+        }
+
+        .btn-secondary {
+            background: #5a7fa3;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #486582;
+        }
+
+        .alliance-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .alliance-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .alliance-tag:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .alliance-tag .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .alliance-tag .remove-btn {
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* Castle Visual */
+        .castle-visual {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 500px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .castle-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin: 20px 0;
+        }
+
+        .castle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: #8B4513;
+            transform: translate(-50%, -50%) rotate(45deg);
+            border: 3px solid #654321;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .castle-label {
+            transform: rotate(-45deg);
+            font-weight: bold;
+            font-size: 11px;
+            text-align: center;
+            max-width: 70px;
+            word-wrap: break-word;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .castle:hover {
+            transform: translate(-50%, -50%) rotate(45deg) scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .turret {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #696969;
+            border-radius: 50%;
+            border: 3px solid #404040;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .turret:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .turret-label {
+            font-weight: bold;
+            font-size: 10px;
+            text-align: center;
+            max-width: 50px;
+            word-wrap: break-word;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .turret-number {
+            font-size: 9px;
+            opacity: 0.8;
+        }
+
+        #turret-iv {
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #turret-iii {
+            right: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #turret-i {
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #turret-ii {
+            left: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Timeline */
+        .timeline-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .timeline-controls label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .timeline-controls select {
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            font-size: 14px;
+        }
+
+        /* Alliance Stats */
+        .alliance-stats {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-start;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .stat-value {
+            color: #2c3e50;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+        }
+
+        .timeline-grid {
+            overflow-x: auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 10px;
+            max-width: 100%;
+            border: 1px solid #e0e0e0;
+        }
+
+        .timeline-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        .timeline-table th {
+            background: #e9ecef;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            border: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            color: #495057;
+        }
+
+        .timeline-table td {
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 40px;
+            font-size: 11px;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .timeline-table td:hover {
+            background: #f8f9fa;
+        }
+
+        .timeline-table .structure-label {
+            background: #e9ecef;
+            font-weight: bold;
+            text-align: left;
+            padding-left: 15px;
+            cursor: default;
+            color: #495057;
+        }
+
+        .timeline-table .structure-label:hover {
+            background: #e9ecef;
+        }
+
+        .timeline-cell {
+            min-width: 60px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Output Section */
+        .output-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .output-parts {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .output-part {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #5c7c5d;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #5c7c5d;
+        }
+
+        .output-part-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .output-part-content {
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Modal for alliance selection */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        /* Tips Modal */
+        .tips-modal-content {
+            max-width: 600px;
+        }
+
+        .tips-modal-content h3 {
+            color: #5c7c5d;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .tips-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tip-step {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #5c7c5d;
+        }
+
+        .tip-number {
+            background: #5c7c5d;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .tip-content h4 {
+            margin: 0 0 5px 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .tip-content p {
+            margin: 0;
+            color: #495057;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .tips-footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tips-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #5c7c5d;
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            transition: all 0.3s;
+        }
+
+        .help-button:hover {
+            transform: scale(1.1);
+            background: #4a6249;
+        }
+
+        .modal-alliances {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .modal-alliance-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .modal-alliance-btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            /* Remove boxes on mobile */
+            .alliance-section,
+            .castle-visual,
+            .timeline-section,
+            .output-section {
+                background: transparent;
+                border: none;
+                border-bottom: 2px solid #e0e0e0;
+                border-radius: 0;
+                padding: 20px 0;
+                margin-bottom: 20px;
+            }
+
+            .output-section {
+                border-bottom: none;
+            }
+
+            /* Adjust timeline grid for mobile */
+            .timeline-grid {
+                background: transparent;
+                border: 1px solid #e0e0e0;
+                padding: 5px;
+            }
+
+            /* Adjust castle container for mobile */
+            .castle-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .castle {
+                width: 80px;
+                height: 80px;
+            }
+
+            .turret {
+                width: 50px;
+                height: 50px;
+            }
+
+            /* Adjust output parts for mobile */
+            .output-part {
+                background: #f8f9fa;
+            }
+
+            /* Stack action buttons vertically on mobile */
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons button {
+                width: 100%;
+            }
+
+            /* Tips modal adjustments for mobile */
+            .tips-modal-content {
+                max-width: 90%;
+                max-height: 85vh;
+                overflow-y: auto;
+            }
+
+            .tips-modal-content h3 {
+                font-size: 20px;
+            }
+
+            .tip-step {
+                padding: 12px;
+            }
+
+            .help-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        .time-preview {
+            margin-top: 30px;
+            text-align: center;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .time-preview label {
+            color: #495057;
+        }
+
+        .time-preview input[type="range"] {
+            width: 100%;
+            max-width: 280px;
+            margin: 10px 0;
+        }
+
+        #current-time-display {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚔️ Kingshot Castle Battle Scheduler</h1>
+
+        <!-- Alliance Management -->
+        <div class="alliance-section">
+            <h2 style="margin-bottom: 15px;">📋 Alliances</h2>
+            <div class="alliance-input">
+                <input type="text" id="alliance-name" placeholder="Alliance Name (e.g., FTP, WUW)" maxlength="10" title="Enter the short name for your alliance (max 10 characters)">
+                <select id="alliance-color" style="padding: 10px; border-radius: 5px; border: none; font-size: 16px; cursor: pointer;" title="Choose a color to represent this alliance">
+                    <option value="#ff6b6b" style="background-color: #ff6b6b;">Red</option>
+                    <option value="#4ecdc4" style="background-color: #4ecdc4;">Teal</option>
+                    <option value="#45b7d1" style="background-color: #45b7d1;">Blue</option>
+                    <option value="#f9ca24" style="background-color: #f9ca24;">Yellow</option>
+                    <option value="#6c5ce7" style="background-color: #6c5ce7;">Purple</option>
+                    <option value="#a29bfe" style="background-color: #a29bfe;">Lavender</option>
+                    <option value="#fd79a8" style="background-color: #fd79a8;">Pink</option>
+                    <option value="#fdcb6e" style="background-color: #fdcb6e;">Orange</option>
+                    <option value="#00b894" style="background-color: #00b894;">Green</option>
+                    <option value="#e17055" style="background-color: #e17055;">Coral</option>
+                    <option value="#0984e3" style="background-color: #0984e3;">Ocean Blue</option>
+                    <option value="#d63031" style="background-color: #d63031;">Dark Red</option>
+                    <option value="#e84393" style="background-color: #e84393;">Magenta</option>
+                    <option value="#74b9ff" style="background-color: #74b9ff;">Light Blue</option>
+                    <option value="#a29bfe" style="background-color: #a29bfe;">Periwinkle</option>
+                </select>
+                <button class="btn-primary" onclick="addAlliance()" title="Add this alliance to your schedule">Add Alliance</button>
+                <button class="btn-secondary" onclick="addFFA()" title="Add Free-For-All option for open battle times">Add FFA</button>
+            </div>
+            <div class="alliance-list" id="alliance-list"></div>
+        </div>
+
+        <!-- Main Content: Castle Visual + Timeline -->
+        <div class="main-content">
+            <!-- Castle Visual -->
+            <div class="castle-visual">
+                <h3 style="margin-bottom: 20px;">🏰 Castle Battle Map</h3>
+                <div class="castle-container">
+                    <div class="castle" id="castle" onclick="selectStructure('castle')">
+                        <div class="castle-label">CASTLE</div>
+                    </div>
+                    <div class="turret" id="turret-iv" onclick="selectStructure('turret-iv')">
+                        <div class="turret-number">IV</div>
+                        <div class="turret-label">-</div>
+                    </div>
+                    <div class="turret" id="turret-iii" onclick="selectStructure('turret-iii')">
+                        <div class="turret-number">III</div>
+                        <div class="turret-label">-</div>
+                    </div>
+                    <div class="turret" id="turret-i" onclick="selectStructure('turret-i')">
+                        <div class="turret-number">I</div>
+                        <div class="turret-label">-</div>
+                    </div>
+                    <div class="turret" id="turret-ii" onclick="selectStructure('turret-ii')">
+                        <div class="turret-number">II</div>
+                        <div class="turret-label">-</div>
+                    </div>
+                </div>
+                <div class="time-preview">
+                    <label for="time-slider"><strong>Preview Time:</strong></label>
+                    <input type="range" id="time-slider" min="0" max="72" value="0" oninput="updatePreview()">
+                    <div id="current-time-display" style="font-size: 18px; font-weight: bold;">12:00 UTC</div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline-section">
+                <h3 style="margin-bottom: 15px;">⏰ Timeline (12:00 - 18:00 UTC)</h3>
+                <div class="timeline-controls">
+                    <label for="interval-select">Time Interval:</label>
+                    <select id="interval-select" onchange="generateTimeline()" title="Choose how long each time block should be">
+                        <option value="15">15 minutes</option>
+                        <option value="30" selected>30 minutes</option>
+                        <option value="60">60 minutes</option>
+                    </select>
+                    <button class="btn-secondary" onclick="exportTimelineAsImage()" title="Download the timeline as an image to share on Discord" style="margin-left: 15px;">📸 Export as Image</button>
+                    <div class="alliance-stats" id="alliance-stats">
+                        <span class="stat-label">Total Time:</span>
+                        <span class="stat-value" id="total-stats">Calculating...</span>
+                    </div>
+                </div>
+                <div class="timeline-grid">
+                    <table class="timeline-table" id="timeline-table">
+                        <thead>
+                            <tr id="timeline-header"></tr>
+                        </thead>
+                        <tbody id="timeline-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="output-section">
+            <div class="output-header">
+                <h2>📝 Battle Schedule Output</h2>
+                <button class="btn-secondary" onclick="generateOutput()" title="Create formatted text from your schedule to copy into Kingshot chat">Generate Schedule</button>
+            </div>
+            <div class="output-parts" id="output-parts">
+                <p style="text-align: center; opacity: 0.7;">Click "Generate Schedule" to create the battle plan</p>
+            </div>
+            <div class="action-buttons">
+                <button class="btn-primary" onclick="copyAllParts()" title="Copy all parts of the schedule to paste in-game">Copy All Parts</button>
+                <button class="btn-primary" onclick="generateShareLink()" title="Create a shareable link with your current schedule">🔗 Share Link</button>
+                <button class="btn-secondary" onclick="loadExampleSchedule()" title="Reset to the default example schedule">Load Example</button>
+                <button class="btn-secondary" onclick="exportSchedule()" title="Download your schedule as a JSON file to share with others">Export JSON</button>
+                <button class="btn-secondary" onclick="importSchedule()" title="Load a schedule from a JSON file someone shared with you">Import JSON</button>
+                <button class="btn-danger" onclick="clearSchedule()" title="Clear all schedule assignments (keeps your alliances)">Clear Schedule</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Alliance Selection -->
+    <div class="modal" id="alliance-modal">
+        <div class="modal-content">
+            <h3>Select Alliance</h3>
+            <div class="modal-alliances" id="modal-alliances"></div>
+            <button class="btn-danger modal-close" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Edit Alliance Modal -->
+    <div class="modal" id="edit-alliance-modal">
+        <div class="modal-content">
+            <h3>Edit Alliance</h3>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; color: #2c3e50; font-weight: bold;">Alliance Name:</label>
+                <input type="text" id="edit-alliance-name" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; font-size: 16px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; color: #2c3e50; font-weight: bold;">Change Color:</label>
+                <select id="edit-alliance-color" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; font-size: 16px; cursor: pointer;">
+                    <option value="#ff6b6b" style="background-color: #ff6b6b;">Red</option>
+                    <option value="#4ecdc4" style="background-color: #4ecdc4;">Teal</option>
+                    <option value="#45b7d1" style="background-color: #45b7d1;">Blue</option>
+                    <option value="#f9ca24" style="background-color: #f9ca24;">Yellow</option>
+                    <option value="#6c5ce7" style="background-color: #6c5ce7;">Purple</option>
+                    <option value="#a29bfe" style="background-color: #a29bfe;">Lavender</option>
+                    <option value="#fd79a8" style="background-color: #fd79a8;">Pink</option>
+                    <option value="#fdcb6e" style="background-color: #fdcb6e;">Orange</option>
+                    <option value="#00b894" style="background-color: #00b894;">Green</option>
+                    <option value="#e17055" style="background-color: #e17055;">Coral</option>
+                    <option value="#0984e3" style="background-color: #0984e3;">Ocean Blue</option>
+                    <option value="#d63031" style="background-color: #d63031;">Dark Red</option>
+                    <option value="#e84393" style="background-color: #e84393;">Magenta</option>
+                    <option value="#74b9ff" style="background-color: #74b9ff;">Light Blue</option>
+                    <option value="#a29bfe" style="background-color: #a29bfe;">Periwinkle</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-primary" onclick="saveAllianceEdit()" style="flex: 1;">Save Changes</button>
+                <button class="btn-danger" onclick="closeEditAllianceModal()" style="flex: 1;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tips Modal -->
+    <div class="modal" id="tips-modal">
+        <div class="modal-content tips-modal-content">
+            <h3>🏰 How to Use the Castle Battle Scheduler</h3>
+            <div class="tips-steps">
+                <div class="tip-step">
+                    <div class="tip-number">1</div>
+                    <div class="tip-content">
+                        <h4>📋 Add Your Alliances</h4>
+                        <p>At the top of the page, enter alliance names (like FTP, WUW, 686) in the text box. Pick a color from the dropdown menu, then click the green "Add Alliance" button. Repeat for each alliance. Click "Add FFA" if you want Free-For-All time slots.</p>
+                        <p style="margin-top: 8px; font-style: italic; font-size: 13px;">💡 Tip: Click any alliance tag to change its color later!</p>
+                    </div>
+                </div>
+                <div class="tip-step">
+                    <div class="tip-number">2</div>
+                    <div class="tip-content">
+                        <h4>📅 Build Your Schedule</h4>
+                        <p>In the timeline grid on the right, click any cell to assign an alliance. Each row is a structure (Castle, Turret I-IV), and each column is a time slot. Choose your time interval (15, 30, or 60 minutes) from the dropdown above the grid.</p>
+                        <p style="margin-top: 8px; font-style: italic; font-size: 13px;">💡 Tip: Click a cell again to change or clear the assignment!</p>
+                    </div>
+                </div>
+                <div class="tip-step">
+                    <div class="tip-number">3</div>
+                    <div class="tip-content">
+                        <h4>👁️ Preview the Battle</h4>
+                        <p>On the left, use the slider under "Castle Battle Map" to scrub through time. Watch the diamond castle and circles (turrets) change colors to see who controls what at each moment.</p>
+                    </div>
+                </div>
+                <div class="tip-step">
+                    <div class="tip-number">4</div>
+                    <div class="tip-content">
+                        <h4>📝 Generate Battle Notes</h4>
+                        <p>Click the blue "Generate Schedule" button at the bottom. Your formatted battle plan appears below, split into easy-to-read parts. Click "Copy Part 1", "Copy Part 2", etc. to copy each section and paste it into Kingshot's in-game chat!</p>
+                    </div>
+                </div>
+                <div class="tip-step">
+                    <div class="tip-number">5</div>
+                    <div class="tip-content">
+                        <h4>💾 Share with Your Alliance</h4>
+                        <p><strong>🔗 Share Link:</strong> Click the "Share Link" button to generate a URL. Copy and paste this link in Discord - anyone who opens it will see your exact schedule!</p>
+                        <p style="margin-top: 8px;"><strong>Export/Import JSON:</strong> For backup or complex schedules, use "Export JSON" to download a file. Others can load it with "Import JSON".</p>
+                        <p style="margin-top: 8px; font-style: italic; font-size: 13px;">💡 Share Link is the fastest way to collaborate!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tips-footer">
+                <label class="tips-checkbox">
+                    <input type="checkbox" id="dont-show-tips" onchange="saveTipsPreference()">
+                    <span>Don't show this again</span>
+                </label>
+                <button class="btn-primary" onclick="closeTipsModal()">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Button -->
+    <button class="help-button" onclick="openTipsModal()" title="Show Tips">?</button>
+
+    <!-- html2canvas library for image export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- LZString for URL compression -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+
+    <script>
+        // State Management
+        let alliances = [];
+        let schedule = {
+            castle: {},
+            'turret-i': {},
+            'turret-ii': {},
+            'turret-iii': {},
+            'turret-iv': {}
+        };
+        let currentStructure = null;
+        let currentTime = null;
+
+        // Default example schedule
+        const defaultSchedule = {
+            "alliances": [
+                {
+                    "name": "FFA",
+                    "color": "#888888",
+                    "isFFA": true
+                },
+                {
+                    "name": "DrG",
+                    "color": "#ff6b6b",
+                    "isFFA": false
+                },
+                {
+                    "name": "686",
+                    "color": "#a29bfe",
+                    "isFFA": false
+                },
+                {
+                    "name": "MYS",
+                    "color": "#00b894",
+                    "isFFA": false
+                },
+                {
+                    "name": "FTP",
+                    "color": "#fdcb6e",
+                    "isFFA": false
+                },
+                {
+                    "name": "BSP",
+                    "color": "#d63031",
+                    "isFFA": false
+                }
+            ],
+            "schedule": {
+                "castle": {
+                    "12:00": "MYS",
+                    "12:30": "MYS",
+                    "13:00": "MYS",
+                    "13:30": "MYS",
+                    "14:00": "686",
+                    "14:30": "686",
+                    "15:00": "FTP",
+                    "15:30": "FTP",
+                    "16:00": "DrG",
+                    "16:30": "DrG",
+                    "17:00": "BSP",
+                    "17:30": "BSP"
+                },
+                "turret-i": {
+                    "12:00": "686",
+                    "12:30": "686",
+                    "13:00": "686",
+                    "13:30": "686",
+                    "14:00": "686",
+                    "14:30": "686",
+                    "15:00": "DrG",
+                    "15:30": "DrG",
+                    "16:00": "DrG",
+                    "16:30": "DrG",
+                    "17:00": "FFA",
+                    "17:30": "FFA"
+                },
+                "turret-ii": {
+                    "12:00": "FTP",
+                    "12:30": "FTP",
+                    "13:00": "FTP",
+                    "13:30": "FTP",
+                    "14:00": "FTP",
+                    "14:30": "FTP",
+                    "15:00": "FTP",
+                    "15:30": "FTP",
+                    "16:00": "FFA",
+                    "16:30": "FFA",
+                    "17:00": "FFA",
+                    "17:30": "FFA"
+                },
+                "turret-iii": {
+                    "12:00": "MYS",
+                    "12:30": "MYS",
+                    "13:00": "MYS",
+                    "13:30": "686",
+                    "14:00": "686",
+                    "14:30": "MYS",
+                    "15:00": "MYS",
+                    "15:30": "MYS",
+                    "16:00": "FFA",
+                    "16:30": "FFA",
+                    "17:00": "FFA",
+                    "17:30": "FFA"
+                },
+                "turret-iv": {
+                    "12:00": "DrG",
+                    "12:30": "DrG",
+                    "13:00": "DrG",
+                    "13:30": "DrG",
+                    "14:00": "BSP",
+                    "14:30": "BSP",
+                    "15:00": "BSP",
+                    "15:30": "BSP",
+                    "16:00": "BSP",
+                    "16:30": "BSP",
+                    "17:00": "BSP",
+                    "17:30": "BSP"
+                }
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for shared schedule in URL first
+            const urlParams = new URLSearchParams(window.location.search);
+            const lzData = urlParams.get('d'); // New LZString compressed format
+            const oldData = urlParams.get('s') || urlParams.get('schedule'); // Old formats
+            
+            if (lzData) {
+                try {
+                    // Decompress LZString data
+                    const jsonStr = LZString.decompressFromEncodedURIComponent(lzData);
+                    const decodedData = JSON.parse(jsonStr);
+                    
+                    // Decompress alliances
+                    alliances = decodedData.a.map(a => ({
+                        name: a.n,
+                        color: '#' + a.c, // Add # back
+                        isFFA: a.f === 1
+                    }));
+                    
+                    // Decompress schedule
+                    const structureMap = {
+                        'c': 'castle',
+                        '1': 'turret-i',
+                        '2': 'turret-ii',
+                        '3': 'turret-iii',
+                        '4': 'turret-iv'
+                    };
+                    
+                    schedule = {
+                        castle: {},
+                        'turret-i': {},
+                        'turret-ii': {},
+                        'turret-iii': {},
+                        'turret-iv': {}
+                    };
+                    
+                    Object.keys(decodedData.s).forEach(key => {
+                        const times = decodedData.s[key];
+                        const expandedTimes = {};
+                        Object.keys(times).forEach(shortTime => {
+                            // Expand time: "1200" -> "12:00"
+                            const fullTime = shortTime.slice(0, 2) + ':' + shortTime.slice(2);
+                            expandedTimes[fullTime] = times[shortTime];
+                        });
+                        schedule[structureMap[key]] = expandedTimes;
+                    });
+                } catch (e) {
+                    console.error('Error loading shared schedule:', e);
+                    loadFromLocalStorage();
+                }
+            } else if (oldData) {
+                try {
+                    // Decode old format
+                    const decodedData = JSON.parse(atob(oldData));
+                    
+                    if (decodedData.a && decodedData.s) {
+                        // Old compressed format
+                        alliances = decodedData.a.map(a => ({
+                            name: a.n,
+                            color: a.c,
+                            isFFA: a.f === 1
+                        }));
+                        
+                        const structureMap = {
+                            'c': 'castle',
+                            '1': 'turret-i',
+                            '2': 'turret-ii',
+                            '3': 'turret-iii',
+                            '4': 'turret-iv'
+                        };
+                        
+                        schedule = {
+                            castle: {},
+                            'turret-i': {},
+                            'turret-ii': {},
+                            'turret-iii': {},
+                            'turret-iv': {}
+                        };
+                        
+                        Object.keys(decodedData.s).forEach(key => {
+                            schedule[structureMap[key]] = decodedData.s[key];
+                        });
+                    } else {
+                        // Original uncompressed format
+                        alliances = decodedData.alliances;
+                        schedule = decodedData.schedule;
+                    }
+                } catch (e) {
+                    console.error('Error loading shared schedule:', e);
+                    loadFromLocalStorage();
+                }
+            } else {
+                loadFromLocalStorage();
+            }
+            
+            generateTimeline();
+            renderAlliances();
+            updateVisualMap(0);
+            
+            // Show tips on first visit
+            const dontShowTips = localStorage.getItem('kingshot_dont_show_tips');
+            if (!dontShowTips) {
+                setTimeout(() => {
+                    openTipsModal();
+                }, 500);
+            }
+        });
+
+        // Tips Modal Functions
+        function openTipsModal() {
+            document.getElementById('tips-modal').style.display = 'flex';
+        }
+
+        function closeTipsModal() {
+            document.getElementById('tips-modal').style.display = 'none';
+        }
+
+        function saveTipsPreference() {
+            const dontShow = document.getElementById('dont-show-tips').checked;
+            if (dontShow) {
+                localStorage.setItem('kingshot_dont_show_tips', 'true');
+            } else {
+                localStorage.removeItem('kingshot_dont_show_tips');
+            }
+        }
+
+        // Edit Alliance Functions
+        let editingAllianceIndex = null;
+
+        function openEditAllianceModal(index) {
+            editingAllianceIndex = index;
+            const alliance = alliances[index];
+            
+            // Don't allow editing FFA
+            if (alliance.isFFA) {
+                alert('FFA alliance cannot be edited');
+                return;
+            }
+
+            document.getElementById('edit-alliance-name').value = alliance.name;
+            document.getElementById('edit-alliance-color').value = alliance.color;
+            document.getElementById('edit-alliance-modal').style.display = 'flex';
+        }
+
+        function closeEditAllianceModal() {
+            document.getElementById('edit-alliance-modal').style.display = 'none';
+            editingAllianceIndex = null;
+        }
+
+        function saveAllianceEdit() {
+            if (editingAllianceIndex === null) return;
+
+            const newName = document.getElementById('edit-alliance-name').value.trim();
+            const newColor = document.getElementById('edit-alliance-color').value;
+            
+            // Validate name
+            if (!newName) {
+                alert('Alliance name cannot be empty');
+                return;
+            }
+            
+            // Check if name already exists (excluding current alliance)
+            if (alliances.some((a, i) => i !== editingAllianceIndex && a.name === newName)) {
+                alert('An alliance with this name already exists');
+                return;
+            }
+            
+            const oldName = alliances[editingAllianceIndex].name;
+            
+            // Update alliance name and color
+            alliances[editingAllianceIndex].name = newName;
+            alliances[editingAllianceIndex].color = newColor;
+            
+            // Update schedule if name changed
+            if (oldName !== newName) {
+                Object.keys(schedule).forEach(structure => {
+                    Object.keys(schedule[structure]).forEach(time => {
+                        if (schedule[structure][time] === oldName) {
+                            schedule[structure][time] = newName;
+                        }
+                    });
+                });
+            }
+
+            closeEditAllianceModal();
+            renderAlliances();
+            generateTimeline();
+            saveToLocalStorage();
+            
+            // Update visual map
+            const slider = document.getElementById('time-slider');
+            updatePreview();
+        }
+
+        // Auto-save on changes
+        function saveToLocalStorage() {
+            localStorage.setItem('kingshot_alliances', JSON.stringify(alliances));
+            localStorage.setItem('kingshot_schedule', JSON.stringify(schedule));
+        }
+
+        function loadFromLocalStorage() {
+            // Always load the default example schedule on startup
+            alliances = JSON.parse(JSON.stringify(defaultSchedule.alliances));
+            schedule = JSON.parse(JSON.stringify(defaultSchedule.schedule));
+        }
+
+        // Alliance Management
+        function addAlliance() {
+            const name = document.getElementById('alliance-name').value.trim();
+            const color = document.getElementById('alliance-color').value;
+            
+            if (!name) {
+                alert('Please enter an alliance name');
+                return;
+            }
+
+            if (alliances.some(a => a.name === name)) {
+                alert('Alliance already exists');
+                return;
+            }
+
+            alliances.push({ name, color, isFFA: false });
+            document.getElementById('alliance-name').value = '';
+            // Reset to first color option
+            document.getElementById('alliance-color').selectedIndex = 0;
+            renderAlliances();
+            saveToLocalStorage();
+        }
+
+        function addFFA() {
+            if (alliances.some(a => a.isFFA)) {
+                alert('FFA already exists');
+                return;
+            }
+
+            alliances.push({ name: 'FFA', color: '#888888', isFFA: true });
+            renderAlliances();
+            saveToLocalStorage();
+        }
+
+        function removeAlliance(index) {
+            if (confirm(`Remove ${alliances[index].name}?`)) {
+                alliances.splice(index, 1);
+                renderAlliances();
+                saveToLocalStorage();
+                generateTimeline();
+            }
+        }
+
+        function renderAlliances() {
+            const list = document.getElementById('alliance-list');
+            list.innerHTML = alliances.map((alliance, index) => `
+                <div class="alliance-tag" style="background-color: ${alliance.color}; color: ${getContrastColor(alliance.color)};">
+                    <div class="color-box" style="background-color: ${alliance.color};" onclick="openEditAllianceModal(${index})"></div>
+                    <span onclick="openEditAllianceModal(${index})" style="cursor: pointer;">${alliance.name}</span>
+                    <button class="remove-btn" onclick="removeAlliance(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        // Timeline Generation
+        function generateTimeline() {
+            const interval = parseInt(document.getElementById('interval-select').value);
+            const header = document.getElementById('timeline-header');
+            const body = document.getElementById('timeline-body');
+
+            // Generate time slots from 12:00 to 18:00
+            const timeSlots = [];
+            for (let hour = 12; hour < 18; hour++) {
+                for (let min = 0; min < 60; min += interval) {
+                    timeSlots.push(`${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`);
+                }
+            }
+            timeSlots.push('18:00');
+
+            // Update slider max
+            document.getElementById('time-slider').max = timeSlots.length - 1;
+
+            // Generate header
+            header.innerHTML = '<th>Structure</th>' + timeSlots.map((time, index) => {
+                // Only show time at start of each interval (not the end time)
+                if (index === timeSlots.length - 1) return ''; // Skip 18:00 header
+                return `<th>${time}</th>`;
+            }).join('');
+
+            // Generate body
+            const structures = [
+                { id: 'castle', label: '🏰 Castle' },
+                { id: 'turret-i', label: '🗼 Turret I' },
+                { id: 'turret-ii', label: '🗼 Turret II' },
+                { id: 'turret-iii', label: '🗼 Turret III' },
+                { id: 'turret-iv', label: '🗼 Turret IV' }
+            ];
+
+            body.innerHTML = structures.map(structure => {
+                const cells = timeSlots.slice(0, -1).map(time => { // Exclude 18:00 from cells
+                    const alliance = getActiveAllianceForCell(structure.id, time, timeSlots);
+                    const bgColor = alliance ? getAllianceById(alliance)?.color || '#555' : '#ffffff';
+                    const textColor = alliance ? getContrastColor(getAllianceById(alliance)?.color) : '#333';
+                    const allianceName = alliance ? getAllianceById(alliance)?.name || '' : '';
+                    
+                    return `<td style="background-color: ${bgColor}; color: ${textColor};" 
+                                onclick="openAllianceModal('${structure.id}', '${time}')">
+                                <div class="timeline-cell">${allianceName}</div>
+                            </td>`;
+                }).join('');
+
+                return `<tr>
+                    <td class="structure-label">${structure.label}</td>
+                    ${cells}
+                </tr>`;
+            }).join('');
+            
+            // Update alliance stats
+            updateAllianceStats();
+        }
+
+        // Get the active alliance for a specific cell
+        function getActiveAllianceForCell(structureId, time, timeSlots) {
+            // Only return the alliance if it's explicitly set for this time
+            return schedule[structureId][time] || null;
+        }
+
+        // Modal Functions
+        function openAllianceModal(structureId, time) {
+            currentStructure = structureId;
+            currentTime = time;
+            
+            const modalAlliances = document.getElementById('modal-alliances');
+            
+            // Check if there's already an assignment
+            const currentAssignment = schedule[structureId][time];
+            
+            modalAlliances.innerHTML = alliances.map(alliance => `
+                <button class="modal-alliance-btn" 
+                        style="background-color: ${alliance.color}; color: ${getContrastColor(alliance.color)};"
+                        onclick="assignAlliance('${alliance.name}')">
+                    ${alliance.name}
+                </button>
+            `).join('');
+
+            // Add clear option (show differently if there's an assignment)
+            if (currentAssignment) {
+                modalAlliances.innerHTML += `
+                    <button class="modal-alliance-btn" 
+                            style="background-color: #d9534f; color: white;"
+                            onclick="assignAlliance(null)">
+                        ✕ Clear Assignment
+                    </button>
+                `;
+            } else {
+                modalAlliances.innerHTML += `
+                    <button class="modal-alliance-btn" 
+                            style="background-color: #6c757d; color: white;"
+                            onclick="assignAlliance(null)">
+                        Clear (Empty)
+                    </button>
+                `;
+            }
+
+            document.getElementById('alliance-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('alliance-modal').style.display = 'none';
+            currentStructure = null;
+            currentTime = null;
+        }
+
+        function assignAlliance(allianceName) {
+            if (allianceName === null) {
+                // Clear this time slot
+                delete schedule[currentStructure][currentTime];
+            } else {
+                // Assign alliance to this time slot
+                schedule[currentStructure][currentTime] = allianceName;
+            }
+            
+            closeModal();
+            generateTimeline();
+            updateAllianceStats();
+            saveToLocalStorage();
+            
+            // Update visual map to current preview time
+            const slider = document.getElementById('time-slider');
+            updatePreview();
+        }
+
+        // Calculate and display alliance statistics
+        function updateAllianceStats() {
+            const stats = {};
+            
+            // Initialize stats for all alliances
+            alliances.forEach(alliance => {
+                stats[alliance.name] = {
+                    castle: 0,
+                    turrets: 0,
+                    total: 0
+                };
+            });
+            
+            // Count time slots for each structure
+            Object.keys(schedule).forEach(structureId => {
+                Object.keys(schedule[structureId]).forEach(time => {
+                    const allianceName = schedule[structureId][time];
+                    if (allianceName && stats[allianceName]) {
+                        const interval = parseInt(document.getElementById('interval-select').value);
+                        if (structureId === 'castle') {
+                            stats[allianceName].castle += interval;
+                        } else {
+                            stats[allianceName].turrets += interval;
+                        }
+                        stats[allianceName].total += interval;
+                    }
+                });
+            });
+            
+            // Build display for all alliances with time
+            const statsElement = document.getElementById('total-stats');
+            const allianceStats = [];
+            
+            Object.keys(stats).forEach(name => {
+                const s = stats[name];
+                if (s.total > 0) {
+                    const castleHours = (s.castle / 60).toFixed(1);
+                    const turretsHours = (s.turrets / 60).toFixed(1);
+                    allianceStats.push(`<div>${name}: ${castleHours}h castle, ${turretsHours}h turrets</div>`);
+                }
+            });
+            
+            statsElement.innerHTML = allianceStats.length > 0 ? allianceStats.join('') : 'No assignments';
+        }
+
+        function selectStructure(structureId) {
+            // For now, this just highlights - could be expanded
+            console.log('Selected:', structureId);
+        }
+
+        // Visual Map Update
+        function updatePreview() {
+            const slider = document.getElementById('time-slider');
+            const timeIndex = parseInt(slider.value);
+            updateVisualMap(timeIndex);
+        }
+
+        function updateVisualMap(timeIndex) {
+            const interval = parseInt(document.getElementById('interval-select').value);
+            const timeSlots = [];
+            for (let hour = 12; hour < 18; hour++) {
+                for (let min = 0; min < 60; min += interval) {
+                    timeSlots.push(`${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`);
+                }
+            }
+            timeSlots.push('18:00');
+
+            const currentTime = timeSlots[timeIndex];
+            document.getElementById('current-time-display').textContent = `${currentTime} UTC`;
+
+            // Update castle
+            const castleAlliance = getActiveAllianceAt('castle', currentTime, timeSlots);
+            updateStructureVisual('castle', castleAlliance);
+
+            // Update turrets
+            ['turret-i', 'turret-ii', 'turret-iii', 'turret-iv'].forEach(turretId => {
+                const turretAlliance = getActiveAllianceAt(turretId, currentTime, timeSlots);
+                updateStructureVisual(turretId, turretAlliance);
+            });
+        }
+
+        function getActiveAllianceAt(structureId, time, timeSlots) {
+            // Only return if explicitly assigned to this time slot
+            return schedule[structureId][time] || null;
+        }
+
+        function updateStructureVisual(structureId, allianceName) {
+            const element = document.getElementById(structureId);
+            const alliance = getAllianceById(allianceName);
+
+            if (alliance) {
+                element.style.backgroundColor = alliance.color;
+                element.style.borderColor = darkenColor(alliance.color);
+                
+                if (structureId === 'castle') {
+                    element.querySelector('.castle-label').textContent = alliance.name;
+                    element.querySelector('.castle-label').style.color = getContrastColor(alliance.color);
+                } else {
+                    element.querySelector('.turret-label').textContent = alliance.name;
+                    element.querySelectorAll('.turret-label, .turret-number').forEach(el => {
+                        el.style.color = getContrastColor(alliance.color);
+                    });
+                }
+            } else {
+                // Reset to default
+                if (structureId === 'castle') {
+                    element.style.backgroundColor = '#8B4513';
+                    element.style.borderColor = '#654321';
+                    element.querySelector('.castle-label').textContent = 'CASTLE';
+                    element.querySelector('.castle-label').style.color = '#fff';
+                } else {
+                    element.style.backgroundColor = '#696969';
+                    element.style.borderColor = '#404040';
+                    element.querySelector('.turret-label').textContent = '-';
+                    element.querySelectorAll('.turret-label, .turret-number').forEach(el => {
+                        el.style.color = '#fff';
+                    });
+                }
+            }
+        }
+
+        function generateOutput() {
+            const interval = parseInt(document.getElementById('interval-select').value);
+            const timeSlots = [];
+            for (let hour = 12; hour < 18; hour++) {
+                for (let min = 0; min < 60; min += interval) {
+                    timeSlots.push(`${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`);
+                }
+            }
+
+            // Build event timeline
+            const events = [];
+            
+            timeSlots.forEach((time, index) => {
+                const changes = detectChanges(time, timeSlots, index);
+                if (changes.length > 0) {
+                    events.push({ time, changes });
+                }
+            });
+
+            // Split into parts (max ~250 chars per part)
+            const parts = splitIntoParts(events);
+            
+            // Render output
+            renderOutput(parts);
+        }
+
+        function detectChanges(time, timeSlots, timeIndex) {
+            const changes = [];
+            const structures = ['castle', 'turret-i', 'turret-ii', 'turret-iii', 'turret-iv'];
+
+            structures.forEach(structureId => {
+                const currentAlliance = schedule[structureId][time];
+                const prevAlliance = timeIndex > 0 ? schedule[structureId][timeSlots[timeIndex - 1]] : null;
+
+                // Only include if there's a change from previous time slot
+                if (currentAlliance !== prevAlliance) {
+                    // Only add if current is not null (something is assigned now)
+                    if (currentAlliance) {
+                        const verb = (prevAlliance === null || prevAlliance === 'FFA') ? 'holds' : 'takes';
+                        changes.push({
+                            structure: structureId,
+                            alliance: currentAlliance,
+                            verb: verb,
+                            isFFA: currentAlliance === 'FFA'
+                        });
+                    }
+                }
+            });
+
+            return changes;
+        }
+
+        function splitIntoParts(events) {
+            const parts = [];
+            let currentPart = [];
+            let currentLength = 0;
+
+            events.forEach(event => {
+                const eventText = formatEvent(event);
+                const eventLength = eventText.length;
+
+                if (currentLength + eventLength > 280 && currentPart.length > 0) {
+                    parts.push([...currentPart]);
+                    currentPart = [];
+                    currentLength = 0;
+                }
+
+                currentPart.push(event);
+                currentLength += eventLength;
+            });
+
+            if (currentPart.length > 0) {
+                parts.push(currentPart);
+            }
+
+            return parts;
+        }
+
+        function formatEvent(event) {
+            const { time, changes } = event;
+            const lines = [];
+
+            // Separate FFA and regular alliances
+            const allianceGroups = {};
+            const ffaStructures = {
+                castle: false,
+                turrets: []
+            };
+            
+            changes.forEach(change => {
+                if (change.isFFA) {
+                    // Handle FFA
+                    if (change.structure === 'castle') {
+                        ffaStructures.castle = true;
+                    } else {
+                        const turretName = change.structure.replace('turret-', '').toUpperCase();
+                        ffaStructures.turrets.push(turretName);
+                    }
+                } else {
+                    // Handle regular alliances
+                    if (!allianceGroups[change.alliance]) {
+                        allianceGroups[change.alliance] = {
+                            castle: false,
+                            turrets: [],
+                            verb: change.verb
+                        };
+                    }
+
+                    if (change.structure === 'castle') {
+                        allianceGroups[change.alliance].castle = true;
+                    } else {
+                        const turretName = change.structure.replace('turret-', '').toUpperCase();
+                        allianceGroups[change.alliance].turrets.push(turretName);
+                    }
+                }
+            });
+
+            // Format regular alliance output
+            Object.keys(allianceGroups).forEach(allianceName => {
+                const group = allianceGroups[allianceName];
+                let line = `${time} – ${allianceName} ${group.verb}`;
+
+                if (group.castle && group.turrets.length > 0) {
+                    const turretList = group.turrets.join(', ');
+                    line += ` Castle + Turret${group.turrets.length > 1 ? 's' : ''} ${turretList}`;
+                } else if (group.castle) {
+                    line += ' Castle';
+                } else if (group.turrets.length > 0) {
+                    const turretList = group.turrets.join(', ');
+                    line += ` Turret${group.turrets.length > 1 ? 's' : ''} ${turretList}`;
+                }
+
+                lines.push(line);
+            });
+
+            // Format FFA output
+            if (ffaStructures.castle && ffaStructures.turrets.length > 0) {
+                // Castle and turrets FFA
+                const turretList = ffaStructures.turrets.join(', ');
+                lines.push(`${time} – Castle + Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
+            } else if (ffaStructures.castle) {
+                lines.push(`${time} – Castle FFA`);
+            } else if (ffaStructures.turrets.length > 0) {
+                const turretList = ffaStructures.turrets.join(', ');
+                lines.push(`${time} – Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
+            }
+
+            return lines.join('\n');
+        }
+
+        function renderOutput(parts) {
+            const container = document.getElementById('output-parts');
+            
+            if (parts.length === 0) {
+                container.innerHTML = '<p style="text-align: center; opacity: 0.7;">No events scheduled</p>';
+                return;
+            }
+
+            container.innerHTML = parts.map((part, index) => {
+                const partText = part.map(event => formatEvent(event)).join('\n');
+                
+                return `
+                    <div class="output-part">
+                        <div class="output-part-header">
+                            <strong>Part ${index + 1}</strong>
+                            <button class="btn-secondary" onclick="copyPart(${index})">Copy Part ${index + 1}</button>
+                        </div>
+                        <div class="output-part-content">${partText}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function copyPart(partIndex) {
+            const partElement = document.querySelectorAll('.output-part-content')[partIndex];
+            const text = partElement.textContent;
+            
+            navigator.clipboard.writeText(`Part ${partIndex + 1}\n${text}`).then(() => {
+                alert(`Part ${partIndex + 1} copied to clipboard!`);
+            });
+        }
+
+        function copyAllParts() {
+            const parts = document.querySelectorAll('.output-part-content');
+            const allText = Array.from(parts).map((part, index) => 
+                `Part ${index + 1}\n${part.textContent}`
+            ).join('\n\n');
+
+            navigator.clipboard.writeText(allText).then(() => {
+                alert('All parts copied to clipboard!');
+            });
+        }
+
+        // Utility Functions
+        function getAllianceById(name) {
+            return alliances.find(a => a.name === name);
+        }
+
+        function getContrastColor(hexColor) {
+            const r = parseInt(hexColor.substr(1, 2), 16);
+            const g = parseInt(hexColor.substr(3, 2), 16);
+            const b = parseInt(hexColor.substr(5, 2), 16);
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness > 128 ? '#000000' : '#ffffff';
+        }
+
+        function darkenColor(hexColor) {
+            const r = Math.max(0, parseInt(hexColor.substr(1, 2), 16) - 40);
+            const g = Math.max(0, parseInt(hexColor.substr(3, 2), 16) - 40);
+            const b = Math.max(0, parseInt(hexColor.substr(5, 2), 16) - 40);
+            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+        }
+
+        // Import/Export
+        function loadExampleSchedule() {
+            if (confirm('Load the example schedule? This will replace your current schedule.')) {
+                alliances = JSON.parse(JSON.stringify(defaultSchedule.alliances));
+                schedule = JSON.parse(JSON.stringify(defaultSchedule.schedule));
+                renderAlliances();
+                generateTimeline();
+                saveToLocalStorage();
+                updateVisualMap(0);
+                alert('Example schedule loaded! Click "Generate Schedule" to see the output.');
+            }
+        }
+
+        function exportSchedule() {
+            const data = {
+                alliances: alliances,
+                schedule: schedule
+            };
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'castle-schedule.json';
+            a.click();
+        }
+
+        function importSchedule() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        alliances = data.alliances;
+                        schedule = data.schedule;
+                        renderAlliances();
+                        generateTimeline();
+                        saveToLocalStorage();
+                        alert('Schedule imported successfully!');
+                    } catch (error) {
+                        alert('Error importing schedule: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        // Share Link Generation
+        function generateShareLink() {
+            const data = {
+                alliances: alliances,
+                schedule: schedule
+            };
+            
+            // Compress the data by shortening keys
+            const compressedData = {
+                a: data.alliances.map(a => ({
+                    n: a.name,
+                    c: a.color.replace('#', ''), // Remove # to save chars
+                    f: a.isFFA ? 1 : 0
+                })),
+                s: {}
+            };
+            
+            // Compress schedule keys and time format
+            const structureMap = {
+                'castle': 'c',
+                'turret-i': '1',
+                'turret-ii': '2',
+                'turret-iii': '3',
+                'turret-iv': '4'
+            };
+            
+            Object.keys(data.schedule).forEach(key => {
+                const times = data.schedule[key];
+                const compressedTimes = {};
+                Object.keys(times).forEach(time => {
+                    // Compress time: "12:00" -> "1200"
+                    const shortTime = time.replace(':', '');
+                    compressedTimes[shortTime] = times[time];
+                });
+                compressedData.s[structureMap[key]] = compressedTimes;
+            });
+            
+            // Use LZString to compress and make URL-safe
+            const jsonStr = JSON.stringify(compressedData);
+            const compressed = LZString.compressToEncodedURIComponent(jsonStr);
+            
+            // Create URL with the current page location
+            const baseUrl = window.location.origin + window.location.pathname;
+            const shareUrl = `${baseUrl}?d=${compressed}`;
+            
+            // Check if URL is too long
+            if (shareUrl.length > 8000) {
+                alert('Schedule is too complex for URL sharing. Please use Export JSON instead.');
+                return;
+            }
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert(`Share link copied to clipboard!\n\nLink length: ${shareUrl.length} characters\n\nAnyone with this link will see your schedule instantly.`);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = shareUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert(`Share link copied to clipboard!\n\nLink length: ${shareUrl.length} characters\n\nAnyone with this link will see your schedule instantly.`);
+            });
+        }
+
+        function exportTimelineAsImage() {
+            const timelineTable = document.getElementById('timeline-table');
+            const timelineGrid = document.querySelector('.timeline-grid');
+            
+            // Show loading message
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏳ Generating...';
+            button.disabled = true;
+            
+            // Temporarily remove scroll and show full width
+            const originalOverflow = timelineGrid.style.overflow;
+            const originalMaxWidth = timelineGrid.style.maxWidth;
+            timelineGrid.style.overflow = 'visible';
+            timelineGrid.style.maxWidth = 'none';
+            
+            // Use html2canvas to capture just the table
+            html2canvas(timelineTable, {
+                backgroundColor: '#ffffff',
+                scale: 2, // Higher quality
+                logging: false,
+                scrollX: 0,
+                scrollY: 0,
+                windowWidth: timelineTable.scrollWidth,
+                windowHeight: timelineTable.scrollHeight,
+                width: timelineTable.scrollWidth,
+                height: timelineTable.scrollHeight
+            }).then(canvas => {
+                // Restore original styles
+                timelineGrid.style.overflow = originalOverflow;
+                timelineGrid.style.maxWidth = originalMaxWidth;
+                
+                // Convert to blob and download
+                canvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'castle-battle-schedule.png';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    
+                    // Reset button
+                    button.textContent = originalText;
+                    button.disabled = false;
+                });
+            }).catch(error => {
+                console.error('Error generating image:', error);
+                alert('Error generating image. Please try again.');
+                
+                // Restore original styles
+                timelineGrid.style.overflow = originalOverflow;
+                timelineGrid.style.maxWidth = originalMaxWidth;
+                
+                button.textContent = originalText;
+                button.disabled = false;
+            });
+        }
+
+        function clearSchedule() {
+            if (confirm('Clear all schedule assignments? Your alliances will be kept.')) {
+                schedule = {
+                    castle: {},
+                    'turret-i': {},
+                    'turret-ii': {},
+                    'turret-iii': {},
+                    'turret-iv': {}
+                };
+                generateTimeline();
+                saveToLocalStorage();
+                document.getElementById('output-parts').innerHTML = '<p style="text-align: center; opacity: 0.7;">Click "Generate Schedule" to create the battle plan</p>';
+                updateVisualMap(0);
+            }
+        }
+    </script>
+</body>
+</html>
