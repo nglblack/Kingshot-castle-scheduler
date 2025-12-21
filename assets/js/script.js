@@ -899,6 +899,22 @@ function importSchedule() {
 
 // Share Link Generation
 function generateShareLink() {
+    // Check if there's any data to share
+    if (alliances.length === 0) {
+        alert('Please add at least one alliance before generating a share link.');
+        return;
+    }
+    
+    // Check if there's any schedule data
+    const hasScheduleData = Object.keys(schedule).some(structure => 
+        Object.keys(schedule[structure]).length > 0
+    );
+    
+    if (!hasScheduleData) {
+        alert('Please create a schedule before generating a share link. Click on timeline cells to assign alliances.');
+        return;
+    }
+    
     const data = {
         alliances: alliances,
         schedule: schedule
