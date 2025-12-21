@@ -1,5 +1,5 @@
-// Kingshot Castle Battle Scheduler - v1.1
-// Updated: 2024-12-21 - Share link validation added
+// Kingshot Castle Battle Scheduler - v2.0
+// Updated: 2024-12-21 - Cloud saving with Supabase
 // State Management
 let alliances = [];
 let schedule = {
@@ -11,6 +11,12 @@ let schedule = {
 };
 let currentStructure = null;
 let currentTime = null;
+
+// Cloud project state
+let currentProjectId = null;
+let currentProjectVersion = 1;
+let saveTimeout = null;
+let isSaving = false;
 
 // Default example schedule
 const defaultSchedule = {
@@ -121,105 +127,246 @@ const defaultSchedule = {
 };
 
 // Initialize
-document.addEventListener('DOMContentLoaded', function() {
-    // Check for shared schedule in URL first
-    const urlParams = new URLSearchParams(window.location.search);
-    const lzData = urlParams.get('d'); // New LZString compressed format
-    const oldData = urlParams.get('s') || urlParams.get('schedule'); // Old formats
+document.addEventListener('DOMContentLoaded', async function() {
+    // Initialize Supabase
+    initSupabase();
     
-    if (lzData) {
-        try {
-            // Decompress LZString data
-            const jsonStr = LZString.decompressFromEncodedURIComponent(lzData);
-            const decodedData = JSON.parse(jsonStr);
-            
-            // Decompress alliances
-            alliances = decodedData.a.map(a => ({
-                name: a.n,
-                color: '#' + a.c, // Add # back
-                isFFA: a.f === 1
-            }));
-            
-            // Decompress schedule
-            const structureMap = {
-                'c': 'castle',
-                '1': 'turret-i',
-                '2': 'turret-ii',
-                '3': 'turret-iii',
-                '4': 'turret-iv'
-            };
-            
-            schedule = {
-                castle: {},
-                'turret-i': {},
-                'turret-ii': {},
-                'turret-iii': {},
-                'turret-iv': {}
-            };
-            
-            Object.keys(decodedData.s).forEach(key => {
-                const times = decodedData.s[key];
-                const expandedTimes = {};
-                Object.keys(times).forEach(shortTime => {
-                    // Expand time: "1200" -> "12:00"
-                    const fullTime = shortTime.slice(0, 2) + ':' + shortTime.slice(2);
-                    expandedTimes[fullTime] = times[shortTime];
-                });
-                schedule[structureMap[key]] = expandedTimes;
-            });
-        } catch (e) {
-            console.error('Error loading shared schedule:', e);
-            loadFromLocalStorage();
-        }
-    } else if (oldData) {
-        try {
-            // Decode old format
-            const decodedData = JSON.parse(atob(oldData));
-            
-            if (decodedData.a && decodedData.s) {
-                // Old compressed format
-                alliances = decodedData.a.map(a => ({
-                    name: a.n,
-                    color: a.c,
-                    isFFA: a.f === 1
-                }));
-                
-                const structureMap = {
-                    'c': 'castle',
-                    '1': 'turret-i',
-                    '2': 'turret-ii',
-                    '3': 'turret-iii',
-                    '4': 'turret-iv'
-                };
-                
-                schedule = {
-                    castle: {},
-                    'turret-i': {},
-                    'turret-ii': {},
-                    'turret-iii': {},
-                    'turret-iv': {}
-                };
-                
-                Object.keys(decodedData.s).forEach(key => {
-                    schedule[structureMap[key]] = decodedData.s[key];
-                });
-            } else {
-                // Original uncompressed format
-                alliances = decodedData.alliances;
-                schedule = decodedData.schedule;
-            }
-        } catch (e) {
-            console.error('Error loading shared schedule:', e);
-            loadFromLocalStorage();
-        }
+    // Check URL for project ID or legacy share link
+    const hash = window.location.hash;
+    const urlParams = new URLSearchParams(window.location.search);
+    const lzData = urlParams.get('d'); // Legacy LZString compressed format
+    
+    if (hash.startsWith('#/p/')) {
+        // Load project from Supabase
+        const projectId = hash.substring(4); // Remove '#/p/'
+        await loadProjectFromCloud(projectId);
+    } else if (lzData) {
+        // Migrate legacy share link to cloud
+        await migrateLegacyLink(lzData);
     } else {
-        loadFromLocalStorage();
+        // New blank schedule - load default
+        loadDefaultSchedule();
     }
     
     generateTimeline();
     renderAlliances();
     updateVisualMap(0);
+    updateSaveStatus('ready');
 });
+
+// Load project from cloud
+async function loadProjectFromCloud(projectId) {
+    console.log('🔄 Loading project from cloud:', projectId);
+    updateSaveStatus('loading');
+    
+    const project = await loadProject(projectId);
+    
+    if (project && project.data) {
+        currentProjectId = projectId;
+        currentProjectVersion = project.version || 1;
+        alliances = project.data.alliances || [];
+        schedule = project.data.schedule || {
+            castle: {},
+            'turret-i': {},
+            'turret-ii': {},
+            'turret-iii': {},
+            'turret-iv': {}
+        };
+        console.log('✅ Project loaded from cloud');
+        updateSaveStatus('saved');
+    } else {
+        console.error('❌ Project not found, loading default');
+        alert('Project not found. Loading blank schedule.');
+        loadDefaultSchedule();
+        // Clear the hash since project doesn't exist
+        window.location.hash = '';
+    }
+}
+
+// Migrate legacy share link to cloud
+async function migrateLegacyLink(lzData) {
+    console.log('🔄 Migrating legacy share link to cloud');
+    
+    try {
+        // Decompress LZString data
+        const jsonStr = LZString.decompressFromEncodedURIComponent(lzData);
+        const decodedData = JSON.parse(jsonStr);
+        
+        // Decompress alliances
+        alliances = decodedData.a.map(a => ({
+            name: a.n,
+            color: '#' + a.c,
+            isFFA: a.f === 1
+        }));
+        
+        // Decompress schedule
+        const structureMap = {
+            'c': 'castle',
+            '1': 'turret-i',
+            '2': 'turret-ii',
+            '3': 'turret-iii',
+            '4': 'turret-iv'
+        };
+        
+        schedule = {
+            castle: {},
+            'turret-i': {},
+            'turret-ii': {},
+            'turret-iii': {},
+            'turret-iv': {}
+        };
+        
+        Object.keys(decodedData.s).forEach(key => {
+            const times = decodedData.s[key];
+            const expandedTimes = {};
+            Object.keys(times).forEach(shortTime => {
+                const fullTime = shortTime.slice(0, 2) + ':' + shortTime.slice(2);
+                expandedTimes[fullTime] = times[shortTime];
+            });
+            schedule[structureMap[key]] = expandedTimes;
+        });
+        
+        // Save to cloud and redirect
+        console.log('💾 Saving migrated schedule to cloud');
+        const project = await createProject(alliances, schedule);
+        
+        if (project) {
+            currentProjectId = project.id;
+            currentProjectVersion = project.version;
+            // Redirect to new cloud URL
+            window.location.hash = `/p/${project.id}`;
+            window.history.replaceState(null, null, window.location.pathname + window.location.hash);
+            console.log('✅ Legacy link migrated successfully');
+            updateSaveStatus('saved');
+        } else {
+            console.error('❌ Failed to migrate legacy link');
+            loadDefaultSchedule();
+        }
+    } catch (e) {
+        console.error('❌ Error migrating legacy link:', e);
+        loadDefaultSchedule();
+    }
+}
+
+// Load default schedule
+function loadDefaultSchedule() {
+    alliances = JSON.parse(JSON.stringify(defaultSchedule.alliances));
+    schedule = JSON.parse(JSON.stringify(defaultSchedule.schedule));
+    currentProjectId = null;
+    currentProjectVersion = 1;
+}
+
+// Save status indicator
+function updateSaveStatus(status) {
+    let indicator = document.getElementById('save-status');
+    
+    if (!indicator) {
+        // Create indicator if it doesn't exist
+        indicator = document.createElement('div');
+        indicator.id = 'save-status';
+        indicator.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        `;
+        document.body.appendChild(indicator);
+    }
+    
+    switch(status) {
+        case 'saving':
+            indicator.textContent = '💾 Saving...';
+            indicator.style.backgroundColor = '#ffd666';
+            indicator.style.color = '#6b4423';
+            indicator.style.display = 'block';
+            isSaving = true;
+            break;
+        case 'saved':
+            indicator.textContent = '✓ Saved';
+            indicator.style.backgroundColor = '#4dd9cc';
+            indicator.style.color = 'white';
+            indicator.style.display = 'block';
+            isSaving = false;
+            // Hide after 2 seconds
+            setTimeout(() => {
+                if (!isSaving) {
+                    indicator.style.display = 'none';
+                }
+            }, 2000);
+            break;
+        case 'error':
+            indicator.textContent = '❌ Save Error';
+            indicator.style.backgroundColor = '#e85d75';
+            indicator.style.color = 'white';
+            indicator.style.display = 'block';
+            isSaving = false;
+            break;
+        case 'loading':
+            indicator.textContent = '📥 Loading...';
+            indicator.style.backgroundColor = '#a29bfe';
+            indicator.style.color = 'white';
+            indicator.style.display = 'block';
+            break;
+        case 'ready':
+            indicator.style.display = 'none';
+            isSaving = false;
+            break;
+    }
+}
+
+// Auto-save to cloud (debounced)
+function scheduleAutoSave() {
+    // Don't save if we don't have a project yet
+    if (!currentProjectId) {
+        console.log('⏭️ Skipping autosave - no project created yet');
+        return;
+    }
+    
+    // Clear existing timeout
+    if (saveTimeout) {
+        clearTimeout(saveTimeout);
+    }
+    
+    // Schedule new save
+    saveTimeout = setTimeout(async () => {
+        await saveToCloud();
+    }, 1000); // 1 second debounce
+    
+    console.log('⏰ Autosave scheduled');
+}
+
+// Save to cloud
+async function saveToCloud() {
+    if (!currentProjectId) {
+        console.log('⏭️ Skipping cloud save - no project ID');
+        return;
+    }
+    
+    console.log('💾 Saving to cloud...');
+    updateSaveStatus('saving');
+    
+    const result = await updateProject(currentProjectId, alliances, schedule, currentProjectVersion);
+    
+    if (result) {
+        currentProjectVersion = result.version;
+        console.log('✅ Saved to cloud successfully');
+        updateSaveStatus('saved');
+    } else {
+        console.error('❌ Failed to save to cloud');
+        updateSaveStatus('error');
+    }
+}
+
+// Modified save function - now saves to cloud instead of localStorage
+function saveToLocalStorage() {
+    // This function is kept for compatibility but now triggers cloud save
+    scheduleAutoSave();
+}
 
 // Edit Alliance Functions
 let editingAllianceIndex = null;
@@ -228,7 +375,6 @@ function openEditAllianceModal(index) {
     editingAllianceIndex = index;
     const alliance = alliances[index];
     
-    // Don't allow editing FFA
     if (alliance.isFFA) {
         alert('FFA alliance cannot be edited');
         return;
@@ -250,13 +396,11 @@ function saveAllianceEdit() {
     const newName = document.getElementById('edit-alliance-name').value.trim();
     const newColor = document.getElementById('edit-alliance-color').value;
     
-    // Validate name
     if (!newName) {
         alert('Alliance name cannot be empty');
         return;
     }
     
-    // Check if name already exists (excluding current alliance)
     if (alliances.some((a, i) => i !== editingAllianceIndex && a.name === newName)) {
         alert('An alliance with this name already exists');
         return;
@@ -264,11 +408,9 @@ function saveAllianceEdit() {
     
     const oldName = alliances[editingAllianceIndex].name;
     
-    // Update alliance name and color
     alliances[editingAllianceIndex].name = newName;
     alliances[editingAllianceIndex].color = newColor;
     
-    // Update schedule if name changed
     if (oldName !== newName) {
         Object.keys(schedule).forEach(structure => {
             Object.keys(schedule[structure]).forEach(time => {
@@ -283,22 +425,7 @@ function saveAllianceEdit() {
     renderAlliances();
     generateTimeline();
     saveToLocalStorage();
-    
-    // Update visual map
-    const slider = document.getElementById('time-slider');
     updatePreview();
-}
-
-// Auto-save on changes
-function saveToLocalStorage() {
-    localStorage.setItem('kingshot_alliances', JSON.stringify(alliances));
-    localStorage.setItem('kingshot_schedule', JSON.stringify(schedule));
-}
-
-function loadFromLocalStorage() {
-    // Always load the default example schedule on startup
-    alliances = JSON.parse(JSON.stringify(defaultSchedule.alliances));
-    schedule = JSON.parse(JSON.stringify(defaultSchedule.schedule));
 }
 
 // Alliance Management
@@ -318,7 +445,6 @@ function addAlliance() {
 
     alliances.push({ name, color, isFFA: false });
     document.getElementById('alliance-name').value = '';
-    // Reset to first color option
     document.getElementById('alliance-color').selectedIndex = 0;
     renderAlliances();
     saveToLocalStorage();
@@ -338,10 +464,8 @@ function addFFA() {
 function removeAlliance(index) {
     const allianceName = alliances[index].name;
     if (confirm(`Remove ${allianceName}?`)) {
-        // Remove alliance from the alliances array
         alliances.splice(index, 1);
         
-        // Remove all assignments of this alliance from the schedule
         Object.keys(schedule).forEach(structure => {
             Object.keys(schedule[structure]).forEach(time => {
                 if (schedule[structure][time] === allianceName) {
@@ -374,7 +498,6 @@ function generateTimeline() {
     const header = document.getElementById('timeline-header');
     const body = document.getElementById('timeline-body');
 
-    // Generate time slots from 12:00 to 18:00
     const timeSlots = [];
     for (let hour = 12; hour < 18; hour++) {
         for (let min = 0; min < 60; min += interval) {
@@ -383,20 +506,14 @@ function generateTimeline() {
     }
     timeSlots.push('18:00');
 
-    // Update slider max
     document.getElementById('time-slider').max = timeSlots.length - 1;
 
-    // Generate header
     header.innerHTML = '<th>Structure</th>' + timeSlots.map((time, index) => {
-        // Only show time at start of each interval (not the end time)
-        if (index === timeSlots.length - 1) return ''; // Skip 18:00 header
-        
-        // Calculate end time for this slot
+        if (index === timeSlots.length - 1) return '';
         const nextTime = timeSlots[index + 1];
         return `<th>${time}<br><span style="font-size: 9px; opacity: 0.8;">to ${nextTime}</span></th>`;
     }).join('');
 
-    // Generate body
     const structures = [
         { id: 'castle', label: '🏰 Castle' },
         { id: 'turret-i', label: '🗼 Turret I' },
@@ -406,7 +523,7 @@ function generateTimeline() {
     ];
 
     body.innerHTML = structures.map(structure => {
-        const cells = timeSlots.slice(0, -1).map(time => { // Exclude 18:00 from cells
+        const cells = timeSlots.slice(0, -1).map(time => {
             const alliance = getActiveAllianceForCell(structure.id, time, timeSlots);
             const bgColor = alliance ? getAllianceById(alliance)?.color || '#555' : '#ffffff';
             const textColor = alliance ? getContrastColor(getAllianceById(alliance)?.color) : '#333';
@@ -424,13 +541,10 @@ function generateTimeline() {
         </tr>`;
     }).join('');
     
-    // Update alliance stats
     updateAllianceStats();
 }
 
-// Get the active alliance for a specific cell
 function getActiveAllianceForCell(structureId, time, timeSlots) {
-    // Only return the alliance if it's explicitly set for this time
     return schedule[structureId][time] || null;
 }
 
@@ -440,8 +554,6 @@ function openAllianceModal(structureId, time) {
     currentTime = time;
     
     const modalAlliances = document.getElementById('modal-alliances');
-    
-    // Check if there's already an assignment
     const currentAssignment = schedule[structureId][time];
     
     modalAlliances.innerHTML = alliances.map(alliance => `
@@ -452,7 +564,6 @@ function openAllianceModal(structureId, time) {
         </button>
     `).join('');
 
-    // Add clear option (show differently if there's an assignment)
     if (currentAssignment) {
         modalAlliances.innerHTML += `
             <button class="modal-alliance-btn" 
@@ -482,10 +593,8 @@ function closeModal() {
 
 function assignAlliance(allianceName) {
     if (allianceName === null) {
-        // Clear this time slot
         delete schedule[currentStructure][currentTime];
     } else {
-        // Assign alliance to this time slot
         schedule[currentStructure][currentTime] = allianceName;
     }
     
@@ -494,7 +603,6 @@ function assignAlliance(allianceName) {
     updateAllianceStats();
     saveToLocalStorage();
     
-    // Update visual map to current preview time
     const slider = document.getElementById('time-slider');
     updatePreview();
 }
@@ -503,7 +611,6 @@ function assignAlliance(allianceName) {
 function updateAllianceStats() {
     const stats = {};
     
-    // Initialize stats for all alliances
     alliances.forEach(alliance => {
         stats[alliance.name] = {
             castle: 0,
@@ -512,7 +619,6 @@ function updateAllianceStats() {
         };
     });
     
-    // Count time slots for each structure
     Object.keys(schedule).forEach(structureId => {
         Object.keys(schedule[structureId]).forEach(time => {
             const allianceName = schedule[structureId][time];
@@ -528,7 +634,6 @@ function updateAllianceStats() {
         });
     });
     
-    // Build display for all alliances with time
     const statsElement = document.getElementById('total-stats');
     const allianceStats = [];
     
@@ -545,7 +650,6 @@ function updateAllianceStats() {
 }
 
 function selectStructure(structureId) {
-    // For now, this just highlights - could be expanded
     console.log('Selected:', structureId);
 }
 
@@ -569,11 +673,9 @@ function updateVisualMap(timeIndex) {
     const currentTime = timeSlots[timeIndex];
     document.getElementById('current-time-display').textContent = `${currentTime} UTC`;
 
-    // Update castle
     const castleAlliance = getActiveAllianceAt('castle', currentTime, timeSlots);
     updateStructureVisual('castle', castleAlliance);
 
-    // Update turrets
     ['turret-i', 'turret-ii', 'turret-iii', 'turret-iv'].forEach(turretId => {
         const turretAlliance = getActiveAllianceAt(turretId, currentTime, timeSlots);
         updateStructureVisual(turretId, turretAlliance);
@@ -581,17 +683,13 @@ function updateVisualMap(timeIndex) {
 }
 
 function getActiveAllianceAt(structureId, time, timeSlots) {
-    // If explicitly assigned to this time slot, return it
     if (schedule[structureId][time]) {
         return schedule[structureId][time];
     }
     
-    // If we're at 18:00 (the end), show the last scheduled period (17:30 for 30min intervals)
     if (time === '18:00') {
-        // Find the last scheduled time before 18:00
         const scheduleKeys = Object.keys(schedule[structureId]).sort();
         if (scheduleKeys.length > 0) {
-            // Return the last scheduled alliance
             return schedule[structureId][scheduleKeys[scheduleKeys.length - 1]] || null;
         }
     }
@@ -617,7 +715,6 @@ function updateStructureVisual(structureId, allianceName) {
             });
         }
     } else {
-        // Reset to default
         if (structureId === 'castle') {
             element.style.background = '#b8860b';
             element.style.borderColor = '#9a7209';
@@ -643,7 +740,6 @@ function generateOutput() {
         }
     }
 
-    // Build event timeline
     const events = [];
     
     timeSlots.forEach((time, index) => {
@@ -653,10 +749,7 @@ function generateOutput() {
         }
     });
 
-    // Split into parts (max ~250 chars per part)
     const parts = splitIntoParts(events);
-    
-    // Render output
     renderOutput(parts);
 }
 
@@ -668,9 +761,7 @@ function detectChanges(time, timeSlots, timeIndex) {
         const currentAlliance = schedule[structureId][time];
         const prevAlliance = timeIndex > 0 ? schedule[structureId][timeSlots[timeIndex - 1]] : null;
 
-        // Only include if there's a change from previous time slot
         if (currentAlliance !== prevAlliance) {
-            // Only add if current is not null (something is assigned now)
             if (currentAlliance) {
                 const verb = (prevAlliance === null || prevAlliance === 'FFA') ? 'holds' : 'takes';
                 changes.push({
@@ -716,7 +807,6 @@ function formatEvent(event) {
     const { time, changes } = event;
     const lines = [];
 
-    // Separate FFA and regular alliances
     const allianceGroups = {};
     const ffaStructures = {
         castle: false,
@@ -725,7 +815,6 @@ function formatEvent(event) {
     
     changes.forEach(change => {
         if (change.isFFA) {
-            // Handle FFA
             if (change.structure === 'castle') {
                 ffaStructures.castle = true;
             } else {
@@ -733,7 +822,6 @@ function formatEvent(event) {
                 ffaStructures.turrets.push(turretName);
             }
         } else {
-            // Handle regular alliances
             if (!allianceGroups[change.alliance]) {
                 allianceGroups[change.alliance] = {
                     castle: false,
@@ -751,10 +839,9 @@ function formatEvent(event) {
         }
     });
 
-    // Format regular alliance output
     Object.keys(allianceGroups).forEach(allianceName => {
         const group = allianceGroups[allianceName];
-        let line = `${time} – ${allianceName} ${group.verb}`;
+        let line = `${time} — ${allianceName} ${group.verb}`;
 
         if (group.castle && group.turrets.length > 0) {
             const turretList = group.turrets.join(', ');
@@ -769,16 +856,14 @@ function formatEvent(event) {
         lines.push(line);
     });
 
-    // Format FFA output
     if (ffaStructures.castle && ffaStructures.turrets.length > 0) {
-        // Castle and turrets FFA
         const turretList = ffaStructures.turrets.join(', ');
-        lines.push(`${time} – Castle + Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
+        lines.push(`${time} — Castle + Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
     } else if (ffaStructures.castle) {
-        lines.push(`${time} – Castle FFA`);
+        lines.push(`${time} — Castle FFA`);
     } else if (ffaStructures.turrets.length > 0) {
         const turretList = ffaStructures.turrets.join(', ');
-        lines.push(`${time} – Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
+        lines.push(`${time} — Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
     }
 
     return lines.join('\n');
@@ -899,15 +984,13 @@ function importSchedule() {
     input.click();
 }
 
-// Share Link Generation
-function generateShareLink() {
-    // Check if there's any data to share
+// Share Link Generation - NOW CREATES CLOUD PROJECT
+async function generateShareLink() {
     if (alliances.length === 0) {
         alert('Please add at least one alliance before generating a share link.');
         return;
     }
     
-    // Check if there's any schedule data
     const hasScheduleData = Object.keys(schedule).some(structure => 
         Object.keys(schedule[structure]).length > 0
     );
@@ -917,90 +1000,75 @@ function generateShareLink() {
         return;
     }
     
-    const data = {
-        alliances: alliances,
-        schedule: schedule
-    };
-    
-    // Compress the data by shortening keys
-    const compressedData = {
-        a: data.alliances.map(a => ({
-            n: a.name,
-            c: a.color.replace('#', ''), // Remove # to save chars
-            f: a.isFFA ? 1 : 0
-        })),
-        s: {}
-    };
-    
-    // Compress schedule keys and time format
-    const structureMap = {
-        'castle': 'c',
-        'turret-i': '1',
-        'turret-ii': '2',
-        'turret-iii': '3',
-        'turret-iv': '4'
-    };
-    
-    Object.keys(data.schedule).forEach(key => {
-        const times = data.schedule[key];
-        const compressedTimes = {};
-        Object.keys(times).forEach(time => {
-            // Compress time: "12:00" -> "1200"
-            const shortTime = time.replace(':', '');
-            compressedTimes[shortTime] = times[time];
+    // If we already have a project, just copy the current URL
+    if (currentProjectId) {
+        const shareUrl = `${window.location.origin}${window.location.pathname}#/p/${currentProjectId}`;
+        
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            alert(`Share link copied to clipboard!\n\nAnyone with this link can view and edit your schedule.\n\nProject ID: ${currentProjectId}`);
+        }).catch(() => {
+            const textArea = document.createElement('textarea');
+            textArea.value = shareUrl;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert(`Share link copied to clipboard!\n\nProject ID: ${currentProjectId}`);
         });
-        compressedData.s[structureMap[key]] = compressedTimes;
-    });
-    
-    // Use LZString to compress and make URL-safe
-    const jsonStr = JSON.stringify(compressedData);
-    const compressed = LZString.compressToEncodedURIComponent(jsonStr);
-    
-    // Create URL with the current page location
-    const baseUrl = window.location.origin + window.location.pathname;
-    const shareUrl = `${baseUrl}?d=${compressed}`;
-    
-    // Check if URL is too long
-    if (shareUrl.length > 8000) {
-        alert('Schedule is too complex for URL sharing. Please use Export JSON instead.');
         return;
     }
     
-    // Copy to clipboard
-    navigator.clipboard.writeText(shareUrl).then(() => {
-        alert(`Share link copied to clipboard!\n\nLink length: ${shareUrl.length} characters\n\nAnyone with this link will see your schedule instantly.`);
-    }).catch(() => {
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = shareUrl;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        alert(`Share link copied to clipboard!\n\nLink length: ${shareUrl.length} characters\n\nAnyone with this link will see your schedule instantly.`);
-    });
+    // Create new cloud project
+    console.log('📝 Creating new cloud project for sharing');
+    updateSaveStatus('saving');
+    
+    const project = await createProject(alliances, schedule);
+    
+    if (project) {
+        currentProjectId = project.id;
+        currentProjectVersion = project.version;
+        
+        // Update URL in browser
+        window.location.hash = `/p/${project.id}`;
+        
+        const shareUrl = `${window.location.origin}${window.location.pathname}#/p/${project.id}`;
+        
+        updateSaveStatus('saved');
+        
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            alert(`Share link created and copied to clipboard!\n\nAnyone with this link can view and edit your schedule.\n\nProject ID: ${project.id}`);
+        }).catch(() => {
+            const textArea = document.createElement('textarea');
+            textArea.value = shareUrl;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert(`Share link created and copied!\n\nProject ID: ${project.id}`);
+        });
+    } else {
+        updateSaveStatus('error');
+        alert('Failed to create share link. Please try again.');
+    }
 }
 
 function exportTimelineAsImage() {
     const timelineTable = document.getElementById('timeline-table');
     const timelineGrid = document.querySelector('.timeline-grid');
     
-    // Show loading message
     const button = event.target;
     const originalText = button.textContent;
     button.textContent = '⏳ Generating...';
     button.disabled = true;
     
-    // Temporarily remove scroll and show full width
     const originalOverflow = timelineGrid.style.overflow;
     const originalMaxWidth = timelineGrid.style.maxWidth;
     timelineGrid.style.overflow = 'visible';
     timelineGrid.style.maxWidth = 'none';
     
-    // Use html2canvas to capture just the table
     html2canvas(timelineTable, {
         backgroundColor: '#ffffff',
-        scale: 2, // Higher quality
+        scale: 2,
         logging: false,
         scrollX: 0,
         scrollY: 0,
@@ -1009,11 +1077,9 @@ function exportTimelineAsImage() {
         width: timelineTable.scrollWidth,
         height: timelineTable.scrollHeight
     }).then(canvas => {
-        // Restore original styles
         timelineGrid.style.overflow = originalOverflow;
         timelineGrid.style.maxWidth = originalMaxWidth;
         
-        // Convert to blob and download
         canvas.toBlob(blob => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1022,7 +1088,6 @@ function exportTimelineAsImage() {
             a.click();
             URL.revokeObjectURL(url);
             
-            // Reset button
             button.textContent = originalText;
             button.disabled = false;
         });
@@ -1030,7 +1095,6 @@ function exportTimelineAsImage() {
         console.error('Error generating image:', error);
         alert('Error generating image. Please try again.');
         
-        // Restore original styles
         timelineGrid.style.overflow = originalOverflow;
         timelineGrid.style.maxWidth = originalMaxWidth;
         
@@ -1105,11 +1169,11 @@ const infoContent = {
                 <li><strong>Generate Schedule:</strong> Click to create formatted battle plan text from your timeline</li>
                 <li><strong>Copy Parts:</strong> The output is split into parts to fit Kingshot's chat message limits - copy each part separately</li>
                 <li><strong>Copy All:</strong> Copy all parts at once to paste into Discord or other apps</li>
-                <li><strong>Share Link:</strong> Generate a URL that anyone can open to see your exact schedule</li>
+                <li><strong>Share Link:</strong> Create a cloud-saved project that anyone can view and edit with the link!</li>
                 <li><strong>Export/Import JSON:</strong> Save your schedule as a file or load someone else's schedule</li>
                 <li><strong>Clear Schedule:</strong> Remove all assignments but keep your alliances</li>
             </ul>
-            <p><strong>Tip:</strong> Use Share Link for the fastest way to collaborate with your alliance!</p>
+            <p><strong>Tip:</strong> Share Link now creates a permanent cloud-saved project! Your schedule autosaves as you work.</p>
         `
     }
 };
@@ -1130,11 +1194,9 @@ function closeInfoModal() {
     document.getElementById('info-modal').style.display = 'none';
 }
 
-// Close info modal when clicking outside
 document.addEventListener('click', function(event) {
     const modal = document.getElementById('info-modal');
     if (event.target === modal) {
         closeInfoModal();
     }
 });
-

@@ -8,11 +8,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>⚔️ Kingshot Castle Battle Scheduler</h1>
+        <h1>âš”ï¸ Kingshot Castle Battle Scheduler</h1>
 
         <!-- Alliance Management -->
         <div class="alliance-section">
-            <h2>📋 Alliances<button class="info-button" onclick="openInfoModal('alliances')" title="Learn about Alliances">!</button></h2>
+            <h2>ðŸ“‹ Alliances<button class="info-button" onclick="openInfoModal('alliances')" title="Learn about Alliances">!</button></h2>
             <div>
                 <div class="alliance-input">
                 <input type="text" id="alliance-name" placeholder="Alliance Name (e.g., FTP, WUW)" maxlength="10" title="Enter the short name for your alliance (max 10 characters)">
@@ -44,7 +44,7 @@
         <div class="main-content">
             <!-- Castle Visual -->
             <div class="castle-visual">
-                <h3>🏰 Castle Battle Map<button class="info-button" onclick="openInfoModal('castle')" title="Learn about Castle Map">!</button></h3>
+                <h3>ðŸ° Castle Battle Map<button class="info-button" onclick="openInfoModal('castle')" title="Learn about Castle Map">!</button></h3>
                 <div style="padding: 20px; width: 100%; display: flex; flex-direction: column; align-items: center;">
                 <div class="castle-container">
                     <div class="castle" id="castle" onclick="selectStructure('castle')">
@@ -72,7 +72,7 @@
                     <input type="range" id="time-slider" min="0" max="72" value="0" oninput="updatePreview()">
                     <div id="current-time-display" style="font-size: 18px; font-weight: bold;">12:00 UTC</div>
                     <div style="font-size: 11px; opacity: 0.6; margin-top: 8px; font-style: italic; color: #6b4423;">
-                        ↔️ Drag slider to preview who controls what at different times
+                        â†”ï¸ Drag slider to preview who controls what at different times
                     </div>
                 </div>
                 </div>
@@ -80,7 +80,7 @@
 
             <!-- Timeline -->
             <div class="timeline-section">
-                <h3>⏰ Timeline (12:00 - 18:00 UTC)<button class="info-button" onclick="openInfoModal('timeline')" title="Learn about Timeline">!</button></h3>
+                <h3>â° Timeline (12:00 - 18:00 UTC)<button class="info-button" onclick="openInfoModal('timeline')" title="Learn about Timeline">!</button></h3>
                 <div style="padding: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; gap: 20px; flex-wrap: wrap;">
                     <div>
@@ -91,7 +91,7 @@
                                 <option value="30" selected>30 minutes</option>
                                 <option value="60">60 minutes</option>
                             </select>
-                            <button class="btn-secondary" onclick="exportTimelineAsImage()" title="Download the timeline as an image to share on Discord">📸 Export as Image</button>
+                            <button class="btn-secondary" onclick="exportTimelineAsImage()" title="Download the timeline as an image to share on Discord">ðŸ“¸ Export as Image</button>
                         </div>
                     </div>
                     <div class="alliance-stats" id="alliance-stats">
@@ -113,7 +113,7 @@
 
         <!-- Output Section -->
         <div class="output-section">
-            <h3>📝 Generated Schedule<button class="info-button" onclick="openInfoModal('output')" title="Learn about Generated Schedule">!</button></h3>
+            <h3>ðŸ“ Generated Schedule<button class="info-button" onclick="openInfoModal('output')" title="Learn about Generated Schedule">!</button></h3>
             <div style="padding: 20px;">
             <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
                 <button class="btn-secondary" onclick="generateOutput()" title="Create formatted text from your schedule to copy into Kingshot chat">Generate Schedule</button>
@@ -123,7 +123,7 @@
             </div>
             <div class="action-buttons">
                 <button class="btn-primary" onclick="copyAllParts()" title="Copy all parts of the schedule to paste in-game">Copy All Parts</button>
-                <button class="btn-primary" onclick="generateShareLink()" title="Create a shareable link with your current schedule">🔗 Share Link</button>
+                <button class="btn-primary" onclick="generateShareLink()" title="Create a shareable link with your current schedule">ðŸ”— Share Link</button>
                 <button class="btn-secondary" onclick="loadExampleSchedule()" title="Reset to the default example schedule">Load Example</button>
                 <button class="btn-secondary" onclick="exportSchedule()" title="Download your schedule as a JSON file to share with others">Export JSON</button>
                 <button class="btn-secondary" onclick="importSchedule()" title="Load a schedule from a JSON file someone shared with you">Import JSON</button>
@@ -191,6 +191,19 @@
     
     <!-- LZString for URL compression -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+
+    <!-- Supabase Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Create Supabase client function from the library
+        const { createClient } = supabase;
+    </script>
+    
+    <!-- Supabase Configuration -->
+    <script src="assets/js/supabase-config.js"></script>
+    
+    <!-- Supabase Database Functions -->
+    <script src="assets/js/supabase-db.js"></script>
 
     <!-- Main JavaScript -->
     <script src="assets/js/script.js"></script>
