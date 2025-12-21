@@ -2,21 +2,26 @@
 // This file handles all database operations for saving/loading projects
 
 // Initialize Supabase client (will be set after supabase-js loads)
-let supabase = null;
+let supabaseClient = null;
 
 // Initialize the Supabase client
 function initSupabase() {
-    if (typeof supabase === 'object' && supabase !== null) {
+    if (supabaseClient) {
         return; // Already initialized
     }
     
-    if (typeof createClient === 'undefined') {
-        console.error('Supabase client library not loaded');
+    if (typeof window.supabase === 'undefined') {
+        console.error('❌ Supabase client library not loaded');
         return;
     }
     
-    supabase = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-    console.log('✅ Supabase client initialized');
+    try {
+        const { createClient } = window.supabase;
+        supabaseClient = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+        console.log('✅ Supabase client initialized');
+    } catch (error) {
+        console.error('❌ Error initializing Supabase:', error);
+    }
 }
 
 // Generate a random project ID (8 characters: letters and numbers)
@@ -38,7 +43,7 @@ function generateProjectName() {
 
 // Create a new project in Supabase
 async function createProject(alliances, schedule) {
-    if (!supabase) {
+    if (!supabaseClient) {
         console.error('❌ Supabase not initialized');
         return null;
     }
@@ -59,7 +64,7 @@ async function createProject(alliances, schedule) {
     console.log('📝 Creating project:', projectId);
     
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('projects')
             .insert([projectData])
             .select()
@@ -80,7 +85,7 @@ async function createProject(alliances, schedule) {
 
 // Load a project from Supabase
 async function loadProject(projectId) {
-    if (!supabase) {
+    if (!supabaseClient) {
         console.error('❌ Supabase not initialized');
         return null;
     }
@@ -88,7 +93,7 @@ async function loadProject(projectId) {
     console.log('📥 Loading project:', projectId);
     
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('projects')
             .select('*')
             .eq('id', projectId)
@@ -109,7 +114,7 @@ async function loadProject(projectId) {
 
 // Update an existing project (autosave)
 async function updateProject(projectId, alliances, schedule, currentVersion) {
-    if (!supabase) {
+    if (!supabaseClient) {
         console.error('❌ Supabase not initialized');
         return null;
     }
@@ -126,7 +131,7 @@ async function updateProject(projectId, alliances, schedule, currentVersion) {
     };
     
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('projects')
             .update(updateData)
             .eq('id', projectId)
@@ -148,13 +153,13 @@ async function updateProject(projectId, alliances, schedule, currentVersion) {
 
 // Check if a project exists
 async function projectExists(projectId) {
-    if (!supabase) {
+    if (!supabaseClient) {
         console.error('❌ Supabase not initialized');
         return false;
     }
     
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('projects')
             .select('id')
             .eq('id', projectId)
