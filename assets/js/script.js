@@ -217,33 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
     generateTimeline();
     renderAlliances();
     updateVisualMap(0);
-    
-    // Show tips on first visit
-    const dontShowTips = localStorage.getItem('kingshot_dont_show_tips');
-    if (!dontShowTips) {
-        setTimeout(() => {
-            openTipsModal();
-        }, 500);
-    }
 });
-
-// Tips Modal Functions
-function openTipsModal() {
-    document.getElementById('tips-modal').style.display = 'flex';
-}
-
-function closeTipsModal() {
-    document.getElementById('tips-modal').style.display = 'none';
-}
-
-function saveTipsPreference() {
-    const dontShow = document.getElementById('dont-show-tips').checked;
-    if (dontShow) {
-        localStorage.setItem('kingshot_dont_show_tips', 'true');
-    } else {
-        localStorage.removeItem('kingshot_dont_show_tips');
-    }
-}
 
 // Edit Alliance Functions
 let editingAllianceIndex = null;
