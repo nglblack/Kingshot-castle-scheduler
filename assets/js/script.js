@@ -1,3 +1,5 @@
+// Kingshot Castle Battle Scheduler - v1.1
+// Updated: 2024-12-21 - Share link validation added
 // State Management
 let alliances = [];
 let schedule = {
