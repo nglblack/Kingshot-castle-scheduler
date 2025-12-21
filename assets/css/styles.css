@@ -262,7 +262,7 @@ button:active {
     height: 100px;
     background: #b8860b;
     transform: translate(-50%, -50%) rotate(45deg);
-    border: 5px solid #4dd9cc;
+    border: 5px solid #9a7209;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
@@ -293,7 +293,7 @@ button:active {
     height: 65px;
     background: #708090;
     border-radius: 50%;
-    border: 5px solid #e85d75;
+    border: 5px solid #5a6a78;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;

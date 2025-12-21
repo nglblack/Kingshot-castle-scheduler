@@ -334,11 +334,24 @@ function addFFA() {
 }
 
 function removeAlliance(index) {
-    if (confirm(`Remove ${alliances[index].name}?`)) {
+    const allianceName = alliances[index].name;
+    if (confirm(`Remove ${allianceName}?`)) {
+        // Remove alliance from the alliances array
         alliances.splice(index, 1);
+        
+        // Remove all assignments of this alliance from the schedule
+        Object.keys(schedule).forEach(structure => {
+            Object.keys(schedule[structure]).forEach(time => {
+                if (schedule[structure][time] === allianceName) {
+                    delete schedule[structure][time];
+                }
+            });
+        });
+        
         renderAlliances();
         saveToLocalStorage();
         generateTimeline();
+        updateVisualMap(parseInt(document.getElementById('time-slider').value));
     }
 }
 
@@ -605,12 +618,12 @@ function updateStructureVisual(structureId, allianceName) {
         // Reset to default
         if (structureId === 'castle') {
             element.style.background = '#b8860b';
-            element.style.borderColor = '#4dd9cc';
+            element.style.borderColor = '#9a7209';
             element.querySelector('.castle-label').textContent = 'CASTLE';
             element.querySelector('.castle-label').style.color = '#fff';
         } else {
             element.style.background = '#708090';
-            element.style.borderColor = '#e85d75';
+            element.style.borderColor = '#5a6a78';
             element.querySelector('.turret-label').textContent = '-';
             element.querySelectorAll('.turret-label, .turret-number').forEach(el => {
                 el.style.color = '#fff';
