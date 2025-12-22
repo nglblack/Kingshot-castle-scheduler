@@ -280,14 +280,14 @@ function updateSaveStatus(status) {
     
     switch(status) {
         case 'saving':
-            indicator.textContent = 'ðŸ’¾ Saving...';
+            indicator.textContent = '💾 Saving...';
             indicator.style.backgroundColor = '#ffd666';
             indicator.style.color = '#6b4423';
             indicator.style.display = 'block';
             isSaving = true;
             break;
         case 'saved':
-            indicator.textContent = 'âœ“ Saved';
+            indicator.textContent = '✓ Saved';
             indicator.style.backgroundColor = '#4dd9cc';
             indicator.style.color = 'white';
             indicator.style.display = 'block';
@@ -300,14 +300,14 @@ function updateSaveStatus(status) {
             }, 2000);
             break;
         case 'error':
-            indicator.textContent = 'âŒ Save Error';
+            indicator.textContent = '✗ Save Error';
             indicator.style.backgroundColor = '#e85d75';
             indicator.style.color = 'white';
             indicator.style.display = 'block';
             isSaving = false;
             break;
         case 'loading':
-            indicator.textContent = 'ðŸ“¥ Loading...';
+            indicator.textContent = '📥 Loading...';
             indicator.style.backgroundColor = '#a29bfe';
             indicator.style.color = 'white';
             indicator.style.display = 'block';
