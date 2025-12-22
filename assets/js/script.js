@@ -515,11 +515,11 @@ function generateTimeline() {
     }).join('');
 
     const structures = [
-        { id: 'castle', label: 'Castle' },
-        { id: 'turret-i', label: 'Turret I' },
-        { id: 'turret-ii', label: 'Turret II' },
-        { id: 'turret-iii', label: 'Turret III' },
-        { id: 'turret-iv', label: 'Turret IV' }
+        { id: 'castle', label: 'ðŸ° Castle' },
+        { id: 'turret-i', label: 'ðŸ—¼ Turret I' },
+        { id: 'turret-ii', label: 'ðŸ—¼ Turret II' },
+        { id: 'turret-iii', label: 'ðŸ—¼ Turret III' },
+        { id: 'turret-iv', label: 'ðŸ—¼ Turret IV' }
     ];
 
     body.innerHTML = structures.map(structure => {
