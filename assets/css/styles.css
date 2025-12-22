@@ -67,27 +67,52 @@ h2, h3 {
 }
 
 .alliance-section h2 {
-    background: #ebe2d5;
-    color: #5a4a3a;
-    padding: 15px 20px 15px 70px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0 0 20px 0;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
-    font-size: 16px;
+    font-size: 18px;
     border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 800;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .alliance-section h2::before {
-    content: '';
+    content: '📋';
     position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
-    width: 55px;
+    width: 50px;
     background: rgba(255, 255, 255, 0.6);
     border-top-left-radius: 18px;
     border-right: 2px solid rgba(139, 111, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    z-index: 1;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+
+.alliance-section h2 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+
+.alliance-section h2 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
 }
 
 .alliance-section > div {
@@ -248,35 +273,59 @@ button:active {
 }
 
 .castle-visual h3 {
-    background: #ebe2d5;
-    color: #5a4a3a;
-    padding: 15px 20px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
-    font-size: 16px;
+    font-size: 18px;
     width: 100%;
-    text-align: center;
+    text-align: left;
     border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 800;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .castle-visual h3::before {
-    content: '';
+    content: '🏰';
     position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
-    width: 55px;
+    width: 50px;
     background: rgba(255, 255, 255, 0.6);
     border-top-left-radius: 18px;
     border-right: 2px solid rgba(139, 111, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+
+.castle-visual h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+
+.castle-visual h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
 }
 
 .castle-container {
     position: relative;
-    width: 250px;
-    height: 250px;
+    width: 260px;
+    height: 260px;
     margin: 20px 0;
 }
 
@@ -284,8 +333,8 @@ button:active {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100px;
-    height: 100px;
+    width: 105px;
+    height: 105px;
     background: #b8860b;
     transform: translate(-50%, -50%) rotate(45deg);
     border: 5px solid #9a7209;
@@ -315,8 +364,8 @@ button:active {
 
 .turret {
     position: absolute;
-    width: 65px;
-    height: 65px;
+    width: 70px;
+    height: 70px;
     background: #708090;
     border-radius: 50%;
     border: 5px solid #5a6a78;
@@ -352,25 +401,25 @@ button:active {
 }
 
 #turret-iv {
-    top: -35px;
+    top: -25px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 #turret-iii {
-    right: -35px;
+    right: -25px;
     top: 50%;
     transform: translateY(-50%);
 }
 
 #turret-i {
-    bottom: -35px;
+    bottom: -25px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 #turret-ii {
-    left: -35px;
+    left: -25px;
     top: 50%;
     transform: translateY(-50%);
 }
@@ -386,27 +435,51 @@ button:active {
 }
 
 .timeline-section h3 {
-    background: #ebe2d5;
-    color: #5a4a3a;
-    padding: 15px 20px 15px 70px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
-    font-size: 16px;
+    font-size: 18px;
     border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 800;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .timeline-section h3::before {
-    content: '';
+    content: '⏰';
     position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
-    width: 55px;
+    width: 50px;
     background: rgba(255, 255, 255, 0.6);
     border-top-left-radius: 18px;
     border-right: 2px solid rgba(139, 111, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+
+.timeline-section h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+
+.timeline-section h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
 }
 
 .timeline-controls {
@@ -481,7 +554,7 @@ button:active {
 }
 
 .timeline-table th {
-    background: #fff8f0;
+    background: #f0e8dc;
     color: #5a4a3a;
     padding: 8px 6px;
     text-align: center;
@@ -513,7 +586,7 @@ button:active {
 }
 
 .timeline-table .structure-label {
-    background: #fff8f0;
+    background: #f0e8dc;
     font-weight: bold;
     text-align: left;
     padding-left: 12px;
@@ -523,7 +596,7 @@ button:active {
 }
 
 .timeline-table .structure-label:hover {
-    background: #fff8f0;
+    background: #f0e8dc;
     transform: none;
 }
 
@@ -548,12 +621,12 @@ button:active {
 }
 
 .statistics-section h3 {
-    background: #ebe2d5;
-    color: #5a4a3a;
-    padding: 15px 20px 15px 70px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0 0 20px 0;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
-    font-size: 16px;
+    font-size: 18px;
     border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 600;
     position: relative;
@@ -565,7 +638,7 @@ button:active {
     left: 0;
     top: 0;
     bottom: 0;
-    width: 55px;
+    width: 50px;
     background: rgba(255, 255, 255, 0.6);
     border-top-left-radius: 18px;
     border-right: 2px solid rgba(139, 111, 71, 0.1);
@@ -633,10 +706,50 @@ button:active {
 }
 
 .info-modal-content h3 {
-    color: #6b4423;
-    margin-bottom: 15px;
-    font-size: 20px;
-    text-align: center;
+    background: #d4c4af;
+    color: #4a3a2a;
+    margin: -25px -25px 15px -25px;
+    padding: 15px 15px 15px 60px;
+    font-size: 18px;
+    text-align: left;
+    border-radius: 20px 20px 0 0;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
+    font-weight: 800;
+    position: relative;
+}
+
+.info-modal-content h3::before {
+    content: 'ℹ️';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: rgba(255, 255, 255, 0.6);
+    border-top-left-radius: 18px;
+    border-right: 2px solid rgba(139, 111, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+
+/* Specific emojis for each info modal type */
+.info-modal-content h3[data-modal="alliances"]::before {
+    content: '📋';
+}
+
+.info-modal-content h3[data-modal="castle"]::before {
+    content: '🏰';
+}
+
+.info-modal-content h3[data-modal="timeline"]::before {
+    content: '⏰';
+}
+
+.info-modal-content h3[data-modal="output"]::before {
+    content: '📝';
 }
 
 .info-modal-content p {
@@ -673,27 +786,51 @@ button:active {
 }
 
 .output-section h2, .output-section h3 {
-    background: #ebe2d5;
-    color: #5a4a3a;
-    padding: 15px 20px 15px 70px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
-    font-size: 16px;
+    font-size: 18px;
     border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 800;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .output-section h3::before {
-    content: '';
+    content: '📝';
     position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
-    width: 55px;
+    width: 50px;
     background: rgba(255, 255, 255, 0.6);
     border-top-left-radius: 18px;
     border-right: 2px solid rgba(139, 111, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+
+.output-section h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+
+.output-section h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
 }
 
 .output-header {
@@ -973,8 +1110,17 @@ button:active {
     .castle-visual h3,
     .timeline-section h3,
     .output-section h3 {
-        padding: 12px 15px;
+        padding: 12px 15px 12px 65px;
         border-radius: 0;
+    }
+    
+    /* Adjust white box for mobile - no rounded corner visible */
+    .alliance-section h2::before,
+    .castle-visual h3::before,
+    .timeline-section h3::before,
+    .output-section h3::before {
+        border-top-left-radius: 0;
+        width: 50px;
     }
 
     /* Remove extra padding from section content */
@@ -995,32 +1141,32 @@ button:active {
         padding: 15px;
     }
 
-    /* Optimize castle map size */
+    /* Optimize castle map size - use more screen space */
     .castle-container {
-        width: 180px;
-        height: 180px;
+        width: 280px;
+        height: 280px;
     }
 
     .castle {
+        width: 110px;
+        height: 110px;
+    }
+
+    .turret {
         width: 70px;
         height: 70px;
     }
 
-    .turret {
-        width: 45px;
-        height: 45px;
-    }
-
     .turret-label {
-        font-size: 9px;
+        font-size: 10px;
     }
 
     .turret-number {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .castle-label {
-        font-size: 10px;
+        font-size: 11px;
     }
 
     /* Adjust time preview */
