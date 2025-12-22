@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Load project from cloud
 async function loadProjectFromCloud(projectId) {
-    console.log('🔄 Loading project from cloud:', projectId);
+    console.log('ðŸ”„ Loading project from cloud:', projectId);
     updateSaveStatus('loading');
     
     const project = await loadProject(projectId);
@@ -172,10 +172,10 @@ async function loadProjectFromCloud(projectId) {
             'turret-iii': {},
             'turret-iv': {}
         };
-        console.log('✅ Project loaded from cloud');
+        console.log('âœ… Project loaded from cloud');
         updateSaveStatus('saved');
     } else {
-        console.error('❌ Project not found, loading default');
+        console.error('âŒ Project not found, loading default');
         alert('Project not found. Loading blank schedule.');
         loadDefaultSchedule();
         // Clear the hash since project doesn't exist
@@ -185,7 +185,7 @@ async function loadProjectFromCloud(projectId) {
 
 // Migrate legacy share link to cloud
 async function migrateLegacyLink(lzData) {
-    console.log('🔄 Migrating legacy share link to cloud');
+    console.log('ðŸ”„ Migrating legacy share link to cloud');
     
     try {
         // Decompress LZString data
@@ -227,7 +227,7 @@ async function migrateLegacyLink(lzData) {
         });
         
         // Save to cloud and redirect
-        console.log('💾 Saving migrated schedule to cloud');
+        console.log('ðŸ’¾ Saving migrated schedule to cloud');
         const project = await createProject(alliances, schedule);
         
         if (project) {
@@ -236,14 +236,14 @@ async function migrateLegacyLink(lzData) {
             // Redirect to new cloud URL
             window.location.hash = `/p/${project.id}`;
             window.history.replaceState(null, null, window.location.pathname + window.location.hash);
-            console.log('✅ Legacy link migrated successfully');
+            console.log('âœ… Legacy link migrated successfully');
             updateSaveStatus('saved');
         } else {
-            console.error('❌ Failed to migrate legacy link');
+            console.error('âŒ Failed to migrate legacy link');
             loadDefaultSchedule();
         }
     } catch (e) {
-        console.error('❌ Error migrating legacy link:', e);
+        console.error('âŒ Error migrating legacy link:', e);
         loadDefaultSchedule();
     }
 }
@@ -280,14 +280,14 @@ function updateSaveStatus(status) {
     
     switch(status) {
         case 'saving':
-            indicator.textContent = '💾 Saving...';
+            indicator.textContent = 'ðŸ’¾ Saving...';
             indicator.style.backgroundColor = '#ffd666';
             indicator.style.color = '#6b4423';
             indicator.style.display = 'block';
             isSaving = true;
             break;
         case 'saved':
-            indicator.textContent = '✓ Saved';
+            indicator.textContent = 'âœ“ Saved';
             indicator.style.backgroundColor = '#4dd9cc';
             indicator.style.color = 'white';
             indicator.style.display = 'block';
@@ -300,14 +300,14 @@ function updateSaveStatus(status) {
             }, 2000);
             break;
         case 'error':
-            indicator.textContent = '❌ Save Error';
+            indicator.textContent = 'âŒ Save Error';
             indicator.style.backgroundColor = '#e85d75';
             indicator.style.color = 'white';
             indicator.style.display = 'block';
             isSaving = false;
             break;
         case 'loading':
-            indicator.textContent = '📥 Loading...';
+            indicator.textContent = 'ðŸ“¥ Loading...';
             indicator.style.backgroundColor = '#a29bfe';
             indicator.style.color = 'white';
             indicator.style.display = 'block';
@@ -323,7 +323,7 @@ function updateSaveStatus(status) {
 function scheduleAutoSave() {
     // Don't save if we don't have a project yet
     if (!currentProjectId) {
-        console.log('⏭️ Skipping autosave - no project created yet');
+        console.log('â­ï¸ Skipping autosave - no project created yet');
         return;
     }
     
@@ -337,27 +337,27 @@ function scheduleAutoSave() {
         await saveToCloud();
     }, 1000); // 1 second debounce
     
-    console.log('⏰ Autosave scheduled');
+    console.log('â° Autosave scheduled');
 }
 
 // Save to cloud
 async function saveToCloud() {
     if (!currentProjectId) {
-        console.log('⏭️ Skipping cloud save - no project ID');
+        console.log('â­ï¸ Skipping cloud save - no project ID');
         return;
     }
     
-    console.log('💾 Saving to cloud...');
+    console.log('ðŸ’¾ Saving to cloud...');
     updateSaveStatus('saving');
     
     const result = await updateProject(currentProjectId, alliances, schedule, currentProjectVersion);
     
     if (result) {
         currentProjectVersion = result.version;
-        console.log('✅ Saved to cloud successfully');
+        console.log('âœ… Saved to cloud successfully');
         updateSaveStatus('saved');
     } else {
-        console.error('❌ Failed to save to cloud');
+        console.error('âŒ Failed to save to cloud');
         updateSaveStatus('error');
     }
 }
@@ -569,7 +569,7 @@ function openAllianceModal(structureId, time) {
             <button class="modal-alliance-btn" 
                     style="background-color: #d9534f; color: white;"
                     onclick="assignAlliance(null)">
-                ✕ Clear Assignment
+                âœ• Clear Assignment
             </button>
         `;
     } else {
@@ -841,7 +841,7 @@ function formatEvent(event) {
 
     Object.keys(allianceGroups).forEach(allianceName => {
         const group = allianceGroups[allianceName];
-        let line = `${time} — ${allianceName} ${group.verb}`;
+        let line = `${time} â€” ${allianceName} ${group.verb}`;
 
         if (group.castle && group.turrets.length > 0) {
             const turretList = group.turrets.join(', ');
@@ -858,12 +858,12 @@ function formatEvent(event) {
 
     if (ffaStructures.castle && ffaStructures.turrets.length > 0) {
         const turretList = ffaStructures.turrets.join(', ');
-        lines.push(`${time} — Castle + Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
+        lines.push(`${time} â€” Castle + Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
     } else if (ffaStructures.castle) {
-        lines.push(`${time} — Castle FFA`);
+        lines.push(`${time} â€” Castle FFA`);
     } else if (ffaStructures.turrets.length > 0) {
         const turretList = ffaStructures.turrets.join(', ');
-        lines.push(`${time} — Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
+        lines.push(`${time} â€” Turret${ffaStructures.turrets.length > 1 ? 's' : ''} ${turretList} FFA`);
     }
 
     return lines.join('\n');
@@ -1019,7 +1019,7 @@ async function generateShareLink() {
     }
     
     // Create new cloud project
-    console.log('📝 Creating new cloud project for sharing');
+    console.log('ðŸ“ Creating new cloud project for sharing');
     updateSaveStatus('saving');
     
     const project = await createProject(alliances, schedule);
@@ -1058,7 +1058,7 @@ function exportTimelineAsImage() {
     
     const button = event.target;
     const originalText = button.textContent;
-    button.textContent = '⏳ Generating...';
+    button.textContent = 'â³ Generating...';
     button.disabled = true;
     
     const originalOverflow = timelineGrid.style.overflow;
@@ -1122,7 +1122,7 @@ function clearSchedule() {
 // Info Modal Functions
 const infoContent = {
     alliances: {
-        title: "📋 Alliance Management",
+        title: "Alliance Management",
         content: `
             <p>This section is where you manage all the alliances participating in the castle battle.</p>
             <ul>
@@ -1135,7 +1135,7 @@ const infoContent = {
         `
     },
     castle: {
-        title: "🏰 Castle Battle Map",
+        title: "Castle Battle Map",
         content: `
             <p>This visual map shows which alliance controls each structure at different times during the battle.</p>
             <ul>
@@ -1148,7 +1148,7 @@ const infoContent = {
         `
     },
     timeline: {
-        title: "⏰ Timeline & Schedule Builder",
+        title: "Timeline & Schedule Builder",
         content: `
             <p>The timeline grid is where you build your battle schedule by assigning structures to alliances.</p>
             <ul>
@@ -1162,7 +1162,7 @@ const infoContent = {
         `
     },
     output: {
-        title: "📝 Generated Schedule Output",
+        title: "Generated Schedule Output",
         content: `
             <p>This section generates formatted text from your schedule that you can copy and paste into Kingshot's in-game chat.</p>
             <ul>
@@ -1185,6 +1185,7 @@ function openInfoModal(section) {
     
     if (infoContent[section]) {
         title.textContent = infoContent[section].title;
+        title.setAttribute('data-modal', section);
         content.innerHTML = infoContent[section].content;
         modal.style.display = 'flex';
     }
