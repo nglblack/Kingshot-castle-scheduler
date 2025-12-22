@@ -18,9 +18,9 @@ body {
     margin: 0 auto;
     background: #f5ebe0;
     padding: 30px;
-    border-radius: 25px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), inset 0 0 0 4px #d4a574;
-    border: 6px solid #8b6f47;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(139, 111, 71, 0.3);
 }
 
 h1 {
@@ -61,20 +61,58 @@ h2, h3 {
     padding: 0;
     border-radius: 20px;
     margin-bottom: 30px;
-    border: 4px solid #d4a574;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(139, 111, 71, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
 
 .alliance-section h2 {
-    background: linear-gradient(180deg, #e8d4be 0%, #dcc4a8 100%);
-    color: #6b4423;
-    padding: 12px 20px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0 0 20px 0;
-    text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
-    font-size: 15px;
-    border-bottom: 1px solid #c89563;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+    border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 800;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.alliance-section h2::before {
+    content: '📋';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: rgba(255, 255, 255, 0.6);
+    border-top-left-radius: 18px;
+    border-right: 2px solid rgba(139, 111, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    z-index: 1;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+
+.alliance-section h2 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+
+.alliance-section h2 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
 }
 
 .alliance-section > div {
@@ -92,8 +130,8 @@ h2, h3 {
     flex: 1;
     min-width: 150px;
     padding: 12px;
-    border: 3px solid #d4a574;
-    border-radius: 12px;
+    border: 2px solid rgba(139, 111, 71, 0.25);
+    border-radius: 15px;
     font-size: 16px;
     background: white;
     font-weight: bold;
@@ -229,28 +267,65 @@ button:active {
     align-items: center;
     justify-content: flex-start;
     min-height: 500px;
-    border: 4px solid #d4a574;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(139, 111, 71, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
 
 .castle-visual h3 {
-    background: linear-gradient(180deg, #e8d4be 0%, #dcc4a8 100%);
-    color: #6b4423;
-    padding: 12px 20px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0;
-    text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
-    font-size: 15px;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
+    font-size: 18px;
     width: 100%;
-    text-align: center;
-    border-bottom: 1px solid #c89563;
+    text-align: left;
+    border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 800;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.castle-visual h3::before {
+    content: '🏰';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: rgba(255, 255, 255, 0.6);
+    border-top-left-radius: 18px;
+    border-right: 2px solid rgba(139, 111, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+
+.castle-visual h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+
+.castle-visual h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
 }
 
 .castle-container {
     position: relative;
-    width: 250px;
-    height: 250px;
+    width: 300px;
+    height: 300px;
     margin: 20px 0;
 }
 
@@ -258,8 +333,8 @@ button:active {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     background: #b8860b;
     transform: translate(-50%, -50%) rotate(45deg);
     border: 5px solid #9a7209;
@@ -289,8 +364,8 @@ button:active {
 
 .turret {
     position: absolute;
-    width: 65px;
-    height: 65px;
+    width: 80px;
+    height: 80px;
     background: #708090;
     border-radius: 50%;
     border: 5px solid #5a6a78;
@@ -326,25 +401,25 @@ button:active {
 }
 
 #turret-iv {
-    top: -35px;
+    top: -25px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 #turret-iii {
-    right: -35px;
+    right: -25px;
     top: 50%;
     transform: translateY(-50%);
 }
 
 #turret-i {
-    bottom: -35px;
+    bottom: -25px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 #turret-ii {
-    left: -35px;
+    left: -25px;
     top: 50%;
     transform: translateY(-50%);
 }
@@ -355,19 +430,56 @@ button:active {
     padding: 0;
     border-radius: 20px;
     overflow: hidden;
-    border: 4px solid #d4a574;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(139, 111, 71, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .timeline-section h3 {
-    background: linear-gradient(180deg, #e8d4be 0%, #dcc4a8 100%);
-    color: #6b4423;
-    padding: 12px 20px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0;
-    text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
-    font-size: 15px;
-    border-bottom: 1px solid #c89563;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+    border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 800;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.timeline-section h3::before {
+    content: '⏰';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: rgba(255, 255, 255, 0.6);
+    border-top-left-radius: 18px;
+    border-right: 2px solid rgba(139, 111, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+
+.timeline-section h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+
+.timeline-section h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
 }
 
 .timeline-controls {
@@ -385,8 +497,8 @@ button:active {
 
 .timeline-controls select {
     padding: 10px;
-    border-radius: 10px;
-    border: 3px solid #d4a574;
+    border-radius: 15px;
+    border: 2px solid rgba(139, 111, 71, 0.25);
     font-size: 14px;
     background: white;
     font-weight: bold;
@@ -396,8 +508,8 @@ button:active {
 /* Alliance Stats */
 .alliance-stats {
     background: #ffffff;
-    border: 3px solid #d4a574;
-    border-radius: 12px;
+    border: 2px solid rgba(139, 111, 71, 0.2);
+    border-radius: 15px;
     padding: 15px;
     font-size: 12px;
     display: flex;
@@ -407,7 +519,7 @@ button:active {
     max-height: 200px;
     overflow-y: auto;
     min-width: 280px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .stat-item {
@@ -430,9 +542,9 @@ button:active {
 .timeline-grid {
     overflow-x: auto;
     background: #ffffff;
-    border-radius: 12px;
+    border-radius: 15px;
     padding: 10px;
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .timeline-table {
@@ -442,14 +554,14 @@ button:active {
 }
 
 .timeline-table th {
-    background: linear-gradient(180deg, #e8d4be 0%, #dcc4a8 100%);
-    color: #6b4423;
+    background: #fff8f0;
+    color: #5a4a3a;
     padding: 8px 6px;
     text-align: center;
     font-size: 11px;
-    border: 1px solid #c89563;
+    border: 1px solid rgba(139, 111, 71, 0.15);
     font-weight: bold;
-    text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
     white-space: nowrap;
 }
 
@@ -474,17 +586,17 @@ button:active {
 }
 
 .timeline-table .structure-label {
-    background: linear-gradient(180deg, #e8d4be 0%, #dcc4a8 100%);
+    background: #fff8f0;
     font-weight: bold;
     text-align: left;
     padding-left: 12px;
     cursor: default;
-    color: #6b4423;
-    border: 1px solid #c89563;
+    color: #5a4a3a;
+    border: 1px solid rgba(139, 111, 71, 0.15);
 }
 
 .timeline-table .structure-label:hover {
-    background: linear-gradient(180deg, #e8d4be 0%, #dcc4a8 100%);
+    background: #fff8f0;
     transform: none;
 }
 
@@ -503,20 +615,33 @@ button:active {
     padding: 0;
     border-radius: 20px;
     margin-bottom: 30px;
-    border: 4px solid #d4a574;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(139, 111, 71, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
 
 .statistics-section h3 {
-    background: linear-gradient(180deg, #e8d4be 0%, #dcc4a8 100%);
-    color: #6b4423;
-    padding: 12px 20px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0 0 20px 0;
-    text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
-    font-size: 15px;
-    border-bottom: 1px solid #c89563;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+    border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 600;
+    position: relative;
+}
+
+.statistics-section h3::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: rgba(255, 255, 255, 0.6);
+    border-top-left-radius: 18px;
+    border-right: 2px solid rgba(139, 111, 71, 0.1);
 }
 
 /* Info Button */
@@ -576,8 +701,8 @@ button:active {
     border-radius: 20px;
     max-width: 500px;
     width: 90%;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    border: 5px solid #d4a574;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(139, 111, 71, 0.3);
 }
 
 .info-modal-content h3 {
@@ -615,20 +740,57 @@ button:active {
     background: #fff8f0;
     padding: 0;
     border-radius: 20px;
-    border: 4px solid #d4a574;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(139, 111, 71, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
 
 .output-section h2, .output-section h3 {
-    background: linear-gradient(180deg, #e8d4be 0%, #dcc4a8 100%);
-    color: #6b4423;
-    padding: 12px 20px;
+    background: #d4c4af;
+    color: #4a3a2a;
+    padding: 15px 15px 15px 60px;
     margin: 0;
-    text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
-    font-size: 15px;
-    border-bottom: 1px solid #c89563;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+    border-bottom: 2px solid rgba(139, 111, 71, 0.15);
     font-weight: 800;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.output-section h3::before {
+    content: '📝';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: rgba(255, 255, 255, 0.6);
+    border-top-left-radius: 18px;
+    border-right: 2px solid rgba(139, 111, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+
+.output-section h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+
+.output-section h3 .info-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
 }
 
 .output-header {
@@ -648,8 +810,8 @@ button:active {
     background: #ffffff;
     padding: 18px;
     border-radius: 15px;
-    border: 3px solid #d4a574;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(139, 111, 71, 0.2);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .output-part-header {
@@ -691,11 +853,11 @@ button:active {
 .modal-content {
     background: #f5ebe0;
     padding: 30px;
-    border-radius: 25px;
+    border-radius: 20px;
     max-width: 400px;
     width: 90%;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    border: 6px solid #8b6f47;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(139, 111, 71, 0.3);
 }
 
 .modal-content h3 {
@@ -730,8 +892,8 @@ button:active {
     padding: 18px;
     background: #fff8f0;
     border-radius: 15px;
-    border: 3px solid #d4a574;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(139, 111, 71, 0.2);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .tip-number {
@@ -908,8 +1070,17 @@ button:active {
     .castle-visual h3,
     .timeline-section h3,
     .output-section h3 {
-        padding: 12px 15px;
+        padding: 12px 15px 12px 65px;
         border-radius: 0;
+    }
+    
+    /* Adjust white box for mobile - no rounded corner visible */
+    .alliance-section h2::before,
+    .castle-visual h3::before,
+    .timeline-section h3::before,
+    .output-section h3::before {
+        border-top-left-radius: 0;
+        width: 50px;
     }
 
     /* Remove extra padding from section content */
@@ -930,32 +1101,32 @@ button:active {
         padding: 15px;
     }
 
-    /* Optimize castle map size */
+    /* Optimize castle map size - use more screen space */
     .castle-container {
-        width: 180px;
-        height: 180px;
+        width: 280px;
+        height: 280px;
     }
 
     .castle {
+        width: 110px;
+        height: 110px;
+    }
+
+    .turret {
         width: 70px;
         height: 70px;
     }
 
-    .turret {
-        width: 45px;
-        height: 45px;
-    }
-
     .turret-label {
-        font-size: 9px;
+        font-size: 10px;
     }
 
     .turret-number {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .castle-label {
-        font-size: 10px;
+        font-size: 11px;
     }
 
     /* Adjust time preview */
