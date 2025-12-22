@@ -554,7 +554,7 @@ button:active {
 }
 
 .timeline-table th {
-    background: #fff8f0;
+    background: #f0e8dc;
     color: #5a4a3a;
     padding: 8px 6px;
     text-align: center;
@@ -586,7 +586,7 @@ button:active {
 }
 
 .timeline-table .structure-label {
-    background: #fff8f0;
+    background: #f0e8dc;
     font-weight: bold;
     text-align: left;
     padding-left: 12px;
@@ -596,7 +596,7 @@ button:active {
 }
 
 .timeline-table .structure-label:hover {
-    background: #fff8f0;
+    background: #f0e8dc;
     transform: none;
 }
 
