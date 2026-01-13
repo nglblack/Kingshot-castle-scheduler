@@ -4,5 +4,5 @@
 
 const SUPABASE_CONFIG = {
     url: 'https://wyyysrjqkcvdixugkadl.supabase.co',
-    anonKey: 'sb_publishable_WLWN1i0I7bjb-nzCHxVX5Q_Y3aVefaE'
+    anonKey: 'sb_publishable_sL2weLDcSf4Rsq1otKCy6Q_sRN9xIbG'
 };
