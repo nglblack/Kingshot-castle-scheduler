@@ -9,9 +9,6 @@ class TerritoryPlanner {
         this.maxGridWidth = 500;
         this.maxGridHeight = 500;
         
-        // Set initial canvas size
-        this.updateCanvasSize();
-        
         this.currentTool = 'select';
         this.placedItems = [];
         this.selectedItem = null;
@@ -55,10 +52,13 @@ class TerritoryPlanner {
             selectedOutline: '#3498db'
         };
         
+        // Set initial canvas size AFTER colors are defined
+        this.updateCanvasSize();
+        
         this.initializeEventListeners();
-        this.redraw();
-        this.loadFromURL();
-        this.saveHistory();
+        this.loadFromURL(); // Load layout from URL if present
+        this.saveHistory(); // Save initial state
+        this.redraw(); // Draw after everything is initialized
         
         // On mobile, default to pan mode for easier navigation
         if (this.isMobile) {
@@ -100,7 +100,7 @@ class TerritoryPlanner {
             });
         }
         
-        // Canvas events - Desktop
+        // Canvas events
         this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
         this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         this.canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e));
@@ -110,9 +110,9 @@ class TerritoryPlanner {
         this.canvas.addEventListener('wheel', (e) => this.handleWheel(e), { passive: false });
         
         // Touch events for mobile
-        this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
-        this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
-        this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
+        this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+        this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e));
+        this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e));
         
         // Button events
         document.getElementById('clear-grid').addEventListener('click', () => this.clearGrid());
@@ -133,6 +133,7 @@ class TerritoryPlanner {
         
         // Window resize event to maintain responsive layout
         window.addEventListener('resize', () => {
+            // Debounce resize to avoid too many redraws
             clearTimeout(this.resizeTimeout);
             this.resizeTimeout = setTimeout(() => {
                 this.updateCanvasSize();
@@ -246,9 +247,11 @@ class TerritoryPlanner {
         const rect = this.canvas.getBoundingClientRect();
         const containerRect = this.canvasContainer ? this.canvasContainer.getBoundingClientRect() : rect;
         
+        // Calculate relative position within the container
         const relativeX = e.clientX - containerRect.left;
         const relativeY = e.clientY - containerRect.top;
         
+        // Add scroll offset to get actual canvas position
         const scrollLeft = this.canvasContainer ? this.canvasContainer.scrollLeft : 0;
         const scrollTop = this.canvasContainer ? this.canvasContainer.scrollTop : 0;
         
@@ -256,16 +259,21 @@ class TerritoryPlanner {
         const canvasX = (relativeX + scrollLeft - this.originX) / this.scale;
         const canvasY = (relativeY + scrollTop - this.originY) / this.scale;
         
-        return { x: canvasX, y: canvasY };
+        return {
+            x: canvasX,
+            y: canvasY
+        };
     }
     
     getTouchPos(e) {
         const rect = this.canvas.getBoundingClientRect();
         const containerRect = this.canvasContainer ? this.canvasContainer.getBoundingClientRect() : rect;
         
+        // Calculate relative position within the container
         const relativeX = e.touches[0].clientX - containerRect.left;
         const relativeY = e.touches[0].clientY - containerRect.top;
         
+        // Add scroll offset to get actual canvas position
         const scrollLeft = this.canvasContainer ? this.canvasContainer.scrollLeft : 0;
         const scrollTop = this.canvasContainer ? this.canvasContainer.scrollTop : 0;
         
@@ -273,7 +281,10 @@ class TerritoryPlanner {
         const canvasX = (relativeX + scrollLeft - this.originX) / this.scale;
         const canvasY = (relativeY + scrollTop - this.originY) / this.scale;
         
-        return { x: canvasX, y: canvasY };
+        return {
+            x: canvasX,
+            y: canvasY
+        };
     }
     
     screenToGrid(screenX, screenY) {
@@ -345,7 +356,7 @@ class TerritoryPlanner {
         if (this.isDragging) {
             this.isDragging = false;
             this.validateItemPlacement(this.selectedItem);
-            this.saveHistory();
+            this.saveHistory(); // Save after moving item
             this.redraw();
         }
     }
@@ -707,10 +718,14 @@ class TerritoryPlanner {
     }
     
     drawGrid() {
+        if (!this.ctx) return;
+        
+        // Clear the entire canvas BEFORE any transforms
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Now apply transform for grid drawing
         this.ctx.save();
         this.ctx.setTransform(this.scale, 0, 0, this.scale, this.originX, this.originY);
-        
-        this.ctx.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
         
         // Draw grid lines
         this.ctx.strokeStyle = this.colors.grid;
@@ -734,6 +749,8 @@ class TerritoryPlanner {
     }
     
     drawTerritoryZones() {
+        if (!this.ctx) return;
+        
         this.ctx.save();
         this.ctx.setTransform(this.scale, 0, 0, this.scale, this.originX, this.originY);
         
@@ -799,6 +816,8 @@ class TerritoryPlanner {
     }
     
     drawItems() {
+        if (!this.ctx) return;
+        
         this.ctx.save();
         this.ctx.setTransform(this.scale, 0, 0, this.scale, this.originX, this.originY);
         
@@ -1113,13 +1132,7 @@ class TerritoryPlanner {
         this.originX = -bounds.x * this.gridSize;
         this.originY = -bounds.y * this.gridSize;
         
-        // Save current canvas state
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = this.canvas.width;
-        tempCanvas.height = this.canvas.height;
-        const tempCtx = tempCanvas.getContext('2d');
-        
-        // Store current context
+        // Store current canvas state
         const currentCanvas = this.canvas;
         const currentCtx = this.ctx;
         
@@ -1150,6 +1163,7 @@ class TerritoryPlanner {
     }
     
     exportToText() {
+        // Create compact representation
         const data = {
             gridWidth: this.gridWidth,
             gridHeight: this.gridHeight,
@@ -1161,6 +1175,7 @@ class TerritoryPlanner {
             }))
         };
         
+        // Compress to base64
         const jsonStr = JSON.stringify(data);
         return btoa(jsonStr);
     }
@@ -1196,28 +1211,33 @@ class TerritoryPlanner {
             let data;
             const trimmedText = text.trim();
             
+            // Try to parse as direct JSON first (pretty format)
             try {
                 data = JSON.parse(trimmedText);
             } catch (e) {
+                // If that fails, try base64 decode then JSON parse (compressed format)
                 const jsonStr = atob(trimmedText);
                 data = JSON.parse(jsonStr);
             }
             
             this.clearGrid();
             
+            // Update grid size if provided
             if (data.gridWidth && data.gridHeight) {
                 this.gridWidth = data.gridWidth;
                 this.gridHeight = data.gridHeight;
                 this.canvas.width = this.gridWidth * this.gridSize;
                 this.canvas.height = this.gridHeight * this.gridSize;
                 
+                // Update UI inputs
                 document.getElementById('grid-width').value = this.gridWidth;
                 document.getElementById('grid-height').value = this.gridHeight;
             }
             
+            // Handle both formats: compressed (with codes) and pretty JSON (with full names)
             for (const itemData of data.items) {
                 const item = {
-                    type: itemData.type || this.getTypeFromCode(itemData.t),
+                    type: itemData.type || this.getTypeFromCode(itemData.t), // Support both formats
                     x: itemData.x,
                     y: itemData.y,
                     id: Date.now() + Math.random()
@@ -1225,7 +1245,7 @@ class TerritoryPlanner {
                 
                 if (item.type === 'townCenter') {
                     this.townCenterCount++;
-                    item.number = itemData.number || this.townCenterCount;
+                    item.number = itemData.number || this.townCenterCount; // Use stored number if available
                     item.color = itemData.color || this.colors.townCenter[(this.townCenterCount - 1) % this.colors.townCenter.length];
                 }
                 
@@ -1248,6 +1268,7 @@ class TerritoryPlanner {
     }
     
     exportToPrettyJSON() {
+        // Create readable JSON with full property names
         const data = {
             version: "1.0",
             gridWidth: this.gridWidth,
@@ -1261,7 +1282,7 @@ class TerritoryPlanner {
             }))
         };
         
-        return JSON.stringify(data, null, 2);
+        return JSON.stringify(data, null, 2); // Pretty print with 2-space indent
     }
     
     downloadJSON() {
@@ -1270,6 +1291,7 @@ class TerritoryPlanner {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         
+        // Generate filename with timestamp
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
         a.href = url;
         a.download = `kingshot-territory-${timestamp}.json`;
@@ -1278,6 +1300,7 @@ class TerritoryPlanner {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         
+        // Show feedback
         const button = document.getElementById('download-json');
         const originalText = button.textContent;
         button.textContent = 'Downloaded!';
@@ -1313,6 +1336,7 @@ class TerritoryPlanner {
                 samplesGrid.appendChild(div);
             });
         } else {
+            // Show message if no samples are available
             samplesGrid.innerHTML = `
                 <div style="padding: 2rem; text-align: center; color: #8b7355;">
                     <h3>No Sample Layouts Available</h3>
@@ -1392,8 +1416,10 @@ class TerritoryPlanner {
     
     // Undo/Redo History Management
     saveHistory() {
+        // Remove any history after current index (when user makes change after undoing)
         this.history = this.history.slice(0, this.historyIndex + 1);
         
+        // Save current state
         const state = {
             items: JSON.parse(JSON.stringify(this.placedItems)),
             townCenterCount: this.townCenterCount
@@ -1401,6 +1427,7 @@ class TerritoryPlanner {
         
         this.history.push(state);
         
+        // Limit history size
         if (this.history.length > this.maxHistorySize) {
             this.history.shift();
         } else {
