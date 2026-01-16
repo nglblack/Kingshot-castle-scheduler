@@ -3,10 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kingshot Castle Battle Scheduler</title>
+    <title>⚔️ Kingshot Castle Battle Scheduler</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-brand">🏰 Kingshot Tools</div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="active">Castle Scheduler</a></li>
+                <li><a href="territory-planner.html">Territory Planner</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
         <h1>⚔️ Kingshot Castle Battle Scheduler</h1>
 
@@ -203,5 +219,20 @@
 
     <!-- Main JavaScript -->
     <script src="assets/js/script.js"></script>
+    
+    <script>
+        // Navigation toggle for mobile
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (navToggle) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    </script>
 </body>
 </html>

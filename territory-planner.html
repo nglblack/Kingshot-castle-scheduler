@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏰 Kingshot Territory Planner</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/territory-planner.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-brand">🏰 Kingshot Tools</div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Castle Scheduler</a></li>
+                <li><a href="territory-planner.html" class="active">Territory Planner</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="planner-container">
+        <div class="planner-content-wrapper">
+        <header class="planner-header">
+            <div class="header-title">
+                <span class="header-icon">🏰</span>
+                <h1>Kingshot Territory Planner</h1>
+            </div>
+            <div class="header-controls">
+                <div class="controls-header">
+                    <span class="controls-icon">🏗️</span>
+                    <h2 class="controls-title">Grid Controls</h2>
+                    <button class="info-button" id="gridInfoBtn" title="Learn about Grid Controls">!</button>
+                </div>
+                <div class="controls-content">
+                    <button id="clear-grid" class="btn btn-danger">Clear</button>
+                    <button id="export-png" class="btn btn-primary">Export PNG</button>
+                    <button id="share-link" class="btn btn-primary">Share Link</button>
+                    <button id="export-json" class="btn btn-secondary">Export JSON</button>
+                    <button id="import-json" class="btn btn-secondary">Import JSON</button>
+                    <button id="sample-layouts" class="btn btn-info">Samples</button>
+                    <div class="grid-size-controls">
+                        <label for="grid-width">Width:</label>
+                        <input type="number" id="grid-width" min="10" max="200" value="80">
+                        <label for="grid-height">Height:</label>
+                        <input type="number" id="grid-height" min="10" max="200" value="80">
+                        <button id="resize-grid" class="btn btn-secondary">Resize</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="planner-main">
+            <!-- Grid Container (now comes first) -->
+            <div class="grid-container">
+                <!-- Floating Action Toolbar -->
+                <div class="floating-toolbar">
+                    <button class="action-tool-btn" data-tool="select" title="Select and move buildings">
+                        <span class="tool-icon">👆</span>
+                        <span>Select</span>
+                    </button>
+                    <button class="action-tool-btn" data-tool="pan" title="Pan and navigate the canvas">
+                        <span class="tool-icon">✋</span>
+                        <span>Pan</span>
+                    </button>
+                    <button class="action-tool-btn" data-tool="delete" title="Delete buildings and terrain">
+                        <span class="tool-icon">🗑️</span>
+                        <span>Delete</span>
+                    </button>
+                    
+                    <!-- Undo/Redo buttons -->
+                    <div class="history-buttons">
+                        <button class="history-btn" id="undoBtn" title="Undo (Ctrl+Z)" disabled>
+                            <span>↶</span>
+                        </button>
+                        <button class="history-btn" id="redoBtn" title="Redo (Ctrl+Y)" disabled>
+                            <span>↷</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Buildings Menu Button -->
+                    <button class="buildings-menu-btn" id="buildingsMenuBtn">
+                        <span class="tool-icon">🏗️</span>
+                        <span>Buildings</span>
+                        <span class="menu-arrow">▼</span>
+                    </button>
+                </div>
+                
+                <!-- Buildings Dropdown Menu -->
+                <div class="buildings-menu" id="buildingsMenu">
+                    <div class="buildings-menu-grid">
+                        <button class="building-menu-btn" data-tool="pitfall">
+                            <span class="tool-icon">🕳️</span>
+                            <span>Pitfall (3x3)</span>
+                        </button>
+                        <button class="building-menu-btn" data-tool="townCenter">
+                            <span class="tool-icon">🏛️</span>
+                            <span>Town Center (2x2)</span>
+                        </button>
+                        <button class="building-menu-btn" data-tool="banner">
+                            <span class="tool-icon">🚩</span>
+                            <span>Banner (1x1)</span>
+                        </button>
+                        <button class="building-menu-btn" data-tool="mill">
+                            <span class="tool-icon">⚙️</span>
+                            <span>Alliance Mills (2x2)</span>
+                        </button>
+                        <button class="building-menu-btn" data-tool="allianceHQ">
+                            <span class="tool-icon">🏰</span>
+                            <span>Alliance HQ (3x3)</span>
+                        </button>
+                        <button class="building-menu-btn" data-tool="blockedPath1">
+                            <span class="tool-icon">🚫</span>
+                            <span>Blocked Path (1x1)</span>
+                        </button>
+                        <button class="building-menu-btn" data-tool="blockedPath2">
+                            <span class="tool-icon">⛔</span>
+                            <span>Blocked Path (2x2)</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="canvas-container">
+                    <canvas id="territory-grid"></canvas>
+                </div>
+                <div class="grid-info">
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color alliance-territory"></div>
+                            <span>Alliance Territory (Blue)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color buildable-area"></div>
+                            <span>Buildable Area (Green)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color valid-placement"></div>
+                            <span>Valid Placement</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color invalid-placement"></div>
+                            <span>Invalid Placement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div> <!-- Close planner-content-wrapper -->
+    </div> <!-- Close planner-container -->
+
+    <!-- Modals -->
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>📥 Import JSON</h2>
+            <textarea id="import-text-area" placeholder="Paste your JSON layout code here..."></textarea>
+            <div class="modal-buttons">
+                <button id="import-confirm" class="btn btn-primary">Import</button>
+                <button id="import-cancel" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="export-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>📤 Export JSON</h2>
+            <textarea id="export-text-area" readonly></textarea>
+            <div class="modal-buttons">
+                <button id="download-json" class="btn btn-primary">Download JSON</button>
+                <button id="copy-export" class="btn btn-secondary">Copy to Clipboard</button>
+                <button id="export-close" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="samples-modal" class="modal">
+        <div class="modal-content large">
+            <span class="close">&times;</span>
+            <h2>📁 Sample Layouts</h2>
+            <div id="sample-layouts-grid"></div>
+            <div class="modal-buttons">
+                <button id="samples-close" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="share-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>🔗 Share Link</h2>
+            <p>Share this link to let others view your territory layout:</p>
+            <input type="text" id="share-link-url" readonly style="width: 100%; padding: 0.75rem; border: 2px solid rgba(139, 111, 71, 0.3); border-radius: 8px; background: #fff8f0; color: #4a3428; font-size: 0.9rem; margin-bottom: 1rem;">
+            <div class="modal-buttons">
+                <button id="copy-share-link" class="btn btn-primary">Copy Link</button>
+                <button id="share-close" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="info-modal" class="info-modal">
+        <div class="info-modal-content">
+            <h3 data-modal="grid">Territory Planner Guide</h3>
+            <div style="max-height: 60vh; overflow-y: auto;">
+                <p style="margin-bottom: 15px;"><strong style="color: #8b6914;">Building Types</strong></p>
+                
+                <p><strong>🏰 Alliance HQ (3x3):</strong> The heart of your alliance territory. Expands territory by 3 tiles in all directions (blue zone) and 7 tiles total for buildable area (green zone).</p>
+                
+                <p><strong>🚩 Banner (1x1):</strong> Extends your alliance territory. Creates a 3-tile blue (alliance) zone and 7-tile total green (buildable) zone. Strategic placement is critical - banners must connect to your HQ or other banners to remain active.</p>
+                
+                <p><strong>🏛️ Town Center (2x2):</strong> Represents each player's city in your alliance (TC). Place numbered centers to assign specific positions to alliance members for coordinated placement.</p>
+                
+                <p><strong>⚙️ Alliance Mills (2x2):</strong> Resource-generating structures (AM). <em>Important: These are fixed on the actual map and cannot be moved!</em> Plan your layout around existing mill positions.</p>
+                
+                <p><strong>🕳️ Pitfall / Bear Trap (3x3):</strong> The building where your alliance summons the Bear Hunt event. Members rally here to attack the Raging Bear for rewards like Forge Hammers and resources. Place it centrally so strong rally leaders can position nearby to minimize march time.</p>
+                
+                <p><strong>🚫 Blocked Path:</strong> Mark impassable terrain like mountains, water, or enemy-controlled areas on the actual map.</p>
+                
+                <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Save & Share</strong></p>
+                
+                <p><strong>Export JSON:</strong> Save your layout as a JSON file or copy the code to share in Discord or notes.</p>
+                
+                <p><strong>Import JSON:</strong> Load a previously saved layout from a file or pasted code.</p>
+                
+                <p><strong>Share Link:</strong> Generate a compressed URL containing your entire layout. Anyone with the link can view and modify the design.</p>
+                
+                <p><strong>Export PNG:</strong> Download your territory as an image to share with alliance members.</p>
+                
+                <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Strategic Tips</strong></p>
+                <ul>
+                    <li><strong>Plan around Alliance Mills</strong> - These cannot be moved in-game.</li>
+                    <li><strong>Connect your banners</strong> - Banners become invalid if disconnected from your HQ.</li>
+                    <li><strong>Bear Trap placement</strong> - Position it centrally for rally leaders with high Command Center levels.</li>
+                    <li><strong>Use numbered Town Centers</strong> - Assign specific grid positions to each member.</li>
+                </ul>
+            </div>
+            <button id="info-close" class="btn btn-secondary info-close-btn">Close</button>
+        </div>
+    </div>
+
+    <!-- LZString for URL compression -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+
+    <!-- Sample layouts -->
+    <script src="assets/js/sample-layouts.js"></script>
+
+    <script src="assets/js/territory-planner.js"></script>
+</body>
+</html>

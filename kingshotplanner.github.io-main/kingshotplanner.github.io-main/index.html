@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingshot Alliance Territory Planner</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1><i class="fas fa-castle"></i> Kingshot Territory Planner</h1>
+            <div class="header-controls">
+                <button id="clear-grid" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+                <button id="export-png" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Export PNG
+                </button>
+                <button id="export-text" class="btn btn-secondary">
+                    <i class="fas fa-code"></i> Export Text
+                </button>
+                <button id="import-text" class="btn btn-secondary">
+                    <i class="fas fa-upload"></i> Import Text
+                </button>
+                <button id="sample-layouts" class="btn btn-info">
+                    <i class="fas fa-folder"></i> Samples
+                </button>
+                <div class="grid-size-controls">
+                    <label for="grid-width">Width:</label>
+                    <input type="number" id="grid-width" min="10" max="500" value="80">
+                    <label for="grid-height">Height:</label>
+                    <input type="number" id="grid-height" min="10" max="500" value="80">
+                    <button id="resize-grid" class="btn btn-secondary">
+                        <i class="fas fa-expand"></i> Resize
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="toolbar">
+                <h3>Tools</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" data-tool="pitfall">
+                        <div class="tool-preview pitfall-preview"></div>
+                        <span>Pitfall/Bear Hunt (3x3)</span>
+                    </button>
+                    <button class="tool-btn" data-tool="townCenter">
+                        <div class="tool-preview town-center-preview"></div>
+                        <span>Town Center (2x2)</span>
+                    </button>
+                    <button class="tool-btn" data-tool="banner">
+                        <div class="tool-preview banner-preview"></div>
+                        <span>Banner (1x1)</span>
+                    </button>
+                    <button class="tool-btn" data-tool="mill">
+                        <div class="tool-preview mill-preview"></div>
+                        <span>Alliance Mills (2x2)</span>
+                    </button>
+                    <button class="tool-btn" data-tool="allianceHQ">
+                        <div class="tool-preview alliance-hq-preview"></div>
+                        <span>Alliance HQ (3x3)</span>
+                    </button>
+                    <button class="tool-btn" data-tool="blockedPath1">
+                        <div class="tool-preview blocked-path-1-preview"></div>
+                        <span>Blocked Path (1x1)</span>
+                    </button>
+                    <button class="tool-btn" data-tool="blockedPath2">
+                        <div class="tool-preview blocked-path-2-preview"></div>
+                        <span>Blocked Path (2x2)</span>
+                    </button>
+                    <button class="tool-btn" data-tool="select">
+                        <i class="fas fa-mouse-pointer"></i>
+                        <span>Select/Move</span>
+                    </button>
+                    <button class="tool-btn" data-tool="pan">
+                        <i class="fas fa-hand-paper"></i>
+                        <span>Pan/Navigate</span>
+                    </button>
+                    <button class="tool-btn" data-tool="delete">
+                        <i class="fas fa-eraser"></i>
+                        <span>Delete</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid-container">
+                <div class="canvas-container">
+                    <canvas id="territory-grid"></canvas>
+                </div>
+                <div class="grid-info">
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color alliance-territory"></div>
+                            <span>Alliance Territory (Blue)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color buildable-area"></div>
+                            <span>Buildable Area (Green)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color valid-placement"></div>
+                            <span>Valid Placement</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color invalid-placement"></div>
+                            <span>Invalid Placement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Import Layout</h2>
+            <textarea id="import-text-area" placeholder="Paste your layout code here..."></textarea>
+            <div class="modal-buttons">
+                <button id="import-confirm" class="btn btn-primary">Import</button>
+                <button id="import-cancel" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="export-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Export Layout</h2>
+            <textarea id="export-text-area" readonly></textarea>
+            <div class="modal-buttons">
+                <button id="copy-export" class="btn btn-primary">Copy to Clipboard</button>
+                <button id="export-close" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="samples-modal" class="modal">
+        <div class="modal-content large">
+            <span class="close">&times;</span>
+            <h2>Sample Layouts</h2>
+            <div id="sample-layouts-grid"></div>
+            <div class="modal-buttons">
+                <button id="samples-close" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="samples/sample-layouts.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
