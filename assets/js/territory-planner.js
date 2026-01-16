@@ -378,8 +378,42 @@ class TerritoryPlanner {
         this.isMultiTouch = false;
         this.touchStartTime = currentTime;
         
-        // On mobile, always enable panning for single touch initially
-        if (this.isMobile) {
+        const pos = this.getTouchPos(e);
+        const gridPos = this.screenToGrid(pos.x, pos.y);
+        
+        // On mobile with select tool, check if touching an item first
+        if (this.isMobile && this.currentTool === 'select') {
+            const clickedItem = this.getItemAt(gridPos.x, gridPos.y);
+            
+            if (clickedItem) {
+                // Touching an item - enable dragging, disable panning
+                this.selectedItem = clickedItem;
+                this.isDragging = true;
+                this.dragOffset = {
+                    x: gridPos.x - clickedItem.x,
+                    y: gridPos.y - clickedItem.y
+                };
+                this.isPanning = false;
+                this.redraw();
+                return;
+            } else {
+                // Not touching an item - enable panning
+                this.selectedItem = null;
+                this.isPanning = true;
+                this.panStart = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY,
+                    scrollLeft: this.canvasContainer ? this.canvasContainer.scrollLeft : 0,
+                    scrollTop: this.canvasContainer ? this.canvasContainer.scrollTop : 0
+                };
+                this.redraw();
+                return;
+            }
+        }
+        
+        // On mobile with other tools, use tap detection
+        if (this.isMobile && this.currentTool !== 'select' && this.currentTool !== 'pan') {
+            // For placement/delete tools, set up for tap detection
             this.isPanning = true;
             this.panStart = {
                 x: e.touches[0].clientX,
@@ -388,13 +422,23 @@ class TerritoryPlanner {
                 scrollTop: this.canvasContainer ? this.canvasContainer.scrollTop : 0
             };
             
-            // Set a timeout to detect if this is a tap vs drag
             clearTimeout(this.touchTimeout);
             this.touchTimeout = setTimeout(() => {
-                // If still touching after 200ms, it's definitely a pan
                 this.isPanning = true;
             }, 200);
             
+            return;
+        }
+        
+        // Pan tool on mobile
+        if (this.isMobile && this.currentTool === 'pan') {
+            this.isPanning = true;
+            this.panStart = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+                scrollLeft: this.canvasContainer ? this.canvasContainer.scrollLeft : 0,
+                scrollTop: this.canvasContainer ? this.canvasContainer.scrollTop : 0
+            };
             return;
         }
         
@@ -409,9 +453,6 @@ class TerritoryPlanner {
             };
             return;
         }
-        
-        const pos = this.getTouchPos(e);
-        const gridPos = this.screenToGrid(pos.x, pos.y);
         
         if (this.currentTool === 'select') {
             this.handleSelect(gridPos, pos);
@@ -450,8 +491,18 @@ class TerritoryPlanner {
             return;
         }
         
-        // Single touch pan
-        if (this.isPanning && e.touches.length === 1) {
+        // Item dragging - PRIORITY over panning
+        if (this.isDragging && this.selectedItem && e.touches.length === 1) {
+            const pos = this.getTouchPos(e);
+            const gridPos = this.screenToGrid(pos.x, pos.y);
+            this.selectedItem.x = gridPos.x - this.dragOffset.x;
+            this.selectedItem.y = gridPos.y - this.dragOffset.y;
+            this.redraw();
+            return;
+        }
+        
+        // Single touch pan - only if NOT dragging
+        if (this.isPanning && e.touches.length === 1 && !this.isDragging) {
             if (this.canvasContainer) {
                 const deltaX = e.touches[0].clientX - this.panStart.x;
                 const deltaY = e.touches[0].clientY - this.panStart.y;
@@ -459,15 +510,6 @@ class TerritoryPlanner {
                 this.canvasContainer.scrollTop = this.panStart.scrollTop - deltaY;
             }
             return;
-        }
-        
-        // Item dragging
-        if (this.isDragging && this.selectedItem && e.touches.length === 1) {
-            const pos = this.getTouchPos(e);
-            const gridPos = this.screenToGrid(pos.x, pos.y);
-            this.selectedItem.x = gridPos.x - this.dragOffset.x;
-            this.selectedItem.y = gridPos.y - this.dragOffset.y;
-            this.redraw();
         }
     }
     
@@ -483,8 +525,18 @@ class TerritoryPlanner {
             this.lastPinchDistance = 0;
         }
         
-        // On mobile, detect tap vs pan
-        if (this.isMobile && this.isPanning && touchDuration < 200) {
+        // Handle item dragging completion
+        if (this.isDragging && this.selectedItem) {
+            this.isDragging = false;
+            this.validateItemPlacement(this.selectedItem);
+            this.saveHistory();
+            this.redraw();
+            this.lastTouchEnd = currentTime;
+            return;
+        }
+        
+        // On mobile with non-select tools, detect tap vs pan
+        if (this.isMobile && this.currentTool !== 'select' && this.currentTool !== 'pan' && this.isPanning && touchDuration < 200) {
             // This was a quick tap, not a pan - treat as tool action
             clearTimeout(this.touchTimeout);
             this.isPanning = false;
@@ -503,24 +555,24 @@ class TerritoryPlanner {
             const gridPos = this.screenToGrid(canvasX, canvasY);
             
             // Execute tool action
-            if (this.currentTool === 'select') {
-                this.handleSelect(gridPos, { x: canvasX, y: canvasY });
-            } else if (this.currentTool === 'delete') {
+            if (this.currentTool === 'delete') {
                 this.handleDelete(gridPos);
             } else if (this.currentTool !== 'pan') {
                 this.handlePlace(gridPos);
             }
         }
         
-        if (this.isPanning) {
+        // On mobile with select tool, detect tap on empty space
+        if (this.isMobile && this.currentTool === 'select' && this.isPanning && touchDuration < 200) {
+            // Quick tap on empty space - deselect
+            clearTimeout(this.touchTimeout);
             this.isPanning = false;
+            this.selectedItem = null;
+            this.redraw();
         }
         
-        if (this.isDragging) {
-            this.isDragging = false;
-            this.validateItemPlacement(this.selectedItem);
-            this.saveHistory();
-            this.redraw();
+        if (this.isPanning) {
+            this.isPanning = false;
         }
         
         this.lastTouchEnd = currentTime;
