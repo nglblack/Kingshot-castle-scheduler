@@ -220,7 +220,7 @@
 }
 
 .info-modal-content h3::before {
-    content: '🏗️';
+    content: 'ðŸ—ï¸';
     position: absolute;
     left: 0;
     top: 0;
@@ -769,6 +769,28 @@
         touch-action: none;
     }
     
+    /* Make legend smaller on mobile to give grid more space */
+    .grid-info {
+        margin-top: 0.5rem;
+    }
+    
+    .legend {
+        gap: 0.5rem;
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .legend-item {
+        font-size: 0.7rem;
+        gap: 0.3rem;
+    }
+    
+    .legend-color {
+        width: 16px;
+        height: 16px;
+        border-width: 1px;
+    }
+    
     .planner-header {
         padding: 0 0 1rem 0;
     }
@@ -879,5 +901,21 @@
     .building-menu-btn {
         padding: 0.5rem;
         font-size: 0.75rem;
+    }
+    
+    /* Even more compact legend for small phones */
+    .legend {
+        gap: 0.4rem;
+        padding: 0.4rem;
+    }
+    
+    .legend-item {
+        font-size: 0.65rem;
+        gap: 0.25rem;
+    }
+    
+    .legend-color {
+        width: 14px;
+        height: 14px;
     }
 }

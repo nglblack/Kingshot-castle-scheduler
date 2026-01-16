@@ -9,9 +9,6 @@ class TerritoryPlanner {
         this.maxGridWidth = 500;
         this.maxGridHeight = 500;
         
-        // Set initial canvas size
-        this.updateCanvasSize();
-        
         this.currentTool = 'select';
         this.placedItems = [];
         this.selectedItem = null;
@@ -20,6 +17,19 @@ class TerritoryPlanner {
         this.townCenterCount = 0;
         this.isPanning = false;
         this.panStart = { x: 0, y: 0 };
+        
+        // Touch and zoom properties
+        this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        this.touchStartTime = 0;
+        this.lastTouchEnd = 0;
+        this.touchTimeout = null;
+        this.isMultiTouch = false;
+        this.lastPinchDistance = 0;
+        this.scale = 1;
+        this.minScale = 0.5;
+        this.maxScale = 3;
+        this.originX = 0;
+        this.originY = 0;
         
         // Undo/Redo history
         this.history = [];
@@ -42,10 +52,18 @@ class TerritoryPlanner {
             selectedOutline: '#3498db'
         };
         
+        // Set initial canvas size AFTER colors are defined
+        this.updateCanvasSize();
+        
         this.initializeEventListeners();
-        this.redraw(); // Use redraw instead of just drawGrid
         this.loadFromURL(); // Load layout from URL if present
         this.saveHistory(); // Save initial state
+        this.redraw(); // Draw after everything is initialized
+        
+        // On mobile, default to pan mode for easier navigation
+        if (this.isMobile) {
+            this.selectTool('pan');
+        }
     }
     
     initializeEventListeners() {
@@ -87,6 +105,9 @@ class TerritoryPlanner {
         this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         this.canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e));
         this.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+        
+        // Mouse wheel zoom for desktop
+        this.canvas.addEventListener('wheel', (e) => this.handleWheel(e), { passive: false });
         
         // Touch events for mobile
         this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
@@ -185,6 +206,43 @@ class TerritoryPlanner {
         if (btn) btn.classList.remove('active');
     }
     
+    // Pinch-to-zoom distance calculation
+    getPinchDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+    
+    // Get center point between two touches
+    getPinchCenter(touches) {
+        return {
+            x: (touches[0].clientX + touches[1].clientX) / 2,
+            y: (touches[0].clientY + touches[1].clientY) / 2
+        };
+    }
+    
+    // Mouse wheel zoom
+    handleWheel(e) {
+        if (!this.isMobile) {
+            e.preventDefault();
+            
+            const rect = this.canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            const newScale = Math.max(this.minScale, Math.min(this.maxScale, this.scale * delta));
+            
+            if (newScale !== this.scale) {
+                // Adjust origin to zoom towards mouse position
+                this.originX = mouseX - (mouseX - this.originX) * (newScale / this.scale);
+                this.originY = mouseY - (mouseY - this.originY) * (newScale / this.scale);
+                this.scale = newScale;
+                this.redraw();
+            }
+        }
+    }
+    
     getMousePos(e) {
         const rect = this.canvas.getBoundingClientRect();
         const containerRect = this.canvasContainer ? this.canvasContainer.getBoundingClientRect() : rect;
@@ -197,9 +255,13 @@ class TerritoryPlanner {
         const scrollLeft = this.canvasContainer ? this.canvasContainer.scrollLeft : 0;
         const scrollTop = this.canvasContainer ? this.canvasContainer.scrollTop : 0;
         
+        // Account for scale and origin
+        const canvasX = (relativeX + scrollLeft - this.originX) / this.scale;
+        const canvasY = (relativeY + scrollTop - this.originY) / this.scale;
+        
         return {
-            x: relativeX + scrollLeft,
-            y: relativeY + scrollTop
+            x: canvasX,
+            y: canvasY
         };
     }
     
@@ -215,9 +277,13 @@ class TerritoryPlanner {
         const scrollLeft = this.canvasContainer ? this.canvasContainer.scrollLeft : 0;
         const scrollTop = this.canvasContainer ? this.canvasContainer.scrollTop : 0;
         
+        // Account for scale and origin
+        const canvasX = (relativeX + scrollLeft - this.originX) / this.scale;
+        const canvasY = (relativeY + scrollTop - this.originY) / this.scale;
+        
         return {
-            x: relativeX + scrollLeft,
-            y: relativeY + scrollTop
+            x: canvasX,
+            y: canvasY
         };
     }
     
@@ -236,7 +302,7 @@ class TerritoryPlanner {
     }
     
     handleMouseDown(e) {
-        if (this.currentTool === 'pan') {
+        if (this.currentTool === 'pan' || this.isMobile) {
             this.isPanning = true;
             this.panStart = {
                 x: e.clientX,
@@ -298,6 +364,41 @@ class TerritoryPlanner {
     handleTouchStart(e) {
         e.preventDefault();
         
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - this.lastTouchEnd;
+        
+        // Multi-touch for pinch zoom
+        if (e.touches.length === 2) {
+            this.isMultiTouch = true;
+            this.lastPinchDistance = this.getPinchDistance(e.touches);
+            return;
+        }
+        
+        // Single touch
+        this.isMultiTouch = false;
+        this.touchStartTime = currentTime;
+        
+        // On mobile, always enable panning for single touch initially
+        if (this.isMobile) {
+            this.isPanning = true;
+            this.panStart = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+                scrollLeft: this.canvasContainer ? this.canvasContainer.scrollLeft : 0,
+                scrollTop: this.canvasContainer ? this.canvasContainer.scrollTop : 0
+            };
+            
+            // Set a timeout to detect if this is a tap vs drag
+            clearTimeout(this.touchTimeout);
+            this.touchTimeout = setTimeout(() => {
+                // If still touching after 200ms, it's definitely a pan
+                this.isPanning = true;
+            }, 200);
+            
+            return;
+        }
+        
+        // Desktop touch behavior (if using touch screen on desktop)
         if (this.currentTool === 'pan') {
             this.isPanning = true;
             this.panStart = {
@@ -324,7 +425,33 @@ class TerritoryPlanner {
     handleTouchMove(e) {
         e.preventDefault();
         
-        if (this.isPanning) {
+        // Pinch zoom with two fingers
+        if (e.touches.length === 2 && this.isMultiTouch) {
+            const currentDistance = this.getPinchDistance(e.touches);
+            const center = this.getPinchCenter(e.touches);
+            const rect = this.canvas.getBoundingClientRect();
+            const centerX = center.x - rect.left;
+            const centerY = center.y - rect.top;
+            
+            if (this.lastPinchDistance > 0) {
+                const delta = currentDistance / this.lastPinchDistance;
+                const newScale = Math.max(this.minScale, Math.min(this.maxScale, this.scale * delta));
+                
+                if (newScale !== this.scale) {
+                    // Zoom towards pinch center
+                    this.originX = centerX - (centerX - this.originX) * (newScale / this.scale);
+                    this.originY = centerY - (centerY - this.originY) * (newScale / this.scale);
+                    this.scale = newScale;
+                    this.redraw();
+                }
+            }
+            
+            this.lastPinchDistance = currentDistance;
+            return;
+        }
+        
+        // Single touch pan
+        if (this.isPanning && e.touches.length === 1) {
             if (this.canvasContainer) {
                 const deltaX = e.touches[0].clientX - this.panStart.x;
                 const deltaY = e.touches[0].clientY - this.panStart.y;
@@ -334,7 +461,8 @@ class TerritoryPlanner {
             return;
         }
         
-        if (this.isDragging && this.selectedItem) {
+        // Item dragging
+        if (this.isDragging && this.selectedItem && e.touches.length === 1) {
             const pos = this.getTouchPos(e);
             const gridPos = this.screenToGrid(pos.x, pos.y);
             this.selectedItem.x = gridPos.x - this.dragOffset.x;
@@ -345,10 +473,57 @@ class TerritoryPlanner {
     
     handleTouchEnd(e) {
         e.preventDefault();
+        
+        const currentTime = new Date().getTime();
+        const touchDuration = currentTime - this.touchStartTime;
+        
+        // Reset multi-touch
+        if (e.touches.length < 2) {
+            this.isMultiTouch = false;
+            this.lastPinchDistance = 0;
+        }
+        
+        // On mobile, detect tap vs pan
+        if (this.isMobile && this.isPanning && touchDuration < 200) {
+            // This was a quick tap, not a pan - treat as tool action
+            clearTimeout(this.touchTimeout);
+            this.isPanning = false;
+            
+            // Get the touch position at the time of tap
+            const touch = e.changedTouches[0];
+            const rect = this.canvas.getBoundingClientRect();
+            const containerRect = this.canvasContainer ? this.canvasContainer.getBoundingClientRect() : rect;
+            const relativeX = touch.clientX - containerRect.left;
+            const relativeY = touch.clientY - containerRect.top;
+            const scrollLeft = this.canvasContainer ? this.canvasContainer.scrollLeft : 0;
+            const scrollTop = this.canvasContainer ? this.canvasContainer.scrollTop : 0;
+            const canvasX = (relativeX + scrollLeft - this.originX) / this.scale;
+            const canvasY = (relativeY + scrollTop - this.originY) / this.scale;
+            
+            const gridPos = this.screenToGrid(canvasX, canvasY);
+            
+            // Execute tool action
+            if (this.currentTool === 'select') {
+                this.handleSelect(gridPos, { x: canvasX, y: canvasY });
+            } else if (this.currentTool === 'delete') {
+                this.handleDelete(gridPos);
+            } else if (this.currentTool !== 'pan') {
+                this.handlePlace(gridPos);
+            }
+        }
+        
         if (this.isPanning) {
             this.isPanning = false;
         }
-        this.handleMouseUp(e);
+        
+        if (this.isDragging) {
+            this.isDragging = false;
+            this.validateItemPlacement(this.selectedItem);
+            this.saveHistory();
+            this.redraw();
+        }
+        
+        this.lastTouchEnd = currentTime;
     }
     
     handleKeyDown(e) {
@@ -543,28 +718,42 @@ class TerritoryPlanner {
     }
     
     drawGrid() {
+        if (!this.ctx) return;
+        
+        // Clear the entire canvas BEFORE any transforms
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Now apply transform for grid drawing
+        this.ctx.save();
+        this.ctx.setTransform(this.scale, 0, 0, this.scale, this.originX, this.originY);
         
         // Draw grid lines
         this.ctx.strokeStyle = this.colors.grid;
-        this.ctx.lineWidth = 1;
+        this.ctx.lineWidth = 1 / this.scale;
         
         for (let x = 0; x <= this.gridWidth; x++) {
             this.ctx.beginPath();
             this.ctx.moveTo(x * this.gridSize, 0);
-            this.ctx.lineTo(x * this.gridSize, this.canvas.height);
+            this.ctx.lineTo(x * this.gridSize, this.gridHeight * this.gridSize);
             this.ctx.stroke();
         }
         
         for (let y = 0; y <= this.gridHeight; y++) {
             this.ctx.beginPath();
             this.ctx.moveTo(0, y * this.gridSize);
-            this.ctx.lineTo(this.canvas.width, y * this.gridSize);
+            this.ctx.lineTo(this.gridWidth * this.gridSize, y * this.gridSize);
             this.ctx.stroke();
         }
+        
+        this.ctx.restore();
     }
     
     drawTerritoryZones() {
+        if (!this.ctx) return;
+        
+        this.ctx.save();
+        this.ctx.setTransform(this.scale, 0, 0, this.scale, this.originX, this.originY);
+        
         // Create a grid to track territory coverage
         const territoryGrid = Array(this.gridHeight).fill(null).map(() => Array(this.gridWidth).fill(null));
         
@@ -614,20 +803,29 @@ class TerritoryPlanner {
         for (let y = 0; y < this.gridHeight; y++) {
             for (let x = 0; x < this.gridWidth; x++) {
                 if (territoryGrid[y][x] === 'green') {
-                    this.ctx.fillStyle = 'rgba(46, 204, 113, 0.3)'; // Semi-transparent green
+                    this.ctx.fillStyle = 'rgba(46, 204, 113, 0.3)';
                     this.ctx.fillRect(x * this.gridSize, y * this.gridSize, this.gridSize, this.gridSize);
                 } else if (territoryGrid[y][x] === 'blue') {
-                    this.ctx.fillStyle = 'rgba(52, 152, 219, 0.3)'; // Semi-transparent blue
+                    this.ctx.fillStyle = 'rgba(52, 152, 219, 0.3)';
                     this.ctx.fillRect(x * this.gridSize, y * this.gridSize, this.gridSize, this.gridSize);
                 }
             }
         }
+        
+        this.ctx.restore();
     }
     
     drawItems() {
+        if (!this.ctx) return;
+        
+        this.ctx.save();
+        this.ctx.setTransform(this.scale, 0, 0, this.scale, this.originX, this.originY);
+        
         for (const item of this.placedItems) {
             this.drawItem(item);
         }
+        
+        this.ctx.restore();
     }
     
     drawItem(item) {
@@ -670,61 +868,60 @@ class TerritoryPlanner {
         if (['pitfall', 'townCenter', 'mill', 'allianceHQ'].includes(item.type)) {
             const isValid = this.isItemInAllianceTerritory(item);
             if (isValid) {
-                // Stronger, more vibrant color with black border
                 this.ctx.fillStyle = this.colors.validPlacement;
                 this.ctx.fillRect(x + 2, y + 2, 12, 12);
                 this.ctx.strokeStyle = '#000';
-                this.ctx.lineWidth = 2;
+                this.ctx.lineWidth = 2 / this.scale;
                 this.ctx.strokeRect(x + 2, y + 2, 12, 12);
             } else {
                 this.ctx.fillStyle = this.colors.invalidPlacement;
                 this.ctx.fillRect(x + 2, y + 2, 12, 12);
                 this.ctx.strokeStyle = '#000';
-                this.ctx.lineWidth = 2;
+                this.ctx.lineWidth = 2 / this.scale;
                 this.ctx.strokeRect(x + 2, y + 2, 12, 12);
             }
         }
         
         // Draw border
         this.ctx.strokeStyle = '#333';
-        this.ctx.lineWidth = 2;
+        this.ctx.lineWidth = 2 / this.scale;
         this.ctx.strokeRect(x, y, width, height);
         
         // Draw text labels for buildings
         this.ctx.fillStyle = 'white';
         this.ctx.strokeStyle = '#000';
-        this.ctx.lineWidth = 3;
+        this.ctx.lineWidth = 3 / this.scale;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         
         let text = '';
-        let fontSize = '12px';
+        let fontSize = 12;
         
         switch (item.type) {
             case 'pitfall':
                 text = 'Pitfall';
-                fontSize = size.width >= 3 ? '10px' : '8px';
+                fontSize = size.width >= 3 ? 10 : 8;
                 break;
             case 'townCenter':
                 text = `TC#${item.number}`;
-                fontSize = '12px';
+                fontSize = 12;
                 break;
             case 'banner':
                 text = 'B';
-                fontSize = '14px';
+                fontSize = 14;
                 break;
             case 'mill':
                 text = 'AM';
-                fontSize = '12px';
+                fontSize = 12;
                 break;
             case 'allianceHQ':
                 text = 'HQ';
-                fontSize = '14px';
+                fontSize = 14;
                 break;
         }
         
         if (text) {
-            this.ctx.font = `bold ${fontSize} Arial`;
+            this.ctx.font = `bold ${fontSize}px Arial`;
             // Draw text stroke (outline)
             this.ctx.strokeText(text, x + width/2, y + height/2);
             // Draw text fill
@@ -734,7 +931,7 @@ class TerritoryPlanner {
         // Draw selection outline
         if (item === this.selectedItem) {
             this.ctx.strokeStyle = this.colors.selectedOutline;
-            this.ctx.lineWidth = 3;
+            this.ctx.lineWidth = 3 / this.scale;
             this.ctx.strokeRect(x - 1, y - 1, width + 2, height + 2);
         }
     }
@@ -799,22 +996,23 @@ class TerritoryPlanner {
         }
         
         // Let the canvas container fill available space (CSS handles this with flex: 1)
-        // Remove fixed dimensions to allow container to grow with available space
         if (this.canvasContainer) {
             this.canvasContainer.style.width = '';
             this.canvasContainer.style.height = '';
             this.canvasContainer.style.overflow = 'auto';
-            this.canvasContainer.style.webkitOverflowScrolling = 'touch'; // Smooth scrolling on iOS
+            this.canvasContainer.style.webkitOverflowScrolling = 'touch';
             
             // Center the view
             this.centerView();
         }
+        
+        this.redraw();
     }
     
     centerView() {
         if (this.canvasContainer) {
-            const containerWidth = parseInt(this.canvasContainer.style.width);
-            const containerHeight = parseInt(this.canvasContainer.style.height);
+            const containerWidth = this.canvasContainer.clientWidth;
+            const containerHeight = this.canvasContainer.clientHeight;
             
             const scrollLeft = Math.max(0, (this.canvas.width - containerWidth) / 2);
             const scrollTop = Math.max(0, (this.canvas.height - containerHeight) / 2);
@@ -872,6 +1070,11 @@ class TerritoryPlanner {
         this.gridWidth = newWidth;
         this.gridHeight = newHeight;
         
+        // Reset scale and origin when resizing
+        this.scale = 1;
+        this.originX = 0;
+        this.originY = 0;
+        
         // Update canvas and container size
         this.updateCanvasSize();
         
@@ -891,6 +1094,9 @@ class TerritoryPlanner {
         this.placedItems = [];
         this.selectedItem = null;
         this.townCenterCount = 0;
+        this.scale = 1;
+        this.originX = 0;
+        this.originY = 0;
         this.centerView();
         this.redraw();
     }
@@ -917,16 +1123,33 @@ class TerritoryPlanner {
         exportCtx.fillStyle = 'white';
         exportCtx.fillRect(0, 0, exportWidth, exportHeight);
         
-        // Calculate source region on the main canvas
-        const sourceX = bounds.x * this.gridSize;
-        const sourceY = bounds.y * this.gridSize;
+        // Temporarily reset scale and origin for export
+        const oldScale = this.scale;
+        const oldOriginX = this.originX;
+        const oldOriginY = this.originY;
         
-        // Copy the relevant portion of the canvas
-        exportCtx.drawImage(
-            this.canvas,
-            sourceX, sourceY, exportWidth, exportHeight,
-            0, 0, exportWidth, exportHeight
-        );
+        this.scale = 1;
+        this.originX = -bounds.x * this.gridSize;
+        this.originY = -bounds.y * this.gridSize;
+        
+        // Store current canvas state
+        const currentCanvas = this.canvas;
+        const currentCtx = this.ctx;
+        
+        // Switch to export canvas
+        this.canvas = exportCanvas;
+        this.ctx = exportCtx;
+        
+        // Draw to export canvas
+        this.redraw();
+        
+        // Restore original canvas
+        this.canvas = currentCanvas;
+        this.ctx = currentCtx;
+        this.scale = oldScale;
+        this.originX = oldOriginX;
+        this.originY = oldOriginY;
+        this.redraw();
         
         // Create download link
         exportCanvas.toBlob((blob) => {
