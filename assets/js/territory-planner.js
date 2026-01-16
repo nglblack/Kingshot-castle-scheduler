@@ -21,6 +21,13 @@ class TerritoryPlanner {
         this.isPanning = false;
         this.panStart = { x: 0, y: 0 };
         
+        // Pinch zoom for mobile
+        this.isPinching = false;
+        this.lastPinchDistance = 0;
+        this.scale = 1;
+        this.minScale = 0.5;
+        this.maxScale = 3;
+        
         // Undo/Redo history
         this.history = [];
         this.historyIndex = -1;
@@ -221,6 +228,12 @@ class TerritoryPlanner {
         };
     }
     
+    getPinchDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+    
     screenToGrid(screenX, screenY) {
         return {
             x: Math.floor(screenX / this.gridSize),
@@ -298,6 +311,14 @@ class TerritoryPlanner {
     handleTouchStart(e) {
         e.preventDefault();
         
+        // Check for pinch zoom (2 fingers)
+        if (e.touches.length === 2) {
+            this.isPinching = true;
+            this.lastPinchDistance = this.getPinchDistance(e.touches);
+            return;
+        }
+        
+        // Single finger touch
         if (this.currentTool === 'pan') {
             this.isPanning = true;
             this.panStart = {
@@ -324,6 +345,23 @@ class TerritoryPlanner {
     handleTouchMove(e) {
         e.preventDefault();
         
+        // Handle pinch zoom
+        if (e.touches.length === 2 && this.isPinching) {
+            const currentDistance = this.getPinchDistance(e.touches);
+            const delta = currentDistance - this.lastPinchDistance;
+            
+            // Update scale
+            const scaleChange = delta * 0.01;
+            this.scale = Math.max(this.minScale, Math.min(this.maxScale, this.scale + scaleChange));
+            
+            // Apply scale to canvas
+            this.canvas.style.transform = `scale(${this.scale})`;
+            this.canvas.style.transformOrigin = 'top left';
+            
+            this.lastPinchDistance = currentDistance;
+            return;
+        }
+        
         if (this.isPanning) {
             if (this.canvasContainer) {
                 const deltaX = e.touches[0].clientX - this.panStart.x;
@@ -345,6 +383,13 @@ class TerritoryPlanner {
     
     handleTouchEnd(e) {
         e.preventDefault();
+        
+        // Reset pinch state
+        if (this.isPinching) {
+            this.isPinching = false;
+            this.lastPinchDistance = 0;
+        }
+        
         if (this.isPanning) {
             this.isPanning = false;
         }

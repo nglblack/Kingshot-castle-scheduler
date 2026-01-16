@@ -293,11 +293,15 @@
     overflow: auto;
     margin-bottom: 1rem;
     max-height: 70vh;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y pinch-zoom;
 }
 
 #territory-grid {
     cursor: crosshair;
     display: block;
+    transition: transform 0.1s ease-out;
+    transform-origin: top left;
 }
 
 /* Legend */
@@ -396,5 +400,13 @@
         width: 30px;
         height: 30px;
         font-size: 1rem;
+    }
+    
+    #territory-grid {
+        touch-action: none; /* Allow JavaScript to handle all touch events on mobile */
+    }
+    
+    .canvas-wrapper {
+        max-height: 60vh; /* More screen space for canvas on mobile */
     }
 }
