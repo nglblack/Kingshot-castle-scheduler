@@ -21,6 +21,13 @@ class TerritoryPlanner {
         this.isPanning = false;
         this.panStart = { x: 0, y: 0 };
         
+        // Pinch zoom for canvas only
+        this.isPinching = false;
+        this.lastPinchDistance = 0;
+        this.canvasScale = 1;
+        this.minCanvasScale = 0.5;
+        this.maxCanvasScale = 3;
+        
         // Undo/Redo history
         this.history = [];
         this.historyIndex = -1;
@@ -103,6 +110,7 @@ class TerritoryPlanner {
         document.getElementById('resize-grid').addEventListener('click', () => this.resizeGrid());
         document.getElementById('undoBtn').addEventListener('click', () => this.undo());
         document.getElementById('redoBtn').addEventListener('click', () => this.redo());
+        document.getElementById('resetZoomBtn').addEventListener('click', () => this.resetZoom());
         
         // Modal events
         this.initializeModalEvents();
@@ -157,8 +165,12 @@ class TerritoryPlanner {
         this.currentTool = tool;
         this.selectedItem = null;
         
-        // Update cursor
-        this.canvas.style.cursor = 'crosshair';
+        // Update cursor based on tool
+        if (tool === 'pan') {
+            this.canvas.style.cursor = 'grab';
+        } else {
+            this.canvas.style.cursor = 'crosshair';
+        }
         
         // Update UI - remove active from all buttons
         document.querySelectorAll('.action-tool-btn, .building-menu-btn').forEach(btn => {
@@ -232,6 +244,18 @@ class TerritoryPlanner {
     }
     
     handleMouseDown(e) {
+        if (this.currentTool === 'pan') {
+            this.isPanning = true;
+            this.panStart = {
+                x: e.clientX,
+                y: e.clientY,
+                scrollLeft: this.canvasContainer ? this.canvasContainer.scrollLeft : 0,
+                scrollTop: this.canvasContainer ? this.canvasContainer.scrollTop : 0
+            };
+            this.canvas.style.cursor = 'grabbing';
+            return;
+        }
+        
         const pos = this.getMousePos(e);
         const gridPos = this.screenToGrid(pos.x, pos.y);
         
@@ -245,6 +269,16 @@ class TerritoryPlanner {
     }
     
     handleMouseMove(e) {
+        if (this.isPanning) {
+            if (this.canvasContainer) {
+                const deltaX = e.clientX - this.panStart.x;
+                const deltaY = e.clientY - this.panStart.y;
+                this.canvasContainer.scrollLeft = this.panStart.scrollLeft - deltaX;
+                this.canvasContainer.scrollTop = this.panStart.scrollTop - deltaY;
+            }
+            return;
+        }
+        
         const pos = this.getMousePos(e);
         const gridPos = this.screenToGrid(pos.x, pos.y);
         
@@ -256,25 +290,42 @@ class TerritoryPlanner {
     }
     
     handleMouseUp(e) {
+        if (this.isPanning) {
+            this.isPanning = false;
+            this.canvas.style.cursor = this.currentTool === 'pan' ? 'grab' : 'crosshair';
+        }
+        
         if (this.isDragging) {
             this.isDragging = false;
             this.validateItemPlacement(this.selectedItem);
-            this.saveHistory(); // Save after moving item
+            this.saveHistory();
             this.redraw();
         }
     }
     
     handleTouchStart(e) {
-        // Only prevent default for non-pan interactions to allow native scrolling
-        if (this.currentTool !== 'pan' && this.currentTool !== 'select') {
+        // Check for pinch zoom (2 fingers) - always handle this
+        if (e.touches.length === 2) {
             e.preventDefault();
-        }
-        
-        // Don't interfere with multi-touch (pinch zoom)
-        if (e.touches.length > 1) {
+            this.isPinching = true;
+            this.lastPinchDistance = this.getPinchDistance(e.touches);
             return;
         }
         
+        // Single touch - handle based on tool
+        if (this.currentTool === 'pan') {
+            this.isPanning = true;
+            this.panStart = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+                scrollLeft: this.canvasContainer ? this.canvasContainer.scrollLeft : 0,
+                scrollTop: this.canvasContainer ? this.canvasContainer.scrollTop : 0
+            };
+            return;
+        }
+        
+        // For select/delete/place tools
+        e.preventDefault();
         const pos = this.getTouchPos(e);
         const gridPos = this.screenToGrid(pos.x, pos.y);
         
@@ -282,22 +333,46 @@ class TerritoryPlanner {
             this.handleSelect(gridPos, pos);
         } else if (this.currentTool === 'delete') {
             this.handleDelete(gridPos);
-        } else if (this.currentTool !== 'pan') {
+        } else {
             this.handlePlace(gridPos);
         }
     }
     
     handleTouchMove(e) {
-        // Allow native scrolling for pan tool and multi-touch
-        if (this.currentTool === 'pan' || e.touches.length > 1) {
+        // Handle pinch zoom on canvas
+        if (e.touches.length === 2 && this.isPinching) {
+            e.preventDefault();
+            const currentDistance = this.getPinchDistance(e.touches);
+            const delta = currentDistance - this.lastPinchDistance;
+            
+            // Update canvas scale
+            const scaleChange = delta * 0.005;
+            this.canvasScale = Math.max(this.minCanvasScale, Math.min(this.maxCanvasScale, this.canvasScale + scaleChange));
+            
+            // Apply scale to canvas
+            this.canvas.style.transform = `scale(${this.canvasScale})`;
+            this.canvas.style.transformOrigin = '0 0';
+            
+            this.lastPinchDistance = currentDistance;
             return;
         }
         
-        // Only prevent default for dragging items
+        // Handle panning
+        if (this.isPanning) {
+            if (this.canvasContainer) {
+                const deltaX = e.touches[0].clientX - this.panStart.x;
+                const deltaY = e.touches[0].clientY - this.panStart.y;
+                this.canvasContainer.scrollLeft = this.panStart.scrollLeft - deltaX;
+                this.canvasContainer.scrollTop = this.panStart.scrollTop - deltaY;
+            }
+            return;
+        }
+        
+        // Handle dragging items
         if (this.isDragging && this.selectedItem) {
             e.preventDefault();
             const pos = this.getTouchPos(e);
-            const gridPos = this.screenToGrid(pos.x, pos.y);
+            const gridPos = this.screenToGrid(pos.x / this.canvasScale, pos.y / this.canvasScale);
             this.selectedItem.x = gridPos.x - this.dragOffset.x;
             this.selectedItem.y = gridPos.y - this.dragOffset.y;
             this.redraw();
@@ -305,12 +380,30 @@ class TerritoryPlanner {
     }
     
     handleTouchEnd(e) {
+        // Reset pinch state
+        if (this.isPinching) {
+            this.isPinching = false;
+            this.lastPinchDistance = 0;
+        }
+        
+        // Reset pan state
+        if (this.isPanning) {
+            this.isPanning = false;
+        }
+        
+        // Handle drag end
         if (this.isDragging) {
             this.isDragging = false;
             this.validateItemPlacement(this.selectedItem);
             this.saveHistory();
             this.redraw();
         }
+    }
+    
+    getPinchDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
     }
     
     handleKeyDown(e) {
@@ -1230,6 +1323,12 @@ class TerritoryPlanner {
         if (redoBtn) {
             redoBtn.disabled = this.historyIndex >= this.history.length - 1;
         }
+    }
+    
+    resetZoom() {
+        this.canvasScale = 1;
+        this.canvas.style.transform = 'scale(1)';
+        this.canvas.style.transformOrigin = '0 0';
     }
 }
 
