@@ -737,19 +737,19 @@ button:active {
 
 /* Specific emojis for each info modal type */
 .info-modal-content h3[data-modal="alliances"]::before {
-    content: '📋';
+    content: 'ℹ️';
 }
 
 .info-modal-content h3[data-modal="castle"]::before {
-    content: '🏰';
+    content: 'ℹ️';
 }
 
 .info-modal-content h3[data-modal="timeline"]::before {
-    content: '⏰';
+    content: 'ℹ️';
 }
 
 .info-modal-content h3[data-modal="output"]::before {
-    content: '📝';
+    content: 'ℹ️';
 }
 
 .info-modal-content p {
@@ -801,7 +801,7 @@ button:active {
 }
 
 .output-section h3::before {
-    content: '📝';
+    content: '📜';
     position: absolute;
     left: 0;
     top: 0;
@@ -1374,14 +1374,22 @@ body {
     
     .nav-container {
         height: 60px;
+        padding: 0 15px;
     }
     
     .nav-brand {
-        font-size: 1.2em;
+        font-size: 1.05em;
+        letter-spacing: 0.5px;
+        gap: 5px;
+        white-space: nowrap;
+        max-width: calc(100vw - 120px);
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
     .nav-toggle {
         display: flex;
+        flex-shrink: 0;
     }
 
     .nav-menu {

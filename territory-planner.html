@@ -24,40 +24,35 @@
         </div>
     </nav>
 
-    <div class="planner-container">
-        <div class="planner-content-wrapper">
-        <header class="planner-header">
-            <div class="header-title">
-                <span class="header-icon">🏰</span>
-                <h1>Kingshot Territory Planner</h1>
-            </div>
-            <div class="header-controls">
-                <div class="controls-header">
-                    <span class="controls-icon">🏗️</span>
-                    <h2 class="controls-title">Grid Controls</h2>
-                    <button class="info-button" id="gridInfoBtn" title="Learn about Grid Controls">!</button>
-                </div>
-                <div class="controls-content">
-                    <button id="clear-grid" class="btn btn-danger">Clear</button>
-                    <button id="export-png" class="btn btn-primary">Export PNG</button>
-                    <button id="share-link" class="btn btn-primary">Share Link</button>
-                    <button id="export-json" class="btn btn-secondary">Export JSON</button>
-                    <button id="import-json" class="btn btn-secondary">Import JSON</button>
-                    <button id="sample-layouts" class="btn btn-info">Samples</button>
-                    <div class="grid-size-controls">
-                        <label for="grid-width">Width:</label>
-                        <input type="number" id="grid-width" min="10" max="200" value="80">
-                        <label for="grid-height">Height:</label>
-                        <input type="number" id="grid-height" min="10" max="200" value="80">
-                        <button id="resize-grid" class="btn btn-secondary">Resize</button>
-                    </div>
-                </div>
-            </div>
-        </header>
+    <div class="container">
+        <h1>🏰 Kingshot Territory Planner</h1>
 
-        <div class="planner-main">
-            <!-- Grid Container (now comes first) -->
-            <div class="grid-container">
+        <!-- Grid Controls Section -->
+        <div class="grid-controls-section">
+            <h2>Grid Controls<button class="info-button" id="gridInfoBtn" title="Learn about Grid Controls">!</button></h2>
+            <div>
+                <div class="controls-buttons">
+                    <button id="clear-grid" class="btn-danger">🗑️ Clear</button>
+                    <button id="export-png" class="btn-primary">🖼️ Export PNG</button>
+                    <button id="share-link" class="btn-primary">🔗 Share Link</button>
+                    <button id="export-json" class="btn-secondary">💾 Export JSON</button>
+                    <button id="import-json" class="btn-secondary">📥 Import JSON</button>
+                    <button id="sample-layouts" class="btn-secondary">📋 Samples</button>
+                </div>
+                <div class="grid-size-controls">
+                    <label for="grid-width">Width:</label>
+                    <input type="number" id="grid-width" min="10" max="200" value="80">
+                    <label for="grid-height">Height:</label>
+                    <input type="number" id="grid-height" min="10" max="200" value="80">
+                    <button id="resize-grid" class="btn-secondary">↔️ Resize</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Territory Canvas Section -->
+        <div class="territory-section">
+            <h2>Territory Map<button class="info-button" id="mapInfoBtn" title="Learn about Territory Map">!</button></h2>
+            <div>
                 <!-- Floating Action Toolbar -->
                 <div class="floating-toolbar">
                     <button class="action-tool-btn" data-tool="select" title="Select and move buildings">
@@ -85,7 +80,7 @@
                     
                     <!-- Buildings Menu Button -->
                     <button class="buildings-menu-btn" id="buildingsMenuBtn">
-                        <span class="tool-icon">🏗️</span>
+                        <span class="tool-icon">🗺️</span>
                         <span>Buildings</span>
                         <span class="menu-arrow">▼</span>
                     </button>
@@ -125,33 +120,31 @@
                     </div>
                 </div>
                 
-                <div class="canvas-container">
+                <div class="canvas-wrapper">
                     <canvas id="territory-grid"></canvas>
                 </div>
-                <div class="grid-info">
-                    <div class="legend">
-                        <div class="legend-item">
-                            <div class="legend-color alliance-territory"></div>
-                            <span>Alliance Territory (Blue)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color buildable-area"></div>
-                            <span>Buildable Area (Green)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color valid-placement"></div>
-                            <span>Valid Placement</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color invalid-placement"></div>
-                            <span>Invalid Placement</span>
-                        </div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color alliance-territory"></div>
+                        <span>Alliance Territory (Blue)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color buildable-area"></div>
+                        <span>Buildable Area (Green)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color valid-placement"></div>
+                        <span>Valid Placement</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color invalid-placement"></div>
+                        <span>Invalid Placement</span>
                     </div>
                 </div>
             </div>
         </div>
-        </div> <!-- Close planner-content-wrapper -->
-    </div> <!-- Close planner-container -->
+    </div>
 
     <!-- Modals -->
     <div id="import-modal" class="modal">
@@ -160,8 +153,8 @@
             <h2>📥 Import JSON</h2>
             <textarea id="import-text-area" placeholder="Paste your JSON layout code here..."></textarea>
             <div class="modal-buttons">
-                <button id="import-confirm" class="btn btn-primary">Import</button>
-                <button id="import-cancel" class="btn btn-secondary">Cancel</button>
+                <button id="import-confirm" class="btn-primary">Import</button>
+                <button id="import-cancel" class="btn-secondary">Cancel</button>
             </div>
         </div>
     </div>
@@ -172,9 +165,9 @@
             <h2>📤 Export JSON</h2>
             <textarea id="export-text-area" readonly></textarea>
             <div class="modal-buttons">
-                <button id="download-json" class="btn btn-primary">Download JSON</button>
-                <button id="copy-export" class="btn btn-secondary">Copy to Clipboard</button>
-                <button id="export-close" class="btn btn-secondary">Close</button>
+                <button id="download-json" class="btn-primary">Download JSON</button>
+                <button id="copy-export" class="btn-secondary">Copy to Clipboard</button>
+                <button id="export-close" class="btn-secondary">Close</button>
             </div>
         </div>
     </div>
@@ -182,10 +175,10 @@
     <div id="samples-modal" class="modal">
         <div class="modal-content large">
             <span class="close">&times;</span>
-            <h2>📁 Sample Layouts</h2>
+            <h2>📋 Sample Layouts</h2>
             <div id="sample-layouts-grid"></div>
             <div class="modal-buttons">
-                <button id="samples-close" class="btn btn-secondary">Close</button>
+                <button id="samples-close" class="btn-secondary">Close</button>
             </div>
         </div>
     </div>
@@ -197,8 +190,8 @@
             <p>Share this link to let others view your territory layout:</p>
             <input type="text" id="share-link-url" readonly style="width: 100%; padding: 0.75rem; border: 2px solid rgba(139, 111, 71, 0.3); border-radius: 8px; background: #fff8f0; color: #4a3428; font-size: 0.9rem; margin-bottom: 1rem;">
             <div class="modal-buttons">
-                <button id="copy-share-link" class="btn btn-primary">Copy Link</button>
-                <button id="share-close" class="btn btn-secondary">Close</button>
+                <button id="copy-share-link" class="btn-primary">Copy Link</button>
+                <button id="share-close" class="btn-secondary">Close</button>
             </div>
         </div>
     </div>
@@ -206,7 +199,7 @@
     <!-- Info Modal -->
     <div id="info-modal" class="info-modal">
         <div class="info-modal-content">
-            <h3 data-modal="grid">Territory Planner Guide</h3>
+            <h3>Territory Planner Guide</h3>
             <div style="max-height: 60vh; overflow-y: auto;">
                 <p style="margin-bottom: 15px;"><strong style="color: #8b6914;">Building Types</strong></p>
                 
@@ -240,7 +233,7 @@
                     <li><strong>Use numbered Town Centers</strong> - Assign specific grid positions to each member.</li>
                 </ul>
             </div>
-            <button id="info-close" class="btn btn-secondary info-close-btn">Close</button>
+            <button id="info-close" class="btn-secondary info-close-btn">Close</button>
         </div>
     </div>
 
