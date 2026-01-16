@@ -196,10 +196,46 @@
         </div>
     </div>
 
-    <!-- Info Modal -->
-    <div id="info-modal" class="info-modal">
+    <!-- Grid Controls Info Modal -->
+    <div id="grid-info-modal" class="info-modal">
         <div class="info-modal-content">
-            <h3>Territory Planner Guide</h3>
+            <h3>Grid Controls Guide</h3>
+            <div style="max-height: 60vh; overflow-y: auto;">
+                <p style="margin-bottom: 15px;"><strong style="color: #8b6914;">Control Buttons</strong></p>
+                
+                <p><strong>🗑️ Clear:</strong> Remove all buildings and terrain from the grid. Your grid size will remain the same.</p>
+                
+                <p><strong>🖼️ Export PNG:</strong> Download your territory layout as an image file. Perfect for sharing on Discord or with alliance members. The export automatically crops to show only the area with buildings.</p>
+                
+                <p><strong>🔗 Share Link:</strong> Generate a compressed URL containing your entire layout. Anyone with the link can view and modify the design. The layout data is encoded in the URL itself.</p>
+                
+                <p><strong>💾 Export JSON:</strong> Save your layout as a JSON file. You can copy the code to share in Discord/notes or download it as a file for backup.</p>
+                
+                <p><strong>📥 Import JSON:</strong> Load a previously saved layout. You can paste JSON code directly or upload a .json file. This will replace your current layout.</p>
+                
+                <p><strong>📋 Samples:</strong> Load pre-made example layouts to see how to organize your alliance territory or use as a starting template.</p>
+                
+                <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Grid Size</strong></p>
+                
+                <p><strong>Width & Height:</strong> Set the dimensions of your planning grid (10-200 tiles). Larger grids let you plan bigger territories. Default is 80x80.</p>
+                
+                <p><strong>↔️ Resize:</strong> Apply your new grid dimensions. Warning: Buildings outside the new grid boundaries will be removed.</p>
+                
+                <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Tips</strong></p>
+                <ul>
+                    <li><strong>Save regularly</strong> - Use Export JSON or Share Link to backup your work</li>
+                    <li><strong>Share Link is easiest</strong> - No file downloads needed, just copy and share the URL</li>
+                    <li><strong>Start with samples</strong> - Load an example to see best practices</li>
+                </ul>
+            </div>
+            <button id="grid-info-close" class="btn-secondary info-close-btn">Close</button>
+        </div>
+    </div>
+
+    <!-- Territory Map Info Modal -->
+    <div id="map-info-modal" class="info-modal">
+        <div class="info-modal-content">
+            <h3>Territory Map Guide</h3>
             <div style="max-height: 60vh; overflow-y: auto;">
                 <p style="margin-bottom: 15px;"><strong style="color: #8b6914;">Building Types</strong></p>
                 
@@ -215,25 +251,26 @@
                 
                 <p><strong>🚫 Blocked Path:</strong> Mark impassable terrain like mountains, water, or enemy-controlled areas on the actual map.</p>
                 
-                <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Save & Share</strong></p>
+                <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Tools</strong></p>
                 
-                <p><strong>Export JSON:</strong> Save your layout as a JSON file or copy the code to share in Discord or notes.</p>
+                <p><strong>👆 Select:</strong> Click and drag buildings to move them around the grid.</p>
                 
-                <p><strong>Import JSON:</strong> Load a previously saved layout from a file or pasted code.</p>
+                <p><strong>✋ Pan:</strong> Click and drag to navigate around the canvas when zoomed in.</p>
                 
-                <p><strong>Share Link:</strong> Generate a compressed URL containing your entire layout. Anyone with the link can view and modify the design.</p>
+                <p><strong>🗑️ Delete:</strong> Click on any building to remove it from the grid.</p>
                 
-                <p><strong>Export PNG:</strong> Download your territory as an image to share with alliance members.</p>
+                <p><strong>↶ Undo / ↷ Redo:</strong> Step backward or forward through your changes (Ctrl+Z / Ctrl+Y).</p>
                 
                 <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Strategic Tips</strong></p>
                 <ul>
-                    <li><strong>Plan around Alliance Mills</strong> - These cannot be moved in-game.</li>
-                    <li><strong>Connect your banners</strong> - Banners become invalid if disconnected from your HQ.</li>
-                    <li><strong>Bear Trap placement</strong> - Position it centrally for rally leaders with high Command Center levels.</li>
-                    <li><strong>Use numbered Town Centers</strong> - Assign specific grid positions to each member.</li>
+                    <li><strong>Plan around Alliance Mills</strong> - These cannot be moved in-game</li>
+                    <li><strong>Connect your banners</strong> - Banners become invalid if disconnected from your HQ</li>
+                    <li><strong>Bear Trap placement</strong> - Position it centrally for rally leaders with high Command Center levels</li>
+                    <li><strong>Use numbered Town Centers</strong> - Assign specific grid positions to each member</li>
+                    <li><strong>Valid Placement indicators</strong> - Green squares show buildings correctly placed in blue territory</li>
                 </ul>
             </div>
-            <button id="info-close" class="btn-secondary info-close-btn">Close</button>
+            <button id="map-info-close" class="btn-secondary info-close-btn">Close</button>
         </div>
     </div>
 
