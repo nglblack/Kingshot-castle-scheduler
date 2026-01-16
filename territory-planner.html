@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>🏰 Kingshot Territory Planner</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/territory-planner.css">
@@ -55,13 +55,9 @@
             <div>
                 <!-- Floating Action Toolbar -->
                 <div class="floating-toolbar">
-                    <button class="action-tool-btn" data-tool="select" title="Select and move buildings">
+                    <button class="action-tool-btn active" data-tool="select" title="Select and move buildings">
                         <span class="tool-icon">👆</span>
                         <span>Select</span>
-                    </button>
-                    <button class="action-tool-btn" data-tool="pan" title="Pan and navigate the canvas">
-                        <span class="tool-icon">✋</span>
-                        <span>Pan</span>
                     </button>
                     <button class="action-tool-btn" data-tool="delete" title="Delete buildings and terrain">
                         <span class="tool-icon">🗑️</span>
@@ -253,13 +249,17 @@
                 
                 <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Tools</strong></p>
                 
-                <p><strong>👆 Select:</strong> Click and drag buildings to move them around the grid.</p>
-                
-                <p><strong>✋ Pan:</strong> Click and drag to navigate around the canvas when zoomed in.</p>
+                <p><strong>👆 Select:</strong> Click and drag buildings to move them around the grid. On mobile, just scroll with your finger to navigate the canvas.</p>
                 
                 <p><strong>🗑️ Delete:</strong> Click on any building to remove it from the grid.</p>
                 
                 <p><strong>↶ Undo / ↷ Redo:</strong> Step backward or forward through your changes (Ctrl+Z / Ctrl+Y).</p>
+                
+                <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Mobile Navigation</strong></p>
+                
+                <p><strong>Scroll:</strong> Use one finger to scroll around the canvas naturally.</p>
+                
+                <p><strong>Pinch Zoom:</strong> Use two fingers to pinch in/out to zoom the entire page for better visibility.</p>
                 
                 <p style="margin: 15px 0 10px 0;"><strong style="color: #8b6914;">Strategic Tips</strong></p>
                 <ul>
