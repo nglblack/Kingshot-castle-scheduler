@@ -110,7 +110,6 @@ class TerritoryPlanner {
         document.getElementById('resize-grid').addEventListener('click', () => this.resizeGrid());
         document.getElementById('undoBtn').addEventListener('click', () => this.undo());
         document.getElementById('redoBtn').addEventListener('click', () => this.redo());
-        document.getElementById('resetZoomBtn').addEventListener('click', () => this.resetZoom());
         
         // Modal events
         this.initializeModalEvents();
@@ -345,13 +344,17 @@ class TerritoryPlanner {
             const currentDistance = this.getPinchDistance(e.touches);
             const delta = currentDistance - this.lastPinchDistance;
             
-            // Update canvas scale
-            const scaleChange = delta * 0.005;
-            this.canvasScale = Math.max(this.minCanvasScale, Math.min(this.maxCanvasScale, this.canvasScale + scaleChange));
+            // Update canvas scale with smoother sensitivity
+            const scaleChange = delta * 0.01;
+            const newScale = Math.max(this.minCanvasScale, Math.min(this.maxCanvasScale, this.canvasScale + scaleChange));
             
-            // Apply scale to canvas
-            this.canvas.style.transform = `scale(${this.canvasScale})`;
-            this.canvas.style.transformOrigin = '0 0';
+            if (newScale !== this.canvasScale) {
+                this.canvasScale = newScale;
+                
+                // Apply scale to canvas
+                this.canvas.style.transform = `scale(${this.canvasScale})`;
+                this.canvas.style.transformOrigin = '0 0';
+            }
             
             this.lastPinchDistance = currentDistance;
             return;
@@ -1323,12 +1326,6 @@ class TerritoryPlanner {
         if (redoBtn) {
             redoBtn.disabled = this.historyIndex >= this.history.length - 1;
         }
-    }
-    
-    resetZoom() {
-        this.canvasScale = 1;
-        this.canvas.style.transform = 'scale(1)';
-        this.canvas.style.transformOrigin = '0 0';
     }
 }
 
