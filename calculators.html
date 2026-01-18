@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧮 Kingshot Calculators</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/calculators.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-brand">🏰 Kingshot Tools</div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Castle Scheduler</a></li>
+                <li><a href="territory-planner.html">Territory Planner</a></li>
+                <li><a href="calculators.html" class="active">Calculators</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>🧮 Kingshot Calculators</h1>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="troop-training">
+                <span class="tab-icon">⚔️</span>
+                <span class="tab-label">Troop Training</span>
+            </button>
+            <button class="tab-btn" data-tab="construction">
+                <span class="tab-icon">🏗️</span>
+                <span class="tab-label">Construction</span>
+            </button>
+            <button class="tab-btn" data-tab="research">
+                <span class="tab-icon">🔬</span>
+                <span class="tab-label">Research</span>
+            </button>
+        </div>
+
+        <!-- Tab Content Container -->
+        <div class="tab-content-wrapper">
+            
+            <!-- TROOP TRAINING TAB -->
+            <div class="tab-content active" id="troop-training-content">
+                <div class="tool-section">
+                    <h2>⚔️ Troop Training Calculator<button class="info-button" id="trainingInfoBtn" title="Learn about Troop Training Calculator">!</button></h2>
+                    <div>
+                        <!-- Sub-tabs for different training calculators -->
+                        <div class="sub-tab-navigation">
+                            <button class="sub-tab-btn active" data-subtab="main-training">Main Calculator</button>
+                            <button class="sub-tab-btn" data-subtab="training-capacity">Training Capacity</button>
+                            <button class="sub-tab-btn" data-subtab="reverse-calc">Reverse Calculator</button>
+                            <button class="sub-tab-btn" data-subtab="promotion">Promotion</button>
+                        </div>
+
+                        <!-- Main Training Calculator -->
+                        <div class="sub-tab-content active" id="main-training-content">
+                            <div class="calculator-section">
+                                <h3>Training Speed Buffs</h3>
+                                <div class="input-grid">
+                                    <div class="input-group">
+                                        <label for="training-minister-buff">Minister Buff:</label>
+                                        <select id="training-minister-buff" class="calc-input">
+                                            <option value="0">None</option>
+                                            <option value="0.025">Prefect (2.5%)</option>
+                                            <option value="0.05">Minister (5%)</option>
+                                            <option value="0.10">Vice President (10%)</option>
+                                            <option value="0.15">President (15%)</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="training-state-buff">State Wide Buff:</label>
+                                        <select id="training-state-buff" class="calc-input">
+                                            <option value="0">None</option>
+                                            <option value="0.05">5%</option>
+                                            <option value="0.10">10%</option>
+                                            <option value="0.15">15%</option>
+                                            <option value="0.20">20%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="calculator-section">
+                                <h3>T11 Troop Quantities</h3>
+                                <div class="input-grid">
+                                    <div class="input-group">
+                                        <label for="t11-infantry">Infantry:</label>
+                                        <input type="number" id="t11-infantry" class="calc-input" min="0" value="1000" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t11-lancer">Lancer:</label>
+                                        <input type="number" id="t11-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t11-marksman">Marksman:</label>
+                                        <input type="number" id="t11-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="calculator-section">
+                                <h3>T11 Cost Reduction</h3>
+                                <div class="input-grid">
+                                    <div class="input-group">
+                                        <label for="infantry-reduction">Infantry:</label>
+                                        <select id="infantry-reduction" class="calc-input">
+                                            <option value="1.0">None (100% cost)</option>
+                                            <option value="0.5">50% Reduction</option>
+                                            <option value="0.0">100% Reduction (Free)</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="lancer-reduction">Lancer:</label>
+                                        <select id="lancer-reduction" class="calc-input">
+                                            <option value="1.0">None (100% cost)</option>
+                                            <option value="0.5">50% Reduction</option>
+                                            <option value="0.0">100% Reduction (Free)</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="marksman-reduction">Marksman:</label>
+                                        <select id="marksman-reduction" class="calc-input">
+                                            <option value="1.0">None (100% cost)</option>
+                                            <option value="0.5">50% Reduction</option>
+                                            <option value="0.0">100% Reduction (Free)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Results Display -->
+                            <div class="results-section">
+                                <h3>Results</h3>
+                                
+                                <div class="results-grid">
+                                    <div class="result-card">
+                                        <h4>⏱️ Speedups Needed</h4>
+                                        <div class="result-value" id="speedups-days">0 Days</div>
+                                        <div class="result-value" id="speedups-hours">0 Hours</div>
+                                        <div class="result-value" id="speedups-minutes">0 Minutes</div>
+                                        <div class="result-value-small" id="speedups-seconds">0 Seconds</div>
+                                    </div>
+
+                                    <div class="result-card">
+                                        <h4>📦 Resource Cost</h4>
+                                        <div class="result-value" id="cost-meat">🥩 Meat: 0</div>
+                                        <div class="result-value" id="cost-wood">🪵 Wood: 0</div>
+                                        <div class="result-value" id="cost-coal">⚫ Coal: 0</div>
+                                        <div class="result-value" id="cost-iron">⚙️ Iron: 0</div>
+                                    </div>
+
+                                    <div class="result-card">
+                                        <h4>🏆 Points Calculator</h4>
+                                        <div class="result-value" id="points-svs">SVS: 0</div>
+                                        <div class="result-value" id="points-koi">KOI: 0</div>
+                                        <div class="result-value" id="points-as">Alliance Showdown: 0</div>
+                                        <div class="result-value" id="points-op">Office Project: 0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Training Capacity Calculator -->
+                        <div class="sub-tab-content" id="training-capacity-content">
+                            <div class="calculator-section">
+                                <h3>Current Training Capacity</h3>
+                                <div class="input-grid">
+                                    <div class="input-group">
+                                        <label for="base-capacity">Base Training Capacity:</label>
+                                        <input type="number" id="base-capacity" class="calc-input" min="0" value="1517" placeholder="1517">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="gem-buff">Gem Buff (×3):</label>
+                                        <select id="gem-buff" class="calc-input">
+                                            <option value="0">None</option>
+                                            <option value="0.10">10%</option>
+                                            <option value="0.20">20%</option>
+                                            <option value="0.30">30%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <p class="help-text">Note: Minister Buff is automatically applied from the main calculator settings.</p>
+                            </div>
+
+                            <div class="results-section">
+                                <h3>Capacity Results</h3>
+                                <div class="results-grid">
+                                    <div class="result-card">
+                                        <h4>📈 New Capacity</h4>
+                                        <div class="result-value-large" id="new-capacity">1,517</div>
+                                    </div>
+                                    <div class="result-card">
+                                        <h4>🔢 Queues Needed</h4>
+                                        <div class="result-value-large" id="queues-needed">0.66</div>
+                                        <p class="result-note">Based on current troop quantities</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reverse Calculator -->
+                        <div class="sub-tab-content" id="reverse-calc-content">
+                            <div class="calculator-section">
+                                <h3>Available Speedups</h3>
+                                <p class="help-text">Enter the total speedups you have available:</p>
+                                <div class="input-grid">
+                                    <div class="input-group">
+                                        <label for="reverse-days">Days:</label>
+                                        <input type="number" id="reverse-days" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="reverse-hours">Hours:</label>
+                                        <input type="number" id="reverse-hours" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="reverse-minutes">Minutes:</label>
+                                        <input type="number" id="reverse-minutes" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="results-section">
+                                <h3>Troops You Can Build</h3>
+                                <div class="troop-tier-results" id="reverse-results">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Promotion Calculator -->
+                        <div class="sub-tab-content" id="promotion-content">
+                            <div class="calculator-section">
+                                <h3>Troops to Promote</h3>
+                                <p class="help-text">Enter quantities for each tier and troop type you want to promote:</p>
+                                
+                                <!-- Infantry Promotion -->
+                                <div class="promotion-group">
+                                    <h4>⚔️ Infantry</h4>
+                                    <div class="tier-input-grid">
+                                        <div class="input-group-small">
+                                            <label>T1:</label>
+                                            <input type="number" id="promo-inf-t1" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T2:</label>
+                                            <input type="number" id="promo-inf-t2" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T3:</label>
+                                            <input type="number" id="promo-inf-t3" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T4:</label>
+                                            <input type="number" id="promo-inf-t4" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T5:</label>
+                                            <input type="number" id="promo-inf-t5" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T6:</label>
+                                            <input type="number" id="promo-inf-t6" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T7:</label>
+                                            <input type="number" id="promo-inf-t7" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T8:</label>
+                                            <input type="number" id="promo-inf-t8" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T9:</label>
+                                            <input type="number" id="promo-inf-t9" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T10:</label>
+                                            <input type="number" id="promo-inf-t10" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T11:</label>
+                                            <input type="number" id="promo-inf-t11" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Lancer Promotion -->
+                                <div class="promotion-group">
+                                    <h4>🐴 Lancer</h4>
+                                    <div class="tier-input-grid">
+                                        <div class="input-group-small">
+                                            <label>T1:</label>
+                                            <input type="number" id="promo-lan-t1" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T2:</label>
+                                            <input type="number" id="promo-lan-t2" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T3:</label>
+                                            <input type="number" id="promo-lan-t3" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T4:</label>
+                                            <input type="number" id="promo-lan-t4" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T5:</label>
+                                            <input type="number" id="promo-lan-t5" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T6:</label>
+                                            <input type="number" id="promo-lan-t6" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T7:</label>
+                                            <input type="number" id="promo-lan-t7" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T8:</label>
+                                            <input type="number" id="promo-lan-t8" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T9:</label>
+                                            <input type="number" id="promo-lan-t9" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T10:</label>
+                                            <input type="number" id="promo-lan-t10" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T11:</label>
+                                            <input type="number" id="promo-lan-t11" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Marksman Promotion -->
+                                <div class="promotion-group">
+                                    <h4>🏹 Marksman</h4>
+                                    <div class="tier-input-grid">
+                                        <div class="input-group-small">
+                                            <label>T1:</label>
+                                            <input type="number" id="promo-mar-t1" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T2:</label>
+                                            <input type="number" id="promo-mar-t2" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T3:</label>
+                                            <input type="number" id="promo-mar-t3" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T4:</label>
+                                            <input type="number" id="promo-mar-t4" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T5:</label>
+                                            <input type="number" id="promo-mar-t5" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T6:</label>
+                                            <input type="number" id="promo-mar-t6" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T7:</label>
+                                            <input type="number" id="promo-mar-t7" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T8:</label>
+                                            <input type="number" id="promo-mar-t8" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T9:</label>
+                                            <input type="number" id="promo-mar-t9" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T10:</label>
+                                            <input type="number" id="promo-mar-t10" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                        <div class="input-group-small">
+                                            <label>T11:</label>
+                                            <input type="number" id="promo-mar-t11" class="calc-input-small" min="0" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="results-section">
+                                <h3>Promotion Results</h3>
+                                <div id="promotion-results">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONSTRUCTION TAB -->
+            <div class="tab-content" id="construction-content">
+                <div class="tool-section">
+                    <h2>🏗️ Construction Calculator<button class="info-button" id="constructionInfoBtn" title="Learn about Construction Calculator">!</button></h2>
+                    <div>
+                        <div class="calculator-section">
+                            <h3>Construction Speed Buffs</h3>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label for="const-minister-buff">Minister Buff:</label>
+                                    <select id="const-minister-buff" class="calc-input">
+                                        <option value="0">None</option>
+                                        <option value="0.025">Prefect (2.5%)</option>
+                                        <option value="0.05">Minister (5%)</option>
+                                        <option value="0.10">VP (10%)</option>
+                                        <option value="0.15">P (15%)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="const-state-buff">State Wide Buff:</label>
+                                    <select id="const-state-buff" class="calc-input">
+                                        <option value="0">None</option>
+                                        <option value="0.05">5%</option>
+                                        <option value="0.10">10%</option>
+                                        <option value="0.15">15%</option>
+                                        <option value="0.20">20%</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="const-hyena-buff">Hyena Pet:</label>
+                                    <select id="const-hyena-buff" class="calc-input">
+                                        <option value="0">None</option>
+                                        <option value="0.05">5%</option>
+                                        <option value="0.10">10%</option>
+                                        <option value="0.15">15%</option>
+                                        <option value="0.20">20%</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="const-double-time">Double Time:</label>
+                                    <select id="const-double-time" class="calc-input">
+                                        <option value="0">None</option>
+                                        <option value="0.05">5%</option>
+                                        <option value="0.10">10%</option>
+                                        <option value="0.15">15%</option>
+                                        <option value="0.20">20%</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calculator-section">
+                            <h3>Original Construction Time</h3>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label for="const-days">Days:</label>
+                                    <input type="number" id="const-days" class="calc-input" min="0" value="1" placeholder="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="const-hours">Hours:</label>
+                                    <input type="number" id="const-hours" class="calc-input" min="0" max="23" value="0" placeholder="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="const-minutes">Minutes:</label>
+                                    <input type="number" id="const-minutes" class="calc-input" min="0" max="59" value="0" placeholder="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="const-seconds">Seconds:</label>
+                                    <input type="number" id="const-seconds" class="calc-input" min="0" max="59" value="0" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section">
+                            <h3>New Construction Time</h3>
+                            <div class="results-grid">
+                                <div class="result-card">
+                                    <h4>⏱️ Reduced Time</h4>
+                                    <div class="result-value" id="const-result-days">0 Days</div>
+                                    <div class="result-value" id="const-result-hours">0 Hours</div>
+                                    <div class="result-value" id="const-result-minutes">0 Minutes</div>
+                                    <div class="result-value-small" id="const-result-seconds">0 Seconds</div>
+                                </div>
+                                <div class="result-card">
+                                    <h4>💾 Total Buff Applied</h4>
+                                    <div class="result-value-large" id="const-total-buff">0%</div>
+                                    <p class="result-note">Time savings from all buffs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESEARCH TAB -->
+            <div class="tab-content" id="research-content">
+                <div class="tool-section">
+                    <h2>🔬 Research Calculator<button class="info-button" id="researchInfoBtn" title="Learn about Research Calculator">!</button></h2>
+                    <div>
+                        <div class="calculator-section">
+                            <h3>Research Speed Buffs</h3>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label for="research-minister-buff">Minister Buff:</label>
+                                    <select id="research-minister-buff" class="calc-input">
+                                        <option value="0">None</option>
+                                        <option value="0.025">Prefect (2.5%)</option>
+                                        <option value="0.05">Minister (5%)</option>
+                                        <option value="0.10">VP (10%)</option>
+                                        <option value="0.15">P (15%)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="research-state-buff">State Wide Buff:</label>
+                                    <select id="research-state-buff" class="calc-input">
+                                        <option value="0">None</option>
+                                        <option value="0.05">5%</option>
+                                        <option value="0.10">10%</option>
+                                        <option value="0.15">15%</option>
+                                        <option value="0.20">20%</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calculator-section">
+                            <h3>Original Research Time</h3>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label for="research-days">Days:</label>
+                                    <input type="number" id="research-days" class="calc-input" min="0" value="1" placeholder="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="research-hours">Hours:</label>
+                                    <input type="number" id="research-hours" class="calc-input" min="0" max="23" value="0" placeholder="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="research-minutes">Minutes:</label>
+                                    <input type="number" id="research-minutes" class="calc-input" min="0" max="59" value="0" placeholder="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="research-seconds">Seconds:</label>
+                                    <input type="number" id="research-seconds" class="calc-input" min="0" max="59" value="0" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section">
+                            <h3>New Research Time</h3>
+                            <div class="results-grid">
+                                <div class="result-card">
+                                    <h4>⏱️ Reduced Time</h4>
+                                    <div class="result-value" id="research-result-days">0 Days</div>
+                                    <div class="result-value" id="research-result-hours">0 Hours</div>
+                                    <div class="result-value" id="research-result-minutes">0 Minutes</div>
+                                    <div class="result-value-small" id="research-result-seconds">0 Seconds</div>
+                                </div>
+                                <div class="result-card">
+                                    <h4>💾 Total Buff Applied</h4>
+                                    <div class="result-value-large" id="research-total-buff">0%</div>
+                                    <p class="result-note">Time savings from all buffs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+</div>  <!-- This closes the .container -->
+
+<!-- Footer -->
+<footer class="site-footer">
+    <nav class="footer-nav">
+        <a href="index.html">Castle Scheduler</a>
+        <span class="footer-divider">|</span>
+        <a href="territory-planner.html">Territory Planner</a>
+        <span class="footer-divider">|</span>
+        <a href="calculators.html">Calculators</a>
+    </nav>
+    <p class="footer-copyright">&copy; 2025 (686)[MYS]MsMysteria</p>
+</footer>
+
+    <!-- Info Modals (will add later) -->
+
+    <!-- JavaScript -->
+    <script src="assets/js/troop-data.js"></script>
+    <script src="assets/js/calculators-main.js"></script>
+    <script src="assets/js/troop-training-calc.js"></script>
+    <script src="assets/js/construction-calc.js"></script>
+    <script src="assets/js/research-calc.js"></script>
+    
+    <script>
+        // Navigation toggle for mobile
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (navToggle) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
