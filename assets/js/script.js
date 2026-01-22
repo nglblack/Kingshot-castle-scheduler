@@ -1622,3 +1622,5 @@ function toggleSection(sectionName) {
         toggle.textContent = '►';
     }
 }
+
+
