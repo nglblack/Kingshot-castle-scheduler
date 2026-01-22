@@ -1347,7 +1347,7 @@ function copyToClipboard(text, successMessage) {
 
 function initializeNotes() {
     const textarea = document.getElementById('notesTextarea');
-    const charCount = document.getElementById('notesCharCount');
+    const charCount = document.getElementById('notes-char-count'); // FIXED
     
     if (!textarea) return;
     
@@ -1355,7 +1355,9 @@ function initializeNotes() {
     textarea.addEventListener('input', () => {
         const length = textarea.value.length;
         const maxLength = 5000;
-        charCount.textContent = `${length} / ${maxLength}`;
+        if (charCount) {
+            charCount.textContent = `${length} / ${maxLength} characters`;
+        }
         
         // Trigger autosave
         saveToLocalStorage();
@@ -1363,18 +1365,20 @@ function initializeNotes() {
     
     // Initialize character count
     const length = textarea.value.length;
-    charCount.textContent = `${length} / 5000`;
+    if (charCount) {
+        charCount.textContent = `${length} / 5000 characters`;
+    }
 }
 
 function loadNotes(notesText) {
     const textarea = document.getElementById('notesTextarea');
-    const charCount = document.getElementById('notesCharCount');
+    const charCount = document.getElementById('notes-char-count'); // FIXED
     
     if (textarea) {
         textarea.value = notesText || '';
         const length = textarea.value.length;
         if (charCount) {
-            charCount.textContent = `${length} / 5000`;
+            charCount.textContent = `${length} / 5000 characters`;
         }
     }
 }
@@ -1390,10 +1394,14 @@ function getNotes() {
 
 let lastCommentTime = 0;
 const COMMENT_RATE_LIMIT = 15000; // 15 seconds
+let commentRefreshInterval = null; // NEW: Store interval ID
+let lastCommentCount = 0; // NEW: Track comment count
 
 function initializeComments() {
-    const postBtn = document.getElementById('postCommentBtn');
+    const postBtn = document.getElementById('post-comment-btn');
     const nameInput = document.getElementById('commentName');
+    const messageInput = document.getElementById('commentMessage');
+    const commentCharCount = document.getElementById('comment-char-count');
     
     if (!postBtn) return;
     
@@ -1406,7 +1414,6 @@ function initializeComments() {
     postBtn.addEventListener('click', postComment);
     
     // Allow Enter key to post (Shift+Enter for new line)
-    const messageInput = document.getElementById('commentMessage');
     if (messageInput) {
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -1414,12 +1421,132 @@ function initializeComments() {
                 postComment();
             }
         });
+        
+        // Character counter for comment message
+        if (commentCharCount) {
+            // Initialize character count
+            const length = messageInput.value.length;
+            commentCharCount.textContent = `${length} / 400 characters`;
+            
+            // Update character count on input
+            messageInput.addEventListener('input', () => {
+                const length = messageInput.value.length;
+                commentCharCount.textContent = `${length} / 400 characters`;
+            });
+        }
     }
+    
+    // Start auto-refresh for comments if project exists
+    startCommentAutoRefresh();
+}
+
+// NEW: Start auto-refresh polling
+function startCommentAutoRefresh() {
+    // Clear any existing interval
+    if (commentRefreshInterval) {
+        clearInterval(commentRefreshInterval);
+    }
+    
+    // Only start if we have a project ID
+    if (!currentProjectId) {
+        return;
+    }
+    
+    // Poll every 15 seconds
+    commentRefreshInterval = setInterval(async () => {
+        if (currentProjectId) {
+            await refreshCommentsIfNeeded();
+        }
+    }, 15000);
+}
+
+// NEW: Stop auto-refresh
+function stopCommentAutoRefresh() {
+    if (commentRefreshInterval) {
+        clearInterval(commentRefreshInterval);
+        commentRefreshInterval = null;
+    }
+}
+
+// NEW: Check and refresh comments if there are new ones
+async function refreshCommentsIfNeeded() {
+    if (!currentProjectId) return;
+    
+    // Don't refresh if comments section is collapsed
+    const commentsContent = document.getElementById('comments-content');
+    if (commentsContent && commentsContent.classList.contains('collapsed')) {
+        return;
+    }
+    
+    try {
+        const comments = await loadComments(currentProjectId, 30);
+        
+        if (comments && comments.length > lastCommentCount) {
+            // New comments detected - refresh display
+            lastCommentCount = comments.length;
+            displayComments(comments);
+            
+            // Optional: Show a subtle notification
+            showNewCommentNotification();
+        }
+    } catch (error) {
+        console.error('Error refreshing comments:', error);
+    }
+}
+
+// NEW: Show notification when new comments arrive
+function showNewCommentNotification() {
+    const commentsSection = document.getElementById('comments-section');
+    if (!commentsSection) return;
+    
+    // Create or update notification badge
+    let badge = document.getElementById('new-comment-badge');
+    if (!badge) {
+        badge = document.createElement('span');
+        badge.id = 'new-comment-badge';
+        badge.style.cssText = `
+            display: inline-block;
+            margin-left: 10px;
+            padding: 4px 8px;
+            background: #4dd9cc;
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 1s ease-in-out 3;
+        `;
+        badge.textContent = 'New!';
+        
+        const h3 = commentsSection.querySelector('h3');
+        if (h3) {
+            h3.appendChild(badge);
+        }
+    }
+    
+    // Add CSS animation if not present
+    if (!document.getElementById('comment-badge-animation')) {
+        const style = document.createElement('style');
+        style.id = 'comment-badge-animation';
+        style.textContent = `
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.1); opacity: 0.8; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Remove badge after 5 seconds
+    setTimeout(() => {
+        if (badge && badge.parentElement) {
+            badge.remove();
+        }
+    }, 5000);
 }
 
 function enableCommentsSection() {
     const section = document.getElementById('comments-section');
-    const placeholder = document.getElementById('comments-placeholder');
+    const placeholder = document.getElementById('comments-disabled-info'); // FIXED: Correct ID
     const inputWrapper = document.getElementById('comment-input-wrapper');
     
     if (section) {
@@ -1431,11 +1558,14 @@ function enableCommentsSection() {
     if (inputWrapper) {
         inputWrapper.classList.remove('hidden');
     }
+    
+    // NEW: Start auto-refresh when comments are enabled
+    startCommentAutoRefresh();
 }
 
 function disableCommentsSection() {
     const section = document.getElementById('comments-section');
-    const placeholder = document.getElementById('comments-placeholder');
+    const placeholder = document.getElementById('comments-disabled-info'); // FIXED: Correct ID
     const inputWrapper = document.getElementById('comment-input-wrapper');
     
     if (section) {
@@ -1447,6 +1577,9 @@ function disableCommentsSection() {
     if (inputWrapper) {
         inputWrapper.classList.add('hidden');
     }
+    
+    // NEW: Stop auto-refresh when comments are disabled
+    stopCommentAutoRefresh();
 }
 
 async function postComment() {
@@ -1493,7 +1626,13 @@ async function postComment() {
         lastCommentTime = now;
         messageInput.value = '';
         
-        // Reload comments
+        // NEW: Reset character counter
+        const commentCharCount = document.getElementById('comment-char-count');
+        if (commentCharCount) {
+            commentCharCount.textContent = '0 / 400 characters';
+        }
+        
+        // Reload comments immediately
         await loadAndDisplayComments();
     } else {
         alert('Failed to post comment. Please try again.');
@@ -1504,6 +1643,12 @@ async function loadAndDisplayComments() {
     if (!currentProjectId) return;
     
     const comments = await loadComments(currentProjectId, 30);
+    
+    // NEW: Update comment count
+    if (comments) {
+        lastCommentCount = comments.length;
+    }
+    
     displayComments(comments || []);
 }
 
@@ -1622,5 +1767,3 @@ function toggleSection(sectionName) {
         toggle.textContent = '►';
     }
 }
-
-
