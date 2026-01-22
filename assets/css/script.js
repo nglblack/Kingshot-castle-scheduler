@@ -1411,6 +1411,8 @@ function initializeComments() {
         nameInput.value = savedName;
     }
     
+    postBtn.addEventListener('click', postComment);
+    
     // Allow Enter key to post (Shift+Enter for new line)
     if (messageInput) {
         messageInput.addEventListener('keydown', (e) => {
