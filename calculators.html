@@ -88,9 +88,178 @@
                                 </div>
                             </div>
 
+                            <!-- Tier Selection -->
                             <div class="calculator-section">
-                                <h3>T11 Troop Quantities</h3>
-                                <div class="input-grid">
+                                <h3>Select Troop Tier</h3>
+                                <div id="tier-selection-buttons" class="tier-button-grid"></div>
+                            </div>
+
+                            <!-- Tier Input Groups (T1-T11) -->
+                            <div class="calculator-section">
+                                <h3 id="tier-quantities-header">Troop Quantities</h3>
+                                
+                                <!-- T1 Inputs -->
+                                <div class="tier-input-group input-grid" id="t1-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t1-infantry">Infantry:</label>
+                                        <input type="number" id="t1-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t1-lancer">Lancer:</label>
+                                        <input type="number" id="t1-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t1-marksman">Marksman:</label>
+                                        <input type="number" id="t1-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T2 Inputs -->
+                                <div class="tier-input-group input-grid" id="t2-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t2-infantry">Infantry:</label>
+                                        <input type="number" id="t2-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t2-lancer">Lancer:</label>
+                                        <input type="number" id="t2-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t2-marksman">Marksman:</label>
+                                        <input type="number" id="t2-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T3 Inputs -->
+                                <div class="tier-input-group input-grid" id="t3-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t3-infantry">Infantry:</label>
+                                        <input type="number" id="t3-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t3-lancer">Lancer:</label>
+                                        <input type="number" id="t3-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t3-marksman">Marksman:</label>
+                                        <input type="number" id="t3-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T4 Inputs -->
+                                <div class="tier-input-group input-grid" id="t4-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t4-infantry">Infantry:</label>
+                                        <input type="number" id="t4-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t4-lancer">Lancer:</label>
+                                        <input type="number" id="t4-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t4-marksman">Marksman:</label>
+                                        <input type="number" id="t4-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T5 Inputs -->
+                                <div class="tier-input-group input-grid" id="t5-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t5-infantry">Infantry:</label>
+                                        <input type="number" id="t5-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t5-lancer">Lancer:</label>
+                                        <input type="number" id="t5-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t5-marksman">Marksman:</label>
+                                        <input type="number" id="t5-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T6 Inputs -->
+                                <div class="tier-input-group input-grid" id="t6-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t6-infantry">Infantry:</label>
+                                        <input type="number" id="t6-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t6-lancer">Lancer:</label>
+                                        <input type="number" id="t6-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t6-marksman">Marksman:</label>
+                                        <input type="number" id="t6-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T7 Inputs -->
+                                <div class="tier-input-group input-grid" id="t7-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t7-infantry">Infantry:</label>
+                                        <input type="number" id="t7-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t7-lancer">Lancer:</label>
+                                        <input type="number" id="t7-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t7-marksman">Marksman:</label>
+                                        <input type="number" id="t7-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T8 Inputs -->
+                                <div class="tier-input-group input-grid" id="t8-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t8-infantry">Infantry:</label>
+                                        <input type="number" id="t8-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t8-lancer">Lancer:</label>
+                                        <input type="number" id="t8-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t8-marksman">Marksman:</label>
+                                        <input type="number" id="t8-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T9 Inputs -->
+                                <div class="tier-input-group input-grid" id="t9-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t9-infantry">Infantry:</label>
+                                        <input type="number" id="t9-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t9-lancer">Lancer:</label>
+                                        <input type="number" id="t9-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t9-marksman">Marksman:</label>
+                                        <input type="number" id="t9-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T10 Inputs -->
+                                <div class="tier-input-group input-grid" id="t10-inputs" style="display: none;">
+                                    <div class="input-group">
+                                        <label for="t10-infantry">Infantry:</label>
+                                        <input type="number" id="t10-infantry" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t10-lancer">Lancer:</label>
+                                        <input type="number" id="t10-lancer" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="t10-marksman">Marksman:</label>
+                                        <input type="number" id="t10-marksman" class="calc-input" min="0" value="0" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- T11 Inputs (Default visible) -->
+                                <div class="tier-input-group input-grid" id="t11-inputs" style="display: grid;">
                                     <div class="input-group">
                                         <label for="t11-infantry">Infantry:</label>
                                         <input type="number" id="t11-infantry" class="calc-input" min="0" value="1000" placeholder="0">
@@ -107,7 +276,7 @@
                             </div>
 
                             <div class="calculator-section">
-                                <h3>T11 Cost Reduction</h3>
+                                <h3>Cost Reduction</h3>
                                 <div class="input-grid">
                                     <div class="input-group">
                                         <label for="infantry-reduction">Infantry:</label>

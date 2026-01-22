@@ -158,6 +158,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     renderAlliances();
     updateVisualMap(0);
     updateSaveStatus('ready');
+    
+    // Initialize new features
+    initializeNotes();
+    initializeComments();
+    updateShareButtonState();
 });
 
 // Load project from cloud
@@ -178,8 +183,17 @@ async function loadProjectFromCloud(projectId) {
             'turret-iii': {},
             'turret-iv': {}
         };
+        
+        // Load notes
+        loadNotes(project.data.notesText || '');
+        
         console.log('✅ Project loaded from cloud');
         updateSaveStatus('saved');
+        updateShareButtonState();
+        
+        // Enable and load comments
+        enableCommentsSection();
+        await loadAndDisplayComments();
     } else {
         console.error('❌ Project not found, loading default');
         alert('Project not found. Loading blank schedule.');
@@ -234,7 +248,7 @@ async function migrateLegacyLink(lzData) {
         
         // Save to cloud and redirect
         console.log('💾 Saving migrated schedule to cloud');
-        const project = await createProject(alliances, schedule);
+        const project = await createProject(alliances, schedule, ''); // empty notes for migrated projects
         
         if (project) {
             currentProjectId = project.id;
@@ -356,7 +370,9 @@ async function saveToCloud() {
     console.log('💾 Saving to cloud...');
     updateSaveStatus('saving');
     
-    const result = await updateProject(currentProjectId, alliances, schedule, currentProjectVersion);
+    const notesText = getNotes();
+    
+    const result = await updateProject(currentProjectId, alliances, schedule, currentProjectVersion, notesText);
     
     if (result) {
         currentProjectVersion = result.version;
@@ -990,73 +1006,7 @@ function importSchedule() {
     input.click();
 }
 
-// Share Link Generation - NOW CREATES CLOUD PROJECT
-async function generateShareLink() {
-    if (alliances.length === 0) {
-        alert('Please add at least one alliance before generating a share link.');
-        return;
-    }
-    
-    const hasScheduleData = Object.keys(schedule).some(structure => 
-        Object.keys(schedule[structure]).length > 0
-    );
-    
-    if (!hasScheduleData) {
-        alert('Please create a schedule before generating a share link. Click on timeline cells to assign alliances.');
-        return;
-    }
-    
-    // If we already have a project, just copy the current URL
-    if (currentProjectId) {
-        const shareUrl = `${window.location.origin}${window.location.pathname}#/p/${currentProjectId}`;
-        
-        navigator.clipboard.writeText(shareUrl).then(() => {
-            alert(`Share link copied to clipboard!\n\nAnyone with this link can view and edit your schedule.\n\nProject ID: ${currentProjectId}`);
-        }).catch(() => {
-            const textArea = document.createElement('textarea');
-            textArea.value = shareUrl;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert(`Share link copied to clipboard!\n\nProject ID: ${currentProjectId}`);
-        });
-        return;
-    }
-    
-    // Create new cloud project
-    console.log('📝 Creating new cloud project for sharing');
-    updateSaveStatus('saving');
-    
-    const project = await createProject(alliances, schedule);
-    
-    if (project) {
-        currentProjectId = project.id;
-        currentProjectVersion = project.version;
-        
-        // Update URL in browser
-        window.location.hash = `/p/${project.id}`;
-        
-        const shareUrl = `${window.location.origin}${window.location.pathname}#/p/${project.id}`;
-        
-        updateSaveStatus('saved');
-        
-        navigator.clipboard.writeText(shareUrl).then(() => {
-            alert(`Share link created and copied to clipboard!\n\nAnyone with this link can view and edit your schedule.\n\nProject ID: ${project.id}`);
-        }).catch(() => {
-            const textArea = document.createElement('textarea');
-            textArea.value = shareUrl;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert(`Share link created and copied!\n\nProject ID: ${project.id}`);
-        });
-    } else {
-        updateSaveStatus('error');
-        alert('Failed to create share link. Please try again.');
-    }
-}
+// OLD SHARE LINK FUNCTION REMOVED - REPLACED WITH NEW SHARE SYSTEM BELOW
 
 function exportTimelineAsImage() {
     const timelineTable = document.getElementById('timeline-table');
@@ -1206,3 +1156,469 @@ document.addEventListener('click', function(event) {
         closeInfoModal();
     }
 });
+
+// ============================================
+// SHARE BUTTON & DROPDOWN MENU SYSTEM
+// ============================================
+
+function updateShareButtonState() {
+    const shareBtn = document.getElementById('main-share-btn');
+    const shareBtnText = document.getElementById('share-btn-text');
+    
+    if (!shareBtn || !shareBtnText) return;
+    
+    if (currentProjectId) {
+        // Project exists - show "Copy Link"
+        shareBtnText.textContent = '📋 Copy Link';
+    } else {
+        // No project - show "Create Share Link"
+        shareBtnText.textContent = '🔗 Create Share Link';
+    }
+}
+
+function handleMainShareClick() {
+    if (currentProjectId) {
+        // Project exists - copy link
+        copyExistingLink();
+    } else {
+        // No project - create new share link
+        createNewShareLink();
+    }
+}
+
+function toggleShareMenu(event) {
+    event.stopPropagation();
+    const menu = document.getElementById('share-dropdown-menu');
+    if (menu) {
+        menu.classList.toggle('show');
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('share-dropdown-menu');
+    const menuBtn = document.getElementById('share-menu-btn');
+    
+    if (menu && !menu.contains(event.target) && event.target !== menuBtn && !menuBtn?.contains(event.target)) {
+        menu.classList.remove('show');
+    }
+});
+
+function handleShareMenuAction(action) {
+    // Close menu
+    const menu = document.getElementById('share-dropdown-menu');
+    if (menu) {
+        menu.classList.remove('show');
+    }
+    
+    switch(action) {
+        case 'copy-link':
+            copyExistingLink();
+            break;
+        case 'copy-id':
+            copyProjectId();
+            break;
+        case 'clone':
+            cloneProject();
+            break;
+    }
+}
+
+async function createNewShareLink() {
+    if (alliances.length === 0) {
+        alert('Please add at least one alliance before creating a share link.');
+        return;
+    }
+    
+    const hasScheduleData = Object.keys(schedule).some(structure => 
+        Object.keys(schedule[structure]).length > 0
+    );
+    
+    if (!hasScheduleData) {
+        alert('Please create a schedule before creating a share link. Click on timeline cells to assign alliances.');
+        return;
+    }
+    
+    console.log('🔗 Creating new cloud project for sharing');
+    updateSaveStatus('saving');
+
+    const notesText = getNotes();
+
+    const project = await createProject(alliances, schedule, notesText);
+    
+    if (project) {
+        currentProjectId = project.id;
+        currentProjectVersion = project.version;
+        
+        // Update URL in browser
+        window.location.hash = `/p/${project.id}`;
+        
+        updateSaveStatus('saved');
+        updateShareButtonState();
+        
+        // Enable comments section
+        enableCommentsSection();
+        
+        // Copy link to clipboard
+        const shareUrl = `${window.location.origin}${window.location.pathname}#/p/${project.id}`;
+        copyToClipboard(shareUrl, 'Share link created and copied to clipboard!');
+    } else {
+        updateSaveStatus('error');
+        alert('Failed to create share link. Please try again.');
+    }
+}
+
+function copyExistingLink() {
+    if (!currentProjectId) {
+        alert('No project to share. Create a share link first.');
+        return;
+    }
+    
+    const shareUrl = `${window.location.origin}${window.location.pathname}#/p/${currentProjectId}`;
+    copyToClipboard(shareUrl, 'Share link copied to clipboard!');
+}
+
+function copyProjectId() {
+    if (!currentProjectId) {
+        alert('No project ID available.');
+        return;
+    }
+    
+    copyToClipboard(currentProjectId, 'Project ID copied to clipboard!');
+}
+
+async function cloneProject() {
+    if (!currentProjectId) {
+        alert('No project to clone.');
+        return;
+    }
+    
+    if (!confirm('Create a new copy of this schedule? This will create a new share link with the current schedule and notes, but with an empty comment section.')) {
+        return;
+    }
+    
+    console.log('🔗 Cloning project...');
+    updateSaveStatus('saving');
+    
+    const notesText = getNotes();
+    
+    const project = await createProject(alliances, schedule, notesText);
+    
+    if (project) {
+        currentProjectId = project.id;
+        currentProjectVersion = project.version;
+        
+        // Update URL
+        window.location.hash = `/p/${project.id}`;
+        
+        updateSaveStatus('saved');
+        updateShareButtonState();
+        
+        // Clear and reload comments (empty for new project)
+        enableCommentsSection();
+        await loadAndDisplayComments();
+        
+        const shareUrl = `${window.location.origin}${window.location.pathname}#/p/${project.id}`;
+        copyToClipboard(shareUrl, 'New project created! Share link copied to clipboard.');
+    } else {
+        updateSaveStatus('error');
+        alert('Failed to clone project. Please try again.');
+    }
+}
+
+function copyToClipboard(text, successMessage) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert(successMessage);
+    }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert(successMessage);
+    });
+}
+
+// ============================================
+// NOTES SECTION FUNCTIONALITY
+// ============================================
+
+function initializeNotes() {
+    const textarea = document.getElementById('notesTextarea');
+    const charCount = document.getElementById('notesCharCount');
+    
+    if (!textarea) return;
+    
+    // Update character count
+    textarea.addEventListener('input', () => {
+        const length = textarea.value.length;
+        const maxLength = 5000;
+        charCount.textContent = `${length} / ${maxLength}`;
+        
+        // Trigger autosave
+        saveToLocalStorage();
+    });
+    
+    // Initialize character count
+    const length = textarea.value.length;
+    charCount.textContent = `${length} / 5000`;
+}
+
+function loadNotes(notesText) {
+    const textarea = document.getElementById('notesTextarea');
+    const charCount = document.getElementById('notesCharCount');
+    
+    if (textarea) {
+        textarea.value = notesText || '';
+        const length = textarea.value.length;
+        if (charCount) {
+            charCount.textContent = `${length} / 5000`;
+        }
+    }
+}
+
+function getNotes() {
+    const textarea = document.getElementById('notesTextarea');
+    return textarea ? textarea.value : '';
+}
+
+// ============================================
+// COMMENTS SECTION FUNCTIONALITY
+// ============================================
+
+let lastCommentTime = 0;
+const COMMENT_RATE_LIMIT = 15000; // 15 seconds
+
+function initializeComments() {
+    const postBtn = document.getElementById('postCommentBtn');
+    const nameInput = document.getElementById('commentName');
+    
+    if (!postBtn) return;
+    
+    // Load saved name from localStorage
+    const savedName = localStorage.getItem('kingshot_comment_name');
+    if (savedName && nameInput) {
+        nameInput.value = savedName;
+    }
+    
+    postBtn.addEventListener('click', postComment);
+    
+    // Allow Enter key to post (Shift+Enter for new line)
+    const messageInput = document.getElementById('commentMessage');
+    if (messageInput) {
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                postComment();
+            }
+        });
+    }
+}
+
+function enableCommentsSection() {
+    const section = document.getElementById('comments-section');
+    const placeholder = document.getElementById('comments-placeholder');
+    const inputWrapper = document.getElementById('comment-input-wrapper');
+    
+    if (section) {
+        section.classList.remove('disabled');
+    }
+    if (placeholder) {
+        placeholder.classList.add('hidden');
+    }
+    if (inputWrapper) {
+        inputWrapper.classList.remove('hidden');
+    }
+}
+
+function disableCommentsSection() {
+    const section = document.getElementById('comments-section');
+    const placeholder = document.getElementById('comments-placeholder');
+    const inputWrapper = document.getElementById('comment-input-wrapper');
+    
+    if (section) {
+        section.classList.add('disabled');
+    }
+    if (placeholder) {
+        placeholder.classList.remove('hidden');
+    }
+    if (inputWrapper) {
+        inputWrapper.classList.add('hidden');
+    }
+}
+
+async function postComment() {
+    if (!currentProjectId) {
+        alert('Please create a share link before posting comments.');
+        return;
+    }
+    
+    // Rate limiting
+    const now = Date.now();
+    if (now - lastCommentTime < COMMENT_RATE_LIMIT) {
+        const waitSeconds = Math.ceil((COMMENT_RATE_LIMIT - (now - lastCommentTime)) / 1000);
+        alert(`Please wait ${waitSeconds} seconds before posting another comment.`);
+        return;
+    }
+    
+    const nameInput = document.getElementById('commentName');
+    const messageInput = document.getElementById('commentMessage');
+    
+    if (!messageInput) return;
+    
+    const name = nameInput?.value.trim() || '';
+    const message = messageInput.value.trim();
+    
+    if (!message) {
+        alert('Please enter a comment message.');
+        return;
+    }
+    
+    if (message.length > 400) {
+        alert('Comment is too long. Maximum 400 characters.');
+        return;
+    }
+    
+    // Save name to localStorage
+    if (name && nameInput) {
+        localStorage.setItem('kingshot_comment_name', name);
+    }
+    
+    // Post comment
+    const success = await createComment(currentProjectId, name, message);
+    
+    if (success) {
+        lastCommentTime = now;
+        messageInput.value = '';
+        
+        // Reload comments
+        await loadAndDisplayComments();
+    } else {
+        alert('Failed to post comment. Please try again.');
+    }
+}
+
+async function loadAndDisplayComments() {
+    if (!currentProjectId) return;
+    
+    const comments = await loadComments(currentProjectId, 30);
+    displayComments(comments || []);
+}
+
+function displayComments(comments) {
+    const container = document.getElementById('comments-list');
+    if (!container) return;
+    
+    if (comments.length === 0) {
+        container.innerHTML = '<p style="text-align: center; opacity: 0.6; padding: 20px;">No comments yet. Be the first to comment!</p>';
+        return;
+    }
+    
+    // Show only first 5 by default
+    const initialShow = 5;
+    const hasMore = comments.length > initialShow;
+    
+    let html = '';
+    
+    comments.forEach((comment, index) => {
+        const isHidden = hasMore && index >= initialShow;
+        const displayName = comment.name || 'Anonymous';
+        const timeAgo = getTimeAgo(comment.created_at);
+        
+        html += `
+            <div class="comment-item ${isHidden ? 'hidden' : ''}" data-comment-index="${index}">
+                <div class="comment-header">
+                    <strong>${escapeHtml(displayName)}</strong>
+                    <span class="comment-time">${timeAgo}</span>
+                </div>
+                <div class="comment-message">${escapeHtml(comment.message)}</div>
+            </div>
+        `;
+    });
+    
+    if (hasMore) {
+        html += `
+            <button class="btn-secondary" id="show-all-comments" style="width: 100%; margin-top: 10px;">
+                Show All ${comments.length} Comments
+            </button>
+        `;
+    }
+    
+    container.innerHTML = html;
+    
+    // Add event listener for "Show All" button
+    const showAllBtn = document.getElementById('show-all-comments');
+    if (showAllBtn) {
+        showAllBtn.addEventListener('click', toggleAllComments);
+    }
+}
+
+function toggleAllComments() {
+    const hiddenComments = document.querySelectorAll('.comment-item.hidden');
+    const btn = document.getElementById('show-all-comments');
+    
+    if (hiddenComments.length > 0) {
+        // Show all
+        hiddenComments.forEach(comment => comment.classList.remove('hidden'));
+        if (btn) {
+            btn.textContent = 'Show Less';
+        }
+    } else {
+        // Hide extras
+        const allComments = document.querySelectorAll('.comment-item');
+        allComments.forEach((comment, index) => {
+            if (index >= 5) {
+                comment.classList.add('hidden');
+            }
+        });
+        if (btn) {
+            const total = document.querySelectorAll('.comment-item').length;
+            btn.textContent = `Show All ${total} Comments`;
+        }
+    }
+}
+
+function getTimeAgo(timestamp) {
+    const now = new Date();
+    const commentTime = new Date(timestamp);
+    const diffMs = now - commentTime;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return 'just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+    
+    return commentTime.toLocaleDateString();
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ============================================
+// SECTION TOGGLE FUNCTIONALITY
+// ============================================
+
+function toggleSection(sectionName) {
+    const content = document.getElementById(`${sectionName}-content`);
+    const toggle = document.getElementById(`${sectionName}-toggle`);
+    
+    if (!content || !toggle) return;
+    
+    const isCollapsed = content.classList.contains('collapsed');
+    
+    if (isCollapsed) {
+        content.classList.remove('collapsed');
+        toggle.textContent = '▼';
+    } else {
+        content.classList.add('collapsed');
+        toggle.textContent = '►';
+    }
+}

@@ -170,3 +170,71 @@ async function projectExists(projectId) {
         return false;
     }
 }
+// ============================================
+// COMMENT MANAGEMENT FUNCTIONS
+// ============================================
+
+// Post a new comment
+async function createComment(projectId, name, message) {
+    if (!supabaseClient) {
+        console.error('❌ Supabase not initialized');
+        return null;
+    }
+    
+    console.log('💬 Creating comment for project:', projectId);
+    
+    const commentData = {
+        project_id: projectId,
+        name: name || null,
+        message: message.trim()
+    };
+    
+    try {
+        const { data, error } = await supabaseClient
+            .from('project_comments')
+            .insert([commentData])
+            .select()
+            .single();
+        
+        if (error) {
+            console.error('❌ Error creating comment:', error);
+            return null;
+        }
+        
+        console.log('✅ Comment created successfully:', data);
+        return data;
+    } catch (err) {
+        console.error('❌ Exception creating comment:', err);
+        return null;
+    }
+}
+
+// Load comments for a project
+async function loadComments(projectId, limit = 30) {
+    if (!supabaseClient) {
+        console.error('❌ Supabase not initialized');
+        return [];
+    }
+    
+    console.log('📥 Loading comments for project:', projectId);
+    
+    try {
+        const { data, error } = await supabaseClient
+            .from('project_comments')
+            .select('*')
+            .eq('project_id', projectId)
+            .order('created_at', { ascending: true })
+            .limit(limit);
+        
+        if (error) {
+            console.error('❌ Error loading comments:', error);
+            return [];
+        }
+        
+        console.log(`✅ Loaded ${data.length} comments`);
+        return data || [];
+    } catch (err) {
+        console.error('❌ Exception loading comments:', err);
+        return [];
+    }
+}

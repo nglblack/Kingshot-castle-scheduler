@@ -1,4 +1,4 @@
-// Troop Training Calculator JavaScript - Main Calculator
+// Troop Training Calculator JavaScript - Main Calculator with Tier Selection
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeTroopTrainingCalculator();
@@ -13,20 +13,30 @@ function initializeTroopTrainingCalculator() {
 }
 
 // ============================================
-// MAIN TRAINING CALCULATOR (T11)
+// MAIN TRAINING CALCULATOR (ALL TIERS)
 // ============================================
 
+let currentSelectedTier = 'T11'; // Default to T11
+
 function initializeMainTraining() {
+    // Initialize tier selection buttons
+    initializeTierButtons();
+    
+    // Get all input elements
     const inputs = [
         'training-minister-buff',
         'training-state-buff',
-        't11-infantry',
-        't11-lancer',
-        't11-marksman',
         'infantry-reduction',
         'lancer-reduction',
         'marksman-reduction'
     ];
+    
+    // Add tier input fields dynamically based on selected tier
+    ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11'].forEach(tier => {
+        inputs.push(`${tier.toLowerCase()}-infantry`);
+        inputs.push(`${tier.toLowerCase()}-lancer`);
+        inputs.push(`${tier.toLowerCase()}-marksman`);
+    });
     
     inputs.forEach(inputId => {
         const element = document.getElementById(inputId);
@@ -36,7 +46,52 @@ function initializeMainTraining() {
         }
     });
     
+    // Show default tier
+    showTierInputs(currentSelectedTier);
     calculateMainTraining();
+}
+
+function initializeTierButtons() {
+    const tierButtonsContainer = document.getElementById('tier-selection-buttons');
+    if (!tierButtonsContainer) return;
+    
+    const tiers = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11'];
+    
+    tierButtonsContainer.innerHTML = tiers.map(tier => {
+        const isActive = tier === currentSelectedTier ? 'active' : '';
+        return `<button class="tier-select-btn ${isActive}" data-tier="${tier}" onclick="selectTier('${tier}')">${tier}</button>`;
+    }).join('');
+}
+
+function selectTier(tier) {
+    currentSelectedTier = tier;
+    
+    // Update button states
+    document.querySelectorAll('.tier-select-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.tier === tier) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Show inputs for selected tier
+    showTierInputs(tier);
+    
+    // Recalculate
+    calculateMainTraining();
+}
+
+function showTierInputs(tier) {
+    // Hide all tier input groups
+    document.querySelectorAll('.tier-input-group').forEach(group => {
+        group.style.display = 'none';
+    });
+    
+    // Show selected tier input group
+    const selectedGroup = document.getElementById(`${tier.toLowerCase()}-inputs`);
+    if (selectedGroup) {
+        selectedGroup.style.display = 'grid';
+    }
 }
 
 function calculateMainTraining() {
@@ -48,23 +103,30 @@ function calculateMainTraining() {
     const stateBuff = utils.getBuffValue('training-state-buff');
     const totalBuff = ministerBuff + stateBuff;
     
-    // Get troop quantities
-    const infantryQty = utils.getNumericValue('t11-infantry');
-    const lancerQty = utils.getNumericValue('t11-lancer');
-    const marksmanQty = utils.getNumericValue('t11-marksman');
+    // Get troop quantities for current selected tier
+    const tier = currentSelectedTier;
+    const infantryQty = utils.getNumericValue(`${tier.toLowerCase()}-infantry`);
+    const lancerQty = utils.getNumericValue(`${tier.toLowerCase()}-lancer`);
+    const marksmanQty = utils.getNumericValue(`${tier.toLowerCase()}-marksman`);
     
     // Get cost reduction multipliers
     const infantryReduction = parseFloat(document.getElementById('infantry-reduction').value);
     const lancerReduction = parseFloat(document.getElementById('lancer-reduction').value);
     const marksmanReduction = parseFloat(document.getElementById('marksman-reduction').value);
     
-    // Calculate time for each troop type (T11 base time = 180 seconds)
-    const baseTime = 180; // T11 base training time in seconds
-    const timePerTroop = totalBuff > 0 ? baseTime / (1 + totalBuff) : baseTime;
+    // Get base time for selected tier
+    const infantryData = data.infantry[tier];
+    const lancerData = data.lancer[tier];
+    const marksmanData = data.marksman[tier];
     
-    const infantryTime = infantryQty * timePerTroop;
-    const lancerTime = lancerQty * timePerTroop;
-    const marksmanTime = marksmanQty * timePerTroop;
+    // Calculate time for each troop type
+    const infantryTimePerTroop = totalBuff > 0 ? infantryData.time / (1 + totalBuff) : infantryData.time;
+    const lancerTimePerTroop = totalBuff > 0 ? lancerData.time / (1 + totalBuff) : lancerData.time;
+    const marksmanTimePerTroop = totalBuff > 0 ? marksmanData.time / (1 + totalBuff) : marksmanData.time;
+    
+    const infantryTime = infantryQty * infantryTimePerTroop;
+    const lancerTime = lancerQty * lancerTimePerTroop;
+    const marksmanTime = marksmanQty * marksmanTimePerTroop;
     const totalTime = infantryTime + lancerTime + marksmanTime;
     
     // Display speedups needed
@@ -72,43 +134,43 @@ function calculateMainTraining() {
     utils.displayTimeResult('speedups', timeBreakdown);
     
     // Calculate resources
-    const infantryMeat = data.infantry.T11.meat * infantryQty * infantryReduction;
-    const infantryWood = data.infantry.T11.wood * infantryQty * infantryReduction;
-    const infantryCoal = data.infantry.T11.coal * infantryQty * infantryReduction;
-    const infantryIron = data.infantry.T11.iron * infantryQty * infantryReduction;
+    const infantryMeat = infantryData.meat * infantryQty * infantryReduction;
+    const infantryWood = infantryData.wood * infantryQty * infantryReduction;
+    const infantryCoal = infantryData.coal * infantryQty * infantryReduction;
+    const infantryIron = infantryData.iron * infantryQty * infantryReduction;
     
-    const lancerMeat = data.lancer.T11.meat * lancerQty * lancerReduction;
-    const lancerWood = data.lancer.T11.wood * lancerQty * lancerReduction;
-    const lancerCoal = data.lancer.T11.coal * lancerQty * lancerReduction;
-    const lancerIron = data.lancer.T11.iron * lancerQty * lancerReduction;
+    const lancerMeat = lancerData.meat * lancerQty * lancerReduction;
+    const lancerWood = lancerData.wood * lancerQty * lancerReduction;
+    const lancerCoal = lancerData.coal * lancerQty * lancerReduction;
+    const lancerIron = lancerData.iron * lancerQty * lancerReduction;
     
-    const marksmanMeat = data.marksman.T11.meat * marksmanQty * marksmanReduction;
-    const marksmanWood = data.marksman.T11.wood * marksmanQty * marksmanReduction;
-    const marksmanCoal = data.marksman.T11.coal * marksmanQty * marksmanReduction;
-    const marksmanIron = data.marksman.T11.iron * marksmanQty * marksmanReduction;
+    const marksmanMeat = marksmanData.meat * marksmanQty * marksmanReduction;
+    const marksmanWood = marksmanData.wood * marksmanQty * marksmanReduction;
+    const marksmanCoal = marksmanData.coal * marksmanQty * marksmanReduction;
+    const marksmanIron = marksmanData.iron * marksmanQty * marksmanReduction;
     
     const totalMeat = infantryMeat + lancerMeat + marksmanMeat;
     const totalWood = infantryWood + lancerWood + marksmanWood;
     const totalCoal = infantryCoal + lancerCoal + marksmanCoal;
     const totalIron = infantryIron + lancerIron + marksmanIron;
     
-    // Display resources
-    document.getElementById('cost-meat').textContent = `🥩 Meat: ${utils.formatNumber(totalMeat)}`;
-    document.getElementById('cost-wood').textContent = `🪵 Wood: ${utils.formatNumber(totalWood)}`;
-    document.getElementById('cost-coal').textContent = `⚫ Coal: ${utils.formatNumber(totalCoal)}`;
-    document.getElementById('cost-iron').textContent = `⚙️ Iron: ${utils.formatNumber(totalIron)}`;
+    // Display resources (preserving emojis)
+    document.getElementById('cost-meat').textContent = '🥩 Meat: ' + utils.formatNumber(totalMeat);
+    document.getElementById('cost-wood').textContent = '🪵 Wood: ' + utils.formatNumber(totalWood);
+    document.getElementById('cost-coal').textContent = '⚫ Coal: ' + utils.formatNumber(totalCoal);
+    document.getElementById('cost-iron').textContent = '⚙️ Iron: ' + utils.formatNumber(totalIron);
     
     // Calculate points (only Infantry has points in the datasheet)
-    const svsPoints = infantryQty * data.infantry.T11.svs;
-    const koiPoints = infantryQty * data.infantry.T11.koi;
-    const asPoints = infantryQty * data.infantry.T11.as;
-    const opPoints = infantryQty * data.infantry.T11.op;
+    const svsPoints = infantryData.svs ? infantryQty * infantryData.svs : 0;
+    const koiPoints = infantryData.koi ? infantryQty * infantryData.koi : 0;
+    const asPoints = infantryData.as ? infantryQty * infantryData.as : 0;
+    const opPoints = infantryData.op ? infantryQty * infantryData.op : 0;
     
     // Display points
-    document.getElementById('points-svs').textContent = `SVS: ${utils.formatNumber(svsPoints)}`;
-    document.getElementById('points-koi').textContent = `KOI: ${utils.formatNumber(koiPoints)}`;
-    document.getElementById('points-as').textContent = `Alliance Showdown: ${utils.formatNumber(asPoints)}`;
-    document.getElementById('points-op').textContent = `Office Project: ${utils.formatNumber(opPoints)}`;
+    document.getElementById('points-svs').textContent = 'SVS: ' + utils.formatNumber(svsPoints);
+    document.getElementById('points-koi').textContent = 'KOI: ' + utils.formatNumber(koiPoints);
+    document.getElementById('points-as').textContent = 'Alliance Showdown: ' + utils.formatNumber(asPoints);
+    document.getElementById('points-op').textContent = 'Office Project: ' + utils.formatNumber(opPoints);
     
     // Update training capacity calculator since it uses the same buffs
     calculateTrainingCapacity();
@@ -155,9 +217,10 @@ function calculateTrainingCapacity() {
     }
     
     // Calculate queues needed based on total troops from main calculator
-    const infantryQty = utils.getNumericValue('t11-infantry');
-    const lancerQty = utils.getNumericValue('t11-lancer');
-    const marksmanQty = utils.getNumericValue('t11-marksman');
+    const tier = currentSelectedTier;
+    const infantryQty = utils.getNumericValue(`${tier.toLowerCase()}-infantry`);
+    const lancerQty = utils.getNumericValue(`${tier.toLowerCase()}-lancer`);
+    const marksmanQty = utils.getNumericValue(`${tier.toLowerCase()}-marksman`);
     const totalTroops = infantryQty + lancerQty + marksmanQty;
     
     const queuesNeeded = newCapacity > 0 ? (totalTroops / newCapacity).toFixed(2) : 0;
@@ -407,5 +470,6 @@ window.TroopTrainingCalculator = {
     calculateMainTraining,
     calculateTrainingCapacity,
     calculateReverseCalculator,
-    calculatePromotion
+    calculatePromotion,
+    selectTier
 };
