@@ -22,114 +22,94 @@ let isSaving = false;
 // Default example schedule
 const defaultSchedule = {
     "alliances": [
-        {
-            "name": "FFA",
-            "color": "#888888",
-            "isFFA": true
-        },
-        {
-            "name": "DrG",
-            "color": "#ff6b6b",
-            "isFFA": false
-        },
-        {
-            "name": "686",
-            "color": "#a29bfe",
-            "isFFA": false
-        },
-        {
-            "name": "MYS",
-            "color": "#00b894",
-            "isFFA": false
-        },
-        {
-            "name": "FTP",
-            "color": "#fdcb6e",
-            "isFFA": false
-        },
-        {
-            "name": "BSP",
-            "color": "#d63031",
-            "isFFA": false
-        },
-        {
-            "name": "IAM",
-            "color": "#0984e3",
-            "isFFA": false
-        }
-    ],
-    "schedule": {
-        "castle": {
-            "12:00": "BSP",
-            "12:30": "BSP",
-            "13:00": "BSP",
-            "13:30": "686",
-            "14:00": "686",
-            "14:30": "FTP",
-            "15:00": "FTP",
-            "15:30": "DrG",
-            "16:00": "DrG",
-            "16:30": "MYS",
-            "17:00": "MYS",
-            "17:30": "IAM"
-        },
-        "turret-i": {
-            "12:00": "686",
-            "12:30": "686",
-            "13:00": "686",
-            "13:30": "686",
-            "14:00": "686",
-            "14:30": "686",
-            "15:00": "686",
-            "15:30": "DrG",
-            "16:00": "DrG",
-            "16:30": "DrG",
-            "17:00": "FFA",
-            "17:30": "FFA"
-        },
-        "turret-ii": {
-            "12:00": "FTP",
-            "12:30": "FTP",
-            "13:00": "FTP",
-            "13:30": "FTP",
-            "14:00": "FTP",
-            "14:30": "FTP",
-            "15:00": "FTP",
-            "15:30": "BSP",
-            "16:00": "BSP",
-            "16:30": "BSP",
-            "17:00": "FFA",
-            "17:30": "FFA"
-        },
-        "turret-iii": {
-            "12:00": "BSP",
-            "12:30": "BSP",
-            "13:00": "BSP",
-            "13:30": "IAM",
-            "14:00": "IAM",
-            "14:30": "IAM",
-            "15:00": "IAM",
-            "15:30": "IAM",
-            "16:00": "IAM",
-            "16:30": "IAM",
-            "17:00": "IAM",
-            "17:30": "FFA"
-        },
-        "turret-iv": {
-            "12:00": "DrG",
-            "12:30": "DrG",
-            "13:00": "DrG",
-            "13:30": "DrG",
-            "14:00": "MYS",
-            "14:30": "MYS",
-            "15:00": "MYS",
-            "15:30": "MYS",
-            "16:00": "MYS",
-            "16:30": "MYS",
-            "17:00": "MYS",
-            "17:30": "FFA"
-        }
+    {
+      "name": "FFA",
+      "color": "#888888",
+      "isFFA": true
+    },
+    {
+      "name": "WTF",
+      "color": "#ff6b6b",
+      "isFFA": false
+    },
+    {
+      "name": "686",
+      "color": "#a29bfe",
+      "isFFA": false
+    },
+    {
+      "name": "MYS",
+      "color": "#00b894",
+      "isFFA": false
+    },
+    {
+      "name": "IAM",
+      "color": "#0984e3",
+      "isFFA": false
     }
+  ],
+  "schedule": {
+    "castle": {
+      "12:00": "WTF",
+      "12:30": "WTF",
+      "13:00": "WTF",
+      "13:30": "686",
+      "14:00": "686",
+      "14:30": "MYS",
+      "15:00": "MYS",
+      "15:30": "IAM",
+      "16:00": "IAM",
+      "16:30": "FFA"
+    },
+    "turret-i": {
+      "12:00": "686",
+      "12:30": "686",
+      "13:00": "686",
+      "13:30": "686",
+      "14:00": "686",
+      "14:30": "686",
+      "15:00": "686",
+      "15:30": "686",
+      "16:00": "686",
+      "16:30": "FFA"
+    },
+    "turret-ii": {
+      "12:00": "WTF",
+      "12:30": "WTF",
+      "13:00": "WTF",
+      "13:30": "WTF",
+      "14:00": "WTF",
+      "14:30": "WTF",
+      "15:00": "WTF",
+      "15:30": "WTF",
+      "16:00": "WTF",
+      "16:30": "FFA"
+    },
+    "turret-iii": {
+      "12:00": "IAM",
+      "12:30": "IAM",
+      "13:00": "IAM",
+      "13:30": "IAM",
+      "14:00": "IAM",
+      "14:30": "IAM",
+      "15:00": "IAM",
+      "15:30": "IAM",
+      "16:00": "IAM",
+      "16:30": "FFA"
+    },
+    "turret-iv": {
+      "12:00": "MYS",
+      "12:30": "MYS",
+      "13:00": "MYS",
+      "13:30": "MYS",
+      "14:00": "MYS",
+      "14:30": "MYS",
+      "15:00": "MYS",
+      "15:30": "MYS",
+      "16:00": "MYS",
+      "16:30": "FFA"
+    }
+  }
 };
 
 // Initialize
@@ -521,12 +501,12 @@ function generateTimeline() {
     const body = document.getElementById('timeline-body');
 
     const timeSlots = [];
-    for (let hour = 12; hour < 18; hour++) {
+    for (let hour = 12; hour < 17; hour++) {
         for (let min = 0; min < 60; min += interval) {
             timeSlots.push(`${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`);
         }
     }
-    timeSlots.push('18:00');
+    timeSlots.push('17:00');
 
     document.getElementById('time-slider').max = timeSlots.length - 1;
 
@@ -685,12 +665,12 @@ function updatePreview() {
 function updateVisualMap(timeIndex) {
     const interval = parseInt(document.getElementById('interval-select').value);
     const timeSlots = [];
-    for (let hour = 12; hour < 18; hour++) {
+    for (let hour = 12; hour < 17; hour++) {
         for (let min = 0; min < 60; min += interval) {
             timeSlots.push(`${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`);
         }
     }
-    timeSlots.push('18:00');
+    timeSlots.push('17:00');
 
     const currentTime = timeSlots[timeIndex];
     document.getElementById('current-time-display').textContent = `${currentTime} UTC`;
@@ -756,11 +736,12 @@ function updateStructureVisual(structureId, allianceName) {
 function generateOutput() {
     const interval = parseInt(document.getElementById('interval-select').value);
     const timeSlots = [];
-    for (let hour = 12; hour < 18; hour++) {
+    for (let hour = 12; hour < 17; hour++) {
         for (let min = 0; min < 60; min += interval) {
             timeSlots.push(`${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`);
         }
     }
+    timeSlots.push('17:00');
 
     const events = [];
     
