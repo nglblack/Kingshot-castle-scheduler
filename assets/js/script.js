@@ -21,7 +21,7 @@ let isSaving = false;
 // Default example schedule
 // Default example schedule
 const defaultSchedule = {
-    "alliances": [
+  "alliances": [
     {
       "name": "FFA",
       "color": "#888888",
@@ -71,7 +71,7 @@ const defaultSchedule = {
       "15:00": "686",
       "15:30": "686",
       "16:00": "686",
-      "16:30": "FFA"
+      "16:30": "686"
     },
     "turret-ii": {
       "12:00": "WTF",
@@ -83,7 +83,7 @@ const defaultSchedule = {
       "15:00": "WTF",
       "15:30": "WTF",
       "16:00": "WTF",
-      "16:30": "FFA"
+      "16:30": "WTF"
     },
     "turret-iii": {
       "12:00": "IAM",
@@ -95,7 +95,7 @@ const defaultSchedule = {
       "15:00": "IAM",
       "15:30": "IAM",
       "16:00": "IAM",
-      "16:30": "FFA"
+      "16:30": "IAM"
     },
     "turret-iv": {
       "12:00": "MYS",
@@ -107,7 +107,7 @@ const defaultSchedule = {
       "15:00": "MYS",
       "15:30": "MYS",
       "16:00": "MYS",
-      "16:30": "FFA"
+      "16:30": "MYS"
     }
   }
 };
@@ -508,7 +508,7 @@ function generateTimeline() {
     }
     timeSlots.push('17:00');
 
-    document.getElementById('time-slider').max = timeSlots.length - 1;
+    document.getElementById('time-slider').max = timeSlots.length - 2;
 
     header.innerHTML = '<th>Structure</th>' + timeSlots.map((time, index) => {
         if (index === timeSlots.length - 1) return '';
