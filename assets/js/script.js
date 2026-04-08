@@ -518,12 +518,12 @@ function generateTimeline() {
     }).join('');
 
     const structures = [
-        { id: 'castle', label: '🏰 Castle' },
-        { id: 'turret-i', label: '🗼 Turret I' },
-        { id: 'turret-ii', label: '🗼 Turret II' },
-        { id: 'turret-iii', label: '🗼 Turret III' },
-        { id: 'turret-iv', label: '🗼 Turret IV' }
-    ];
+    { id: 'castle', label: '🏰 Castle' },
+    { id: 'turret-i', label: '🗼 South Turret' },
+    { id: 'turret-ii', label: '🗼 West Turret' },
+    { id: 'turret-iii', label: '🗼 East Turret' },
+    { id: 'turret-iv', label: '🗼 North Turret' }
+];
 
     body.innerHTML = structures.map(structure => {
         const cells = timeSlots.slice(0, -1).map(time => {
@@ -807,41 +807,48 @@ function splitIntoParts(events) {
     return parts;
 }
 
-function formatEvent(event) {
-    const { time, changes } = event;
-    const lines = [];
+        function formatEvent(event) {
+            const { time, changes } = event;
+            const lines = [];
 
-    const allianceGroups = {};
-    const ffaStructures = {
-        castle: false,
-        turrets: []
-    };
-    
-    changes.forEach(change => {
-        if (change.isFFA) {
-            if (change.structure === 'castle') {
-                ffaStructures.castle = true;
-            } else {
-                const turretName = change.structure.replace('turret-', '').toUpperCase();
-                ffaStructures.turrets.push(turretName);
-            }
-        } else {
-            if (!allianceGroups[change.alliance]) {
-                allianceGroups[change.alliance] = {
-                    castle: false,
-                    turrets: [],
-                    verb: change.verb
-                };
-            }
+            const allianceGroups = {};
+            const ffaStructures = {
+                castle: false,
+                turrets: []
+            };
 
-            if (change.structure === 'castle') {
-                allianceGroups[change.alliance].castle = true;
-            } else {
-                const turretName = change.structure.replace('turret-', '').toUpperCase();
-                allianceGroups[change.alliance].turrets.push(turretName);
-            }
-        }
-    });
+            const turretNames = {
+                'turret-i': 'South',
+                'turret-ii': 'West',
+                'turret-iii': 'East',
+                'turret-iv': 'North'
+            };
+            
+            changes.forEach(change => {
+                if (change.isFFA) {
+                    if (change.structure === 'castle') {
+                        ffaStructures.castle = true;
+                    } else {
+                        const turretName = turretNames[change.structure] || change.structure.replace('turret-', '').toUpperCase();
+                        ffaStructures.turrets.push(turretName);
+                    }
+                } else {
+                    if (!allianceGroups[change.alliance]) {
+                        allianceGroups[change.alliance] = {
+                            castle: false,
+                            turrets: [],
+                            verb: change.verb
+                        };
+                    }
+
+                    if (change.structure === 'castle') {
+                        allianceGroups[change.alliance].castle = true;
+                    } else {
+                        const turretName = turretNames[change.structure] || change.structure.replace('turret-', '').toUpperCase();
+                        allianceGroups[change.alliance].turrets.push(turretName);
+                    }
+                }
+            });
 
     Object.keys(allianceGroups).forEach(allianceName => {
         const group = allianceGroups[allianceName];
