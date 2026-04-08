@@ -21,6 +21,7 @@ let isSaving = false;
 // Default example schedule
 // Default example schedule
 const defaultSchedule = {
+  
   "alliances": [
     {
       "name": "FFA",
@@ -28,7 +29,7 @@ const defaultSchedule = {
       "isFFA": true
     },
     {
-      "name": "WTF",
+      "name": "DrG",
       "color": "#ff6b6b",
       "isFFA": false
     },
@@ -43,6 +44,16 @@ const defaultSchedule = {
       "isFFA": false
     },
     {
+      "name": "FTP",
+      "color": "#fdcb6e",
+      "isFFA": false
+    },
+    {
+      "name": "BSP",
+      "color": "#d63031",
+      "isFFA": false
+    },
+    {
       "name": "IAM",
       "color": "#0984e3",
       "isFFA": false
@@ -50,16 +61,18 @@ const defaultSchedule = {
   ],
   "schedule": {
     "castle": {
-      "12:00": "WTF",
-      "12:30": "WTF",
-      "13:00": "WTF",
+      "12:00": "BSP",
+      "12:30": "BSP",
+      "13:00": "BSP",
       "13:30": "686",
       "14:00": "686",
-      "14:30": "MYS",
-      "15:00": "MYS",
-      "15:30": "IAM",
-      "16:00": "IAM",
-      "16:30": "FFA"
+      "14:30": "FTP",
+      "15:00": "FTP",
+      "15:30": "DrG",
+      "16:00": "DrG",
+      "16:30": "MYS",
+      "17:00": "MYS",
+      "17:30": "IAM"
     },
     "turret-i": {
       "12:00": "686",
@@ -69,45 +82,53 @@ const defaultSchedule = {
       "14:00": "686",
       "14:30": "686",
       "15:00": "686",
-      "15:30": "686",
-      "16:00": "686",
-      "16:30": "686"
+      "15:30": "DrG",
+      "16:00": "DrG",
+      "16:30": "DrG",
+      "17:00": "FFA",
+      "17:30": "FFA"
     },
     "turret-ii": {
-      "12:00": "WTF",
-      "12:30": "WTF",
-      "13:00": "WTF",
-      "13:30": "WTF",
-      "14:00": "WTF",
-      "14:30": "WTF",
-      "15:00": "WTF",
-      "15:30": "WTF",
-      "16:00": "WTF",
-      "16:30": "WTF"
+      "12:00": "FTP",
+      "12:30": "FTP",
+      "13:00": "FTP",
+      "13:30": "FTP",
+      "14:00": "FTP",
+      "14:30": "FTP",
+      "15:00": "FTP",
+      "15:30": "BSP",
+      "16:00": "BSP",
+      "16:30": "BSP",
+      "17:00": "FFA",
+      "17:30": "FFA"
     },
     "turret-iii": {
-      "12:00": "IAM",
-      "12:30": "IAM",
-      "13:00": "IAM",
+      "12:00": "BSP",
+      "12:30": "BSP",
+      "13:00": "BSP",
       "13:30": "IAM",
       "14:00": "IAM",
       "14:30": "IAM",
       "15:00": "IAM",
       "15:30": "IAM",
       "16:00": "IAM",
-      "16:30": "IAM"
+      "16:30": "IAM",
+      "17:00": "IAM",
+      "17:30": "FFA"
     },
     "turret-iv": {
-      "12:00": "MYS",
-      "12:30": "MYS",
-      "13:00": "MYS",
-      "13:30": "MYS",
+      "12:00": "DrG",
+      "12:30": "DrG",
+      "13:00": "DrG",
+      "13:30": "DrG",
       "14:00": "MYS",
       "14:30": "MYS",
       "15:00": "MYS",
       "15:30": "MYS",
       "16:00": "MYS",
-      "16:30": "MYS"
+      "16:30": "MYS",
+      "17:00": "MYS",
+      "17:30": "FFA"
     }
   }
 };
