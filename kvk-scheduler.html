@@ -209,6 +209,21 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 /* Toast */
 .toast{position:fixed;bottom:20px;right:20px;background:#f5ebe0;border:2px solid rgba(139,111,71,.4);border-radius:8px;padding:9px 16px;font-size:13px;color:#4a3428;z-index:300;opacity:0;transition:opacity .2s;pointer-events:none;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
 .toast.show{opacity:1;}
+/* Undo toast */
+.undo-toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:#4a3428;border-radius:10px;padding:10px 16px 10px 14px;
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;color:#f5ebe0;font-weight:600;
+  box-shadow:0 6px 20px rgba(0,0,0,0.35);
+  z-index:400;opacity:0;pointer-events:none;
+  transition:opacity .2s;white-space:nowrap;
+}
+.undo-toast.show{opacity:1;pointer-events:all;}
+.undo-bar-wrap{width:80px;height:3px;background:rgba(255,255,255,0.2);border-radius:2px;overflow:hidden;}
+.undo-bar{height:100%;background:#ffd966;border-radius:2px;transition:width linear;}
+.undo-btn{padding:4px 10px;border-radius:6px;border:1.5px solid rgba(255,217,102,0.5);background:rgba(255,217,102,0.15);color:#ffd966;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;flex-shrink:0;}
+.undo-btn:hover{background:rgba(255,217,102,0.3);}
 
 /* Confirm */
 .confirm-strip{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(192,57,43,.08);border-top:2px solid rgba(192,57,43,.3);padding:10px 20px;align-items:center;justify-content:space-between;gap:10px;z-index:150;backdrop-filter:blur(4px);}
@@ -782,6 +797,11 @@ True Gold: __126__
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="undo-toast" id="undo-toast">
+  <div class="undo-bar-wrap"><div class="undo-bar" id="undo-bar"></div></div>
+  <span id="undo-label">Removed</span>
+  <button class="undo-btn" onclick="undoDelete()">↩ Undo</button>
+</div>
 
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1503,7 +1523,30 @@ function renderQueue(){
     +'</div>';
   }).join('');
 }
-function deleteFromQueue(id){state.queue=state.queue.filter(p=>p.id!==id);debouncedSave();renderQueue();renderStats();}
+function deleteFromQueue(id){
+  const p = state.queue.find(q=>q.id===id);
+  if (!p) return;
+  // Remove visually immediately
+  state.queue = state.queue.filter(q=>q.id!==id);
+  renderQueue(); renderStats();
+  // But defer the actual save — allow undo
+  showUndoToast('Removed ' + p.name, () => {
+    // Already removed from state.queue above — just save
+    debouncedSave();
+  });
+  // Store player for potential undo restore
+  const snapshot = {...p};
+  const origUndo = undoPending;
+  if (origUndo) {
+    origUndo._restore = () => {
+      state.queue.splice(0, 0, snapshot); // restore to top
+      renderQueue(); renderStats();
+    };
+  }
+  // Patch undoDelete to also restore
+  const prevUndo = undoPending;
+  if (prevUndo) prevUndo._playerSnapshot = snapshot;
+}
 
 let editingId = null;
 function openEditModal(id) {
@@ -1743,7 +1786,7 @@ function gpMove(){
   g[v]=g[gpIdx];g[gpIdx]=null;debouncedSave();renderGrid();renderStats();toast('Moved.');closeGearPopover();
 }
 function gpQueue(){returnToQueue(gpDay,gpIdx);closeGearPopover();}
-function gpDelete(){if(!confirm('Remove player? They will NOT return to queue.'))return;deleteSlot(gpDay,gpIdx);closeGearPopover();}
+function gpDelete(){deleteSlot(gpDay,gpIdx);closeGearPopover();}
 
 // Close popover when clicking outside
 document.addEventListener('click',e=>{
@@ -1889,7 +1932,6 @@ function actionSheetQueue() {
 }
 
 function actionSheetDelete() {
-  if (!confirm('Remove this player? They will NOT return to queue.')) return;
   deleteSlot(asDay, asIdx);
   closeActionSheet();
 }
@@ -1911,7 +1953,23 @@ document.getElementById('sched-body').addEventListener('change',e=>{
   toast('Moved to '+slotTime(dest)+' UTC');
 });
 function returnToQueue(day,idx){const grid=day===1?state.day1:day===2?state.day2:state.day4;const player=grid[idx];if(!player)return;state.queue.unshift({...player,id:Date.now(),forDay:null,_qDay:day});grid[idx]=null;debouncedSave();renderQueue();renderGrid();renderStats();toast(player.name+' returned to queue.');}
-function deleteSlot(day,idx){const grid=day===1?state.day1:day===2?state.day2:state.day4;const player=grid[idx];if(!player)return;if(!confirm('Delete '+player.name+' from this slot?\nThey will NOT return to queue.'))return;grid[idx]=null;debouncedSave();renderGrid();renderStats();toast(player.name+' removed.');}
+function deleteSlot(day,idx){
+  const grid=day===1?state.day1:day===2?state.day2:state.day4;
+  const player=grid[idx]; if(!player)return;
+  const snapshot={...player}; const snapDay=day; const snapIdx=idx;
+  grid[idx]=null;
+  renderGrid(); renderStats();
+  showUndoToast('Removed ' + player.name + ' from slot', ()=>{
+    debouncedSave();
+  });
+  // Override undoDelete to restore slot
+  const prev = undoPending;
+  if(prev) prev.onUndo = ()=>{
+    const g=snapDay===1?state.day1:snapDay===2?state.day2:state.day4;
+    if(!g[snapIdx]) { g[snapIdx]=snapshot; renderGrid(); renderStats(); }
+    else toast('Slot already taken — could not restore.');
+  };
+}
 
 // ══════════════════════════════════════════════
 //  OPEN RANGES / COPY MODAL
@@ -1974,6 +2032,53 @@ function hideReset(){document.getElementById('confirm-strip').classList.remove('
 function doReset(){state={queue:[],day1:new Array(48).fill(null),day2:new Array(48).fill(null),day4:new Array(48).fill(null)};startMinutes=0;document.getElementById('slot-start-input').value='';debouncedSave();hideReset();renderQueue();renderGrid();renderStats();toast('All data cleared.');}
 let toastTimer;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2800);}
+
+// ── Undo delete system ──
+let undoPending = null;   // {type:'queue'|'slot', data, day, idx, label}
+let undoTimer = null;
+let undoBarAnim = null;
+const UNDO_SECS = 5;
+
+function showUndoToast(label, onConfirm) {
+  // If there's already a pending undo, execute it immediately before starting new one
+  if (undoPending) commitDelete();
+
+  undoPending = { onConfirm };
+  clearTimeout(undoTimer);
+  cancelAnimationFrame(undoBarAnim);
+
+  const toastEl = document.getElementById('undo-toast');
+  const barEl   = document.getElementById('undo-bar');
+  const lblEl   = document.getElementById('undo-label');
+  lblEl.textContent = label;
+  barEl.style.transition = 'none';
+  barEl.style.width = '100%';
+  toastEl.classList.add('show');
+
+  // Animate bar shrinking over UNDO_SECS
+  requestAnimationFrame(() => {
+    barEl.style.transition = `width ${UNDO_SECS}s linear`;
+    barEl.style.width = '0%';
+  });
+
+  undoTimer = setTimeout(commitDelete, UNDO_SECS * 1000);
+}
+
+function commitDelete() {
+  if (!undoPending) return;
+  undoPending.onConfirm();
+  undoPending = null;
+  clearTimeout(undoTimer);
+  document.getElementById('undo-toast').classList.remove('show');
+}
+
+function undoDelete() {
+  if (undoPending && undoPending.onUndo) undoPending.onUndo();
+  undoPending = null;
+  clearTimeout(undoTimer);
+  document.getElementById('undo-toast').classList.remove('show');
+  toast('↩ Restored');
+}
 
 // ══════════════════════════════════════════════
 //  BOOT
