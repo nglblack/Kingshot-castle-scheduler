@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚔️ KvK Castle Buff Scheduler — Kingshot</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Arial Rounded MT Bold','Helvetica Rounded',Arial,sans-serif;background:linear-gradient(135deg,#5a7a5f 0%,#3d5a42 100%);color:#4a3428;min-height:100vh;padding-top:90px;}
+
+/* Nav */
+.nav-bar{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(135deg,#5a7a5f 0%,#3d5a42 100%);border-bottom:3px solid rgba(139,111,71,0.4);box-shadow:0 2px 10px rgba(0,0,0,0.3);}
+.nav-container{max-width:1400px;margin:0 auto;padding:0 20px;height:70px;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{font-size:1.4em;font-weight:900;color:#ffd966;text-shadow:2px 2px 0 #8b6914,3px 3px 5px rgba(0,0,0,0.4);font-family:'Arial Black','Arial Bold',sans-serif;letter-spacing:1px;white-space:nowrap;}
+.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:5px;}
+.nav-toggle span{display:block;width:28px;height:3px;background:#f5ebe0;border-radius:2px;transition:all 0.3s;}
+.nav-menu{display:flex;list-style:none;gap:8px;}
+.nav-menu a{display:block;padding:10px 18px;color:#f5ebe0;text-decoration:none;font-weight:700;font-size:.95em;border-radius:8px;border:1px solid transparent;transition:all .3s;background:rgba(245,235,224,0.1);}
+.nav-menu a:hover{background:rgba(245,235,224,0.25);border-color:rgba(139,111,71,0.3);transform:translateY(-2px);}
+.nav-menu a.active{background:#f5ebe0;color:#6b4423;border-color:rgba(139,111,71,0.4);box-shadow:inset 0 2px 5px rgba(0,0,0,0.1);text-shadow:1px 1px 0 rgba(255,255,255,0.5);}
+@media(max-width:768px){body{padding-top:80px;}.nav-container{height:60px;}.nav-brand{font-size:1.1em;}.nav-toggle{display:flex;}.nav-menu{position:fixed;top:60px;right:-100%;width:100%;background:linear-gradient(135deg,#5a7a5f 0%,#3d5a42 100%);flex-direction:column;padding:20px;gap:12px;transition:right .3s;border-bottom:3px solid rgba(139,111,71,0.4);max-height:calc(100vh - 60px);overflow-y:auto;}.nav-menu.active{right:0;}.nav-menu a{padding:16px 20px;font-size:1.1em;text-align:center;}}
+
+/* Page */
+.page-outer{max-width:1400px;margin:0 auto;padding:20px 20px 0;}
+h1.page-title{text-align:center;margin-bottom:14px;font-size:2.6em;color:#ffd966;text-shadow:3px 3px 0 #8b6914,-2px -2px 0 #fff9e6,-2px 2px 0 #8b6914,2px -2px 0 #8b6914,4px 4px 0 #6b5010,5px 5px 0 #4a3508,6px 6px 15px rgba(0,0,0,0.5);font-weight:900;letter-spacing:2px;font-family:'Arial Black','Arial Bold',sans-serif;-webkit-text-stroke:1px #8b6914;paint-order:stroke fill;}
+
+/* Session bar */
+.session-bar{background:#fff8f0;border:2px solid rgba(139,111,71,0.25);border-radius:12px;padding:10px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.session-bar .lbl{font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;}
+.session-id-display{font-family:'Courier New',monospace;font-size:13px;font-weight:700;color:#4a3428;background:#f5ebe0;border:2px solid rgba(139,111,71,0.2);border-radius:6px;padding:4px 10px;min-width:110px;}
+.spacer{flex:1;}
+.sync-dot{width:9px;height:9px;border-radius:50%;background:#b8a898;display:inline-block;transition:background .4s;flex-shrink:0;}
+.sync-dot.live{background:#3d7a45;box-shadow:0 0 0 3px rgba(61,122,69,0.2);}
+.sync-dot.saving{background:#e67e22;}
+.sync-dot.error{background:#c0392b;}
+.sync-status{font-size:12px;color:#8b7a5a;font-weight:600;white-space:nowrap;}
+
+/* Card */
+.card{background:#f5ebe0;border-radius:16px;border:2px solid rgba(139,111,71,0.3);box-shadow:0 8px 30px rgba(0,0,0,0.3);overflow:hidden;}
+
+/* Toolbar */
+.toolbar{background:#d4c4af;border-bottom:2px solid rgba(139,111,71,0.2);padding:10px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.toolbar-left{display:flex;align-items:center;gap:8px;flex:1;min-width:0;}
+.toolbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.save-info{font-size:11px;color:#8b7a5a;white-space:nowrap;}
+
+/* Layout */
+.layout{display:flex;height:calc(100vh - 240px);min-height:480px;}
+
+/* Sidebar */
+.sidebar{width:300px;min-width:300px;background:#fff8f0;border-right:2px solid rgba(139,111,71,0.2);display:flex;flex-direction:column;overflow:hidden;}
+.stabs{display:flex;border-bottom:2px solid rgba(139,111,71,0.2);background:#ede0cc;}
+.stab{flex:1;padding:11px 6px;font-size:12px;font-weight:700;cursor:pointer;color:#8b7a5a;border:none;background:none;border-bottom:3px solid transparent;transition:all .2s;font-family:inherit;}
+.stab:hover{color:#6b4423;background:rgba(245,235,224,.5);}
+.stab.active{color:#6b4423;border-bottom-color:#8b6914;background:#fff8f0;}
+.spanel{display:none;flex-direction:column;gap:10px;overflow-y:auto;flex:1;padding:14px;}
+.spanel.active{display:flex;}
+.slabel{font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+
+/* Inputs */
+textarea{width:100%;background:#fff8f0;border:2px solid rgba(139,111,71,0.25);border-radius:8px;color:#4a3428;font-family:'Courier New',monospace;font-size:12px;line-height:1.6;padding:9px;resize:vertical;min-height:150px;outline:none;transition:border .15s;}
+textarea:focus{border-color:#8b6914;}
+textarea::placeholder{color:#b8a898;}
+input[type="text"],input[type="number"]{width:100%;background:#fff8f0;border:2px solid rgba(139,111,71,0.25);border-radius:8px;color:#4a3428;font-size:13px;padding:8px 10px;outline:none;transition:border .15s;font-family:inherit;}
+input:focus{border-color:#8b6914 !important;}
+input::placeholder{color:#b8a898;}
+select{background:#fff8f0;border:2px solid rgba(139,111,71,0.25);border-radius:8px;color:#4a3428;font-size:12px;padding:6px 8px;outline:none;cursor:pointer;flex:1;min-width:0;font-family:inherit;transition:border .15s;}
+select:focus{border-color:#8b6914;}
+
+/* Buttons */
+.btn{padding:7px 13px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;border:2px solid rgba(139,111,71,0.3);background:#fff8f0;color:#4a3428;transition:all .15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-family:inherit;}
+.btn:hover{background:#ede0cc;border-color:rgba(139,111,71,.5);}
+.btn.primary{background:linear-gradient(135deg,#8b6914,#6b5010);border-color:#6b5010;color:#ffd966;text-shadow:1px 1px 0 rgba(0,0,0,0.4);box-shadow:0 2px 6px rgba(0,0,0,0.2);}
+.btn.primary:hover{opacity:.88;}
+.btn.ghost{background:transparent;border-color:transparent;color:#8b7a5a;padding:5px 8px;}
+.btn.ghost:hover{color:#c0392b;background:rgba(192,57,43,.08);border-color:rgba(192,57,43,.2);}
+.btn.full{width:100%;justify-content:center;}
+.btn.sm{padding:4px 9px;font-size:12px;}
+.btn.warn{border-color:rgba(192,57,43,.4);color:#c0392b;}
+.btn.warn:hover{background:rgba(192,57,43,.08);}
+
+/* Preview */
+.pv-card{background:#fff8f0;border:2px solid rgba(139,111,71,0.25);border-radius:10px;padding:12px;display:none;}
+.pv-card.show{display:block;}
+.pv-name{font-size:15px;font-weight:700;color:#4a3428;}
+.pv-pid{font-size:11px;color:#8b7a5a;margin-bottom:9px;}
+.pv-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px;margin-bottom:8px;}
+.pv-row{font-size:12px;color:#8b7a5a;}
+.pv-row b{color:#4a3428;font-weight:700;}
+.pref-pill{display:inline-block;background:rgba(139,111,71,.12);color:#6b4423;border:1px solid rgba(139,111,71,.3);font-size:11px;padding:3px 9px;border-radius:20px;margin-bottom:10px;}
+
+/* Queue */
+.q-empty{font-size:13px;color:#8b7a5a;text-align:center;padding:20px 0;}
+.qi{background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:7px;}
+.qi-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.qi-name{font-size:13px;font-weight:700;color:#4a3428;}
+.qi-meta{font-size:11px;color:#8b7a5a;}
+.qi-tg{color:#8b6914;font-weight:700;}
+.qi-row{display:flex;gap:6px;align-items:center;}
+
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.main-hdr{padding:10px 18px;border-bottom:2px solid rgba(139,111,71,.15);background:#ede0cc;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
+.dtabs{display:flex;gap:6px;}
+.dtab{padding:6px 15px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:2px solid rgba(139,111,71,.25);background:transparent;color:#8b7a5a;transition:all .15s;font-family:inherit;}
+.dtab:hover{background:rgba(139,111,71,.1);color:#4a3428;}
+.dtab.active{background:linear-gradient(135deg,#8b6914,#6b5010);border-color:#6b5010;color:#ffd966;text-shadow:1px 1px 0 rgba(0,0,0,.3);}
+.fill-stat{font-size:12px;color:#8b7a5a;font-weight:600;}
+
+/* Open bar */
+.open-bar{background:rgba(139,111,71,.08);border-bottom:1px solid rgba(139,111,71,.15);padding:8px 18px;flex-shrink:0;}
+.open-bar-inner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.open-label{font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;}
+.open-ranges{font-size:12px;color:#3d7a45;font-family:'Courier New',monospace;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.open-count{font-size:11px;color:#8b7a5a;white-space:nowrap;}
+
+/* Table */
+.sched-wrap{flex:1;overflow-y:auto;}
+table{width:100%;border-collapse:collapse;table-layout:fixed;}
+thead th{font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.06em;padding:9px 14px;text-align:left;border-bottom:2px solid rgba(139,111,71,.2);background:#f5ebe0;position:sticky;top:0;z-index:10;}
+tbody td{padding:7px 14px;border-bottom:1px solid rgba(139,111,71,.1);vertical-align:middle;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#4a3428;}
+.row-filled td{background:rgba(61,122,69,.05);}
+.row-filled:hover td{background:rgba(61,122,69,.1);}
+tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
+.drag-over td{background:rgba(139,105,20,.12) !important;outline:2px dashed #8b6914;outline-offset:-2px;}
+.dragging{opacity:.25;pointer-events:none;}
+.t-time{font-family:'Courier New',monospace;font-size:12px;color:#8b7a5a;font-weight:700;white-space:nowrap;}
+.t-end{font-size:11px;color:#b8a898;}
+.t-name{font-weight:700;color:#4a3428;}
+.t-tg{color:#8b6914;font-size:12px;font-weight:700;}
+.t-speed{font-size:11px;color:#8b7a5a;}
+.t-pref{font-size:11px;color:#6b4423;}
+.t-empty{color:#b8a898;font-size:12px;}
+.handle{cursor:grab;color:#b8a898;font-size:18px;user-select:none;display:inline-block;line-height:1;padding:0 2px;}
+.handle:active{cursor:grabbing;color:#8b6914;}
+.badge-f{font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(61,122,69,.12);color:#3d7a45;border:1px solid rgba(61,122,69,.3);font-weight:700;}
+.badge-o{font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(139,111,71,.08);color:#b8a898;border:1px solid rgba(139,111,71,.2);}
+.row-acts{display:flex;gap:4px;align-items:center;}
+.act{padding:3px 8px;font-size:11px;border-radius:6px;cursor:pointer;border:1px solid rgba(139,111,71,.25);background:transparent;color:#8b7a5a;transition:.15s;white-space:nowrap;font-family:inherit;font-weight:600;}
+.act:hover{background:rgba(139,111,71,.1);color:#4a3428;}
+.act.q{border-color:rgba(139,111,71,.4);color:#6b4423;}
+.act.q:hover{background:rgba(139,111,71,.15);}
+.act.del{border-color:transparent;color:#b8a898;}
+.act.del:hover{color:#c0392b;border-color:rgba(192,57,43,.3);background:rgba(192,57,43,.06);}
+
+/* Status bar */
+.status-bar{padding:8px 18px;border-top:2px solid rgba(139,111,71,.2);display:flex;gap:18px;background:#ede0cc;flex-shrink:0;}
+.stat-pill{font-size:12px;color:#8b7a5a;display:flex;align-items:center;gap:5px;font-weight:600;}
+.stat-pill .n{font-weight:900;color:#4a3428;}
+
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(74,52,40,.7);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+.modal-bg.open{display:flex;}
+.modal{background:#f5ebe0;border:2px solid rgba(139,111,71,.4);border-radius:16px;padding:24px;width:520px;max-width:95vw;display:flex;flex-direction:column;gap:14px;box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+.modal-title{font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:center;color:#4a3428;}
+.copy-block{background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;padding:12px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;color:#4a3428;white-space:pre-wrap;word-break:break-word;max-height:160px;overflow-y:auto;}
+.char-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.char-count{font-size:11px;color:#8b7a5a;}
+.char-count.warn{color:#e67e22;}
+.char-count.over{color:#c0392b;}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:#f5ebe0;border:2px solid rgba(139,111,71,.4);border-radius:8px;padding:9px 16px;font-size:13px;color:#4a3428;z-index:300;opacity:0;transition:opacity .2s;pointer-events:none;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+.toast.show{opacity:1;}
+
+/* Confirm */
+.confirm-strip{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(192,57,43,.08);border-top:2px solid rgba(192,57,43,.3);padding:10px 20px;align-items:center;justify-content:space-between;gap:10px;z-index:150;backdrop-filter:blur(4px);}
+.confirm-strip.open{display:flex;}
+.confirm-strip span{font-size:13px;color:#c0392b;font-weight:700;}
+.man-error{display:none;font-size:12px;color:#c0392b;padding:6px 10px;background:rgba(192,57,43,.08);border-radius:8px;border:1px solid rgba(192,57,43,.3);}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(139,111,71,.3);border-radius:3px;}
+
+/* Footer */
+.site-footer{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;margin-top:30px;padding:40px 30px 25px;text-align:center;background:linear-gradient(135deg,#4a5a4d 0%,#3a4a3d 100%);border-top:3px solid rgba(139,111,71,.5);box-shadow:0 -2px 15px rgba(0,0,0,.2);}
+.footer-nav{margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,.15);display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;}
+.footer-nav a{color:#e8dcc8;text-decoration:none;font-weight:600;font-size:.95em;padding:8px 16px;border-radius:6px;transition:all 0.3s;}
+.footer-nav a:hover{background:rgba(245,235,224,.15);color:#ffd966;}
+.footer-divider{color:rgba(255,255,255,.3);font-size:1.1em;}
+.footer-copyright{color:rgba(232,220,200,.6);font-size:.85em;}
+
+@media(max-width:768px){.page-outer{padding:10px 10px 0;}h1.page-title{font-size:1.8em;}.layout{flex-direction:column;height:auto;}.sidebar{width:100%;min-width:unset;height:auto;max-height:380px;}.main{height:55vh;}}
+</style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-container">
+    <div class="nav-brand">🏰 Kingshot Tools</div>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="index.html">Castle Scheduler</a></li>
+      <li><a href="kvk-scheduler.html" class="active">KvK Buff Scheduler</a></li>
+      <li><a href="territory-planner.html">Territory Planner</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-outer">
+  <h1 class="page-title">⚔️ KvK Castle Buff Scheduler</h1>
+
+  <!-- Session / share bar -->
+  <div class="session-bar">
+    <span class="lbl">Schedule ID:</span>
+    <span class="session-id-display" id="session-id-display">—</span>
+    <button class="btn sm" onclick="copyShareLink()" title="Copy shareable link">🔗 Share</button>
+    <button class="btn sm" onclick="promptLoadId()" title="Load by ID">📂 Load</button>
+    <button class="btn sm primary" onclick="createNewSchedule()" title="Start fresh">＋ New</button>
+    <span class="spacer"></span>
+    <span class="sync-dot" id="sync-dot"></span>
+    <span class="sync-status" id="sync-status">Connecting…</span>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <div class="toolbar-left"><span class="save-info" id="save-info">Not saved yet</span></div>
+      <div class="toolbar-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:5px;background:rgba(139,111,71,0.12);border:2px solid rgba(139,111,71,0.25);border-radius:8px;padding:4px 10px;">
+          <span style="font-size:11px;font-weight:700;color:#8b7a5a;white-space:nowrap;">🕐 Slots start:</span>
+          <input id="slot-start-input" type="text" placeholder="e.g. 12:11" maxlength="5"
+            style="width:72px;padding:3px 7px;font-size:13px;border-radius:6px;border:1px solid rgba(139,111,71,0.3);background:#fff8f0;color:#4a3428;font-family:'Courier New',monospace;font-weight:700;outline:none;text-align:center;"
+            onkeydown="if(event.key==='Enter')applySlotStart()"
+            oninput="autoColonSlotInput(this)">
+          <span style="font-size:11px;color:#8b7a5a;font-weight:600;">UTC</span>
+          <button class="btn sm primary" onclick="applySlotStart()" style="padding:3px 9px;font-size:11px;">Apply</button>
+        </div>
+        <button class="btn sm" onclick="openCopyModal('d1')">📋 Day 1 open slots</button>
+        <button class="btn sm" onclick="openCopyModal('d4')">📋 Day 4 open slots</button>
+        <button class="btn sm warn" onclick="showReset()">Reset all</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="stabs">
+          <button class="stab active" onclick="switchSTab('intake')">📥 Intake</button>
+          <button class="stab" onclick="switchSTab('queue')">🕐 Queue <span id="q-cnt"></span></button>
+        </div>
+
+        <div class="spanel active" id="sp-intake">
+          <div>
+            <div class="slabel">Paste player message</div>
+            <textarea id="paste-in" placeholder="EchoD3ath 102474621 (player ID)
+True Gold: __126__
+1. General : 43 day 4 hrs 18 min
+2. Training: 3 days 20hr 16min
+3. Construction : 11 days 8hr 43 min
+4. Research : 6 days 11hr 26 min
+5. Total : 76 days
+⏰Perferred time _21_:00 UTC - __03:00_UTC"></textarea>
+            <button class="btn primary full" style="margin-top:8px" onclick="parseMsg()">⚡ Parse &amp; Preview</button>
+          </div>
+          <div class="pv-card" id="pv-card">
+            <div class="pv-name" id="pv-name"></div>
+            <div class="pv-pid"  id="pv-pid"></div>
+            <div class="pv-grid" id="pv-stats"></div>
+            <div id="pv-pref"></div>
+            <div style="display:flex;gap:6px;margin-top:4px">
+              <button class="btn primary" style="flex:1" onclick="addToQueue()">+ Add to queue</button>
+              <button class="btn ghost" onclick="clearPv()">✕</button>
+            </div>
+          </div>
+          <div style="border-top:2px solid rgba(139,111,71,.15);padding-top:10px;">
+            <div class="slabel" style="margin-bottom:8px">✏️ Manual entry</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <input id="man-name" type="text" placeholder="Player name *">
+              <input id="man-pid"  type="text" placeholder="Player ID (optional)">
+              <div style="display:flex;gap:12px;align-items:center;">
+                <span style="font-size:12px;color:#8b7a5a;font-weight:600;">Day:</span>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;color:#4a3428;font-weight:600;"><input type="checkbox" id="man-d1" style="accent-color:#8b6914;width:14px;height:14px;cursor:pointer;"> Day 1</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;color:#4a3428;font-weight:600;"><input type="checkbox" id="man-d4" style="accent-color:#8b6914;width:14px;height:14px;cursor:pointer;"> Day 4</label>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <span style="font-size:12px;color:#8b7a5a;font-weight:600;">Pref time window (UTC):</span>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span style="font-size:11px;color:#8b7a5a;font-weight:600;white-space:nowrap;">From:</span>
+                  <select id="man-pref-sh">
+                    <option value="">hr</option><option value="00">00</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
+                  </select>
+                  <span style="color:#8b7a5a;font-weight:700;">:</span>
+                  <select id="man-pref-sm">
+                    <option value="">min</option><option value="00">00</option><option value="30">30</option>
+                  </select>
+                  <span style="font-size:11px;color:#8b7a5a;font-weight:600;white-space:nowrap;margin-left:6px;">To:</span>
+                  <select id="man-pref-eh">
+                    <option value="">hr</option><option value="00">00</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
+                  </select>
+                  <span style="color:#8b7a5a;font-weight:700;">:</span>
+                  <select id="man-pref-em">
+                    <option value="">min</option><option value="00">00</option><option value="30">30</option>
+                  </select>
+                </div>
+              </div>
+              <input id="man-tg" type="number" min="0" placeholder="True Gold (optional)">
+              <div id="man-error" class="man-error"></div>
+              <button class="btn primary full" onclick="submitManual()">+ Add to queue</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="spanel" id="sp-queue">
+          <div class="slabel">Unscheduled players</div>
+          <div id="queue-list"></div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="main-hdr">
+          <div class="dtabs">
+            <button class="dtab active" onclick="switchDay(1)">Day 1 — Building 🏗️</button>
+            <button class="dtab"        onclick="switchDay(4)">Day 4 — Training ⚔️</button>
+          </div>
+          <span class="fill-stat" id="fill-stat"></span>
+        </div>
+        <div class="open-bar">
+          <div class="open-bar-inner">
+            <span class="open-label">Open ranges</span>
+            <span class="open-ranges" id="open-ranges">—</span>
+            <span class="open-count"  id="open-count"></span>
+            <button class="btn sm" id="open-copy-btn" onclick="openCopyModal('d1')">📋 Copy</button>
+          </div>
+        </div>
+        <div class="sched-wrap">
+          <table id="sched-table">
+            <colgroup>
+              <col style="width:32px"><col style="width:82px"><col style="width:76px">
+              <col><col style="width:82px"><col style="width:130px">
+              <col style="width:110px"><col style="width:60px"><col style="width:118px">
+            </colgroup>
+            <thead><tr><th></th><th>Start</th><th>End</th><th>Player</th><th>TG</th><th>Key Speed</th><th>Pref window</th><th>Status</th><th></th></tr></thead>
+            <tbody id="sched-body"></tbody>
+          </table>
+        </div>
+        <div class="status-bar">
+          <div class="stat-pill">Day 1: <span class="n" id="s-d1">0</span>/48 filled</div>
+          <div class="stat-pill">Day 4: <span class="n" id="s-d4">0</span>/48 filled</div>
+          <div class="stat-pill">Queue: <span class="n" id="s-q">0</span></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <nav class="footer-nav">
+      <a href="index.html">Castle Scheduler</a>
+      <span class="footer-divider">|</span>
+      <a href="kvk-scheduler.html">KvK Buff Scheduler</a>
+      <span class="footer-divider">|</span>
+      <a href="territory-planner.html">Territory Planner</a>
+      <span class="footer-divider">|</span>
+      <a href="calculators.html">Calculators</a>
+    </nav>
+    <p class="footer-copyright">&copy; 2025 (686)[MYS]MsMysteria</p>
+  </footer>
+</div>
+
+<!-- Copy modal -->
+<div class="modal-bg" id="copy-modal">
+  <div class="modal">
+    <div class="modal-title"><span id="modal-title-txt">Open slots</span><button class="btn ghost" onclick="closeCopyModal()">✕</button></div>
+    <div>
+      <div class="slabel" style="margin-bottom:6px">In-game compact message</div>
+      <div class="copy-block" id="copy-compact-block"></div>
+      <div class="char-row"><span class="char-count" id="copy-char-count"></span><button class="btn sm primary" onclick="copyCompact()">📋 Copy this</button></div>
+    </div>
+    <div>
+      <div class="slabel" style="margin-bottom:6px">Full schedule summary</div>
+      <div class="copy-block" id="copy-full-block"></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:4px"><button class="btn sm" onclick="copyFull()">📋 Copy full</button></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeCopyModal()">Done</button></div>
+  </div>
+</div>
+
+<div class="confirm-strip" id="confirm-strip">
+  <span>⚠️ This will erase all players and schedule data. Are you sure?</span>
+  <div style="display:flex;gap:8px">
+    <button class="btn sm" onclick="hideReset()">Cancel</button>
+    <button class="btn sm warn" onclick="doReset()">Yes, reset everything</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-config.js"></script>
+<script>
+// ══════════════════════════════════════════════
+//  SUPABASE
+// ══════════════════════════════════════════════
+const TABLE = 'kvk_schedules';
+let sb = null, realtimeChannel = null;
+
+function initSB() {
+  if (sb || typeof window.supabase === 'undefined') return;
+  try {
+    sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+  } catch(e) { console.error('Supabase init failed', e); }
+}
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let state       = { queue:[], day1:new Array(48).fill(null), day4:new Array(48).fill(null) };
+let currentDay  = 1;
+let parsed      = null;
+let modalDay    = 'd1';
+let scheduleId  = null;
+let scheduleVer = 1;
+let ignoreNext  = false;
+let saveTimer   = null;
+let dragIdx = null, dragOverIdx = null;
+
+// ══════════════════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════════════════
+function setSyncStatus(s) {
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-status');
+  dot.className = 'sync-dot';
+  if      (s==='live')  { dot.classList.add('live');   txt.textContent = '🟢 Live'; }
+  else if (s==='saving'){ dot.classList.add('saving'); txt.textContent = 'Saving…'; }
+  else if (s==='error') { dot.classList.add('error');  txt.textContent = '⚠️ Error'; }
+  else                  { txt.textContent = 'Offline'; }
+}
+function setSaveInfo(msg) { document.getElementById('save-info').textContent = msg; }
+function setSessionDisplay(id) { document.getElementById('session-id-display').textContent = id||'—'; }
+function genId() {
+  const c='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from({length:8},()=>c[Math.floor(Math.random()*c.length)]).join('');
+}
+function genName() {
+  const now=new Date(), m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()];
+  return `KvK Schedule - ${m} ${now.getDate()}, ${now.getFullYear()}`;
+}
+
+// ══════════════════════════════════════════════
+//  CLOUD OPS
+// ══════════════════════════════════════════════
+async function cloudLoad(id) {
+  if (!sb) return null;
+  const { data, error } = await sb.from(TABLE).select('*').eq('id', id).single();
+  return error ? null : data;
+}
+
+async function cloudCreate() {
+  if (!sb) return null;
+  const id = genId();
+  const { data, error } = await sb.from(TABLE)
+    .insert([{ id, name: genName(), day1: state.day1, day4: state.day4, queue: state.queue, version: 1 }])
+    .select().single();
+  return error ? null : data;
+}
+
+async function cloudSave() {
+  if (!sb || !scheduleId) return;
+  setSyncStatus('saving');
+  ignoreNext = true;
+  const { data, error } = await sb.from(TABLE)
+    .update({ day1: state.day1, day4: state.day4, queue: state.queue, version: scheduleVer + 1 })
+    .eq('id', scheduleId)
+    .select().single();
+  if (error) {
+    console.error('Save failed', error);
+    setSyncStatus('error');
+    setSaveInfo('⚠️ Save failed');
+    ignoreNext = false;
+    return;
+  }
+  scheduleVer = data.version;
+  setSaveInfo('Saved ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+  setSyncStatus('live');
+}
+
+// Debounce — only write to Supabase 800ms after the last change
+function debouncedSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(cloudSave, 800);
+}
+
+// ══════════════════════════════════════════════
+//  REALTIME
+// ══════════════════════════════════════════════
+function subscribeRealtime(id) {
+  if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null; }
+  realtimeChannel = sb
+    .channel('kvk-rt-' + id)
+    .on('postgres_changes', {
+      event: 'UPDATE', schema: 'public', table: TABLE, filter: `id=eq.${id}`
+    }, payload => {
+      if (ignoreNext) { ignoreNext = false; return; }   // our own write — skip
+      const row = payload.new;
+      state.day1  = row.day1  || new Array(48).fill(null);
+      state.day4  = row.day4  || new Array(48).fill(null);
+      state.queue = row.queue || [];
+      scheduleVer = row.version;
+      renderQueue(); renderGrid(); renderStats();
+      setSaveInfo('Updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) + ' by another user');
+      toast('📡 Schedule updated by another user');
+    })
+    .subscribe(status => {
+      if (status === 'SUBSCRIBED') setSyncStatus('live');
+      else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') setSyncStatus('error');
+    });
+}
+
+// ══════════════════════════════════════════════
+//  SESSION INIT
+// ══════════════════════════════════════════════
+async function initSession() {
+  initSB();
+  // Restore slot start from localStorage
+  const savedSlot = localStorage.getItem('kvk_slot_start');
+  if (savedSlot !== null) {
+    startMinutes = parseInt(savedSlot)||0;
+    const h=String(Math.floor(startMinutes/60)).padStart(2,'0'),m=String(startMinutes%60).padStart(2,'0');
+    const inp=document.getElementById('slot-start-input');
+    if(inp) inp.value = startMinutes>0 ? h+':'+m : '';
+  }
+  if (!sb) { setSyncStatus('error'); setSaveInfo('⚠️ Cloud unavailable'); return; }
+
+  // Look for ID in URL hash  e.g.  kvk-scheduler.html#Ab3xY7Qz
+  const hash = window.location.hash.replace('#','').trim();
+
+  if (hash.length === 8) {
+    const row = await cloudLoad(hash);
+    if (row) { applyRow(row); subscribeRealtime(scheduleId); setSaveInfo('Loaded from cloud'); toast('📂 Loaded: ' + scheduleId); return; }
+    toast('⚠️ ID not found — creating new schedule');
+  }
+
+  // Fall back to last used ID in localStorage
+  const cached = localStorage.getItem('kvk_last_id');
+  if (cached) {
+    const row = await cloudLoad(cached);
+    if (row) { applyRow(row); subscribeRealtime(scheduleId); setSaveInfo('Restored from last session'); toast('Restored: ' + scheduleId); return; }
+  }
+
+  // Brand new schedule
+  await createNewSchedule();
+}
+
+function applyRow(row) {
+  scheduleId  = row.id;
+  scheduleVer = row.version;
+  state.day1  = row.day1  || new Array(48).fill(null);
+  state.day4  = row.day4  || new Array(48).fill(null);
+  state.queue = row.queue || [];
+  if (typeof state.startMinutes === 'number') startMinutes = state.startMinutes;
+  localStorage.setItem('kvk_last_id', scheduleId);
+  window.history.replaceState(null,'','#' + scheduleId);
+  setSessionDisplay(scheduleId);
+  renderQueue(); renderGrid(); renderStats();
+}
+
+async function createNewSchedule() {
+  state = { queue:[], day1:new Array(48).fill(null), day4:new Array(48).fill(null) };
+  renderQueue(); renderGrid(); renderStats();
+  const row = await cloudCreate();
+  if (!row) { setSyncStatus('error'); setSaveInfo('⚠️ Could not create cloud schedule'); return; }
+  applyRow(row);
+  subscribeRealtime(scheduleId);
+  setSaveInfo('New schedule created');
+  toast('✅ New schedule: ' + scheduleId);
+}
+
+function promptLoadId() {
+  const id = prompt('Enter a KvK Schedule ID (8 characters):','');
+  if (!id || id.trim().length !== 8) { toast('Invalid ID — must be 8 characters.'); return; }
+  window.location.hash = id.trim();
+  window.location.reload();
+}
+
+function copyShareLink() {
+  if (!scheduleId) { toast('No schedule loaded.'); return; }
+  const url = window.location.origin + window.location.pathname + '#' + scheduleId;
+  navigator.clipboard.writeText(url).then(()=>toast('🔗 Share link copied!'));
+}
+
+// ══════════════════════════════════════════════
+//  TIME — fully configurable start time (any minute)
+// ══════════════════════════════════════════════
+// startMinutes: absolute minute-of-day for slot 0 (0–1439)
+let startMinutes = 0; // default: 00:00
+
+function slotTime(i) {
+  const total = (startMinutes + i * 30) % 1440;
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+}
+function slotEnd(i) { return slotTime((i + 1) % 48); }
+function slotShort(i) { return slotTime(i) + ' UTC'; }
+
+// Auto-insert colon after 2 digits
+function autoColonSlotInput(el) {
+  let v = el.value.replace(/[^0-9:]/g,'');
+  // insert colon automatically after 2 digits if not already there
+  if (v.length === 2 && !v.includes(':')) v = v + ':';
+  if (v.length > 5) v = v.slice(0,5);
+  el.value = v;
+}
+
+function parseTimeInput(raw) {
+  // accepts HH:MM or HHMM
+  const s = raw.trim().replace(/[^0-9:]/g,'');
+  let h, m;
+  if (s.includes(':')) {
+    const parts = s.split(':');
+    h = parseInt(parts[0]||'0');
+    m = parseInt(parts[1]||'0');
+  } else if (s.length >= 3) {
+    h = parseInt(s.slice(0, s.length-2));
+    m = parseInt(s.slice(-2));
+  } else {
+    return null;
+  }
+  if (isNaN(h)||isNaN(m)||h<0||h>23||m<0||m>59) return null;
+  return h * 60 + m;
+}
+
+function applySlotStart() {
+  const raw = document.getElementById('slot-start-input').value;
+  const mins = parseTimeInput(raw);
+  if (mins === null) { toast('Enter a valid time like 12:11 or 08:05'); return; }
+  startMinutes = mins;
+  state.startMinutes = startMinutes;
+  localStorage.setItem('kvk_slot_start', startMinutes);
+  debouncedSave();
+  renderGrid();
+  renderQueue();
+  const h = String(Math.floor(mins/60)).padStart(2,'0');
+  const m = String(mins%60).padStart(2,'0');
+  toast('Slots now start at ' + h + ':' + m + ' UTC');
+}
+
+// ══════════════════════════════════════════════
+//  PARSE
+// ══════════════════════════════════════════════
+function parseMsg(){
+  const raw=document.getElementById('paste-in').value.trim();
+  if(!raw){toast('Paste a player message first.');return;}
+  const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  let name='',pid='',tg=0,general='',training='',construction='',research='',total='',prefStart='',prefEnd='';
+  const first=lines[0]||'';
+  const fm=first.match(/^(.+?)\s+(\d{6,})/);
+  if(fm){name=fm[1].trim();pid=fm[2];}else{name=first.replace(/\s*\(.*?\)/g,'').trim();const pm=first.match(/\((\d+)\)/);if(pm)pid=pm[1];}
+  lines.forEach(l=>{
+    const tgm=l.match(/true\s*gold[:\s_*]*(\d+)/i);if(tgm)tg=parseInt(tgm[1]);
+    const gm=l.match(/general[:\s]+(.+)/i);if(gm)general=gm[1].trim();
+    const tm=l.match(/training[:\s]+(.+)/i);if(tm)training=tm[1].trim();
+    const cm=l.match(/construction[:\s]+(.+)/i);if(cm)construction=cm[1].trim();
+    const rm=l.match(/research[:\s]+(.+)/i);if(rm)research=rm[1].trim();
+    const tlm=l.match(/total[:\s]+(.+)/i);if(tlm)total=tlm[1].trim();
+    const pm=l.match(/(?:preferred?|pref(?:er+ed?)?)\s*time[^:]*[:_\s]+_*(\d{1,2})_*:(\d{2})\s*UTC\s*[-–]\s*_*(\d{1,2})_*:(\d{2})/i);
+    if(pm){prefStart=pm[1].padStart(2,'0')+':'+pm[2];prefEnd=pm[3].padStart(2,'0')+':'+pm[4];}
+    else{const pm2=l.match(/(?:⏰|preferred?|pref(?:er+ed?)?)[^0-9]*(\d{1,2})[:\s._*]+(\d{2})/i);if(pm2){prefStart=pm2[1].padStart(2,'0')+':'+pm2[2];const tot=parseInt(pm2[1])*60+parseInt(pm2[2])+30;prefEnd=String(Math.floor(tot/60)%24).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');}}
+  });
+  if(!name){toast('Could not parse player name.');return;}
+  parsed={name,pid,tg,general,training,construction,research,total,prefStart,prefEnd,requestedDays:['Day 1','Day 4'],id:Date.now()};
+  document.getElementById('pv-name').textContent=name;
+  document.getElementById('pv-pid').textContent=pid?'ID: '+pid:'No ID found';
+  document.getElementById('pv-stats').innerHTML=[['General',general||'—'],['Training',training||'—'],['Construction',construction||'—'],['Research',research||'—'],['Total',total||'—'],['TG',tg?tg.toLocaleString():'—']].map(([k,v])=>'<div class="pv-row"><b>'+k+'</b><br>'+v+'</div>').join('');
+  document.getElementById('pv-pref').innerHTML=prefStart?'<span class="pref-pill">⏰ '+prefStart+' – '+prefEnd+' UTC</span>':'<span class="pref-pill" style="background:rgba(192,57,43,.08);color:#c0392b;border-color:rgba(192,57,43,.2);">No time preference</span>';
+  document.getElementById('pv-card').classList.add('show');
+}
+function clearPv(){parsed=null;document.getElementById('pv-card').classList.remove('show');}
+
+function addToQueue(){
+  if(!parsed){toast('Nothing parsed yet.');return;}
+  // Add a separate queue entry for each requested day
+  const days = parsed.requestedDays && parsed.requestedDays.length ? parsed.requestedDays : ['Day 1','Day 4'];
+  let added = 0;
+  days.forEach(day => {
+    const forDay = day === 'Day 1' ? 1 : 4;
+    const alreadyInQueue = state.queue.find(q => q.name===parsed.name && q.pid===parsed.pid && q.forDay===forDay);
+    const alreadyScheduled = (forDay===1 ? state.day1 : state.day4).find(s => s && s.name===parsed.name && s.pid===parsed.pid);
+    if (alreadyInQueue || alreadyScheduled) return; // skip this day — already there
+    state.queue.push({...parsed, id: Date.now() + forDay, forDay});
+    added++;
+  });
+  if (!added) { toast(parsed.name+' is already queued/scheduled for all selected days.'); return; }
+  debouncedSave();renderQueue();renderStats();
+  toast(parsed.name+' added to queue' + (added > 1 ? ' for both days' : '') + '.');
+  clearPv();document.getElementById('paste-in').value='';switchSTab('queue');
+}
+
+// ══════════════════════════════════════════════
+//  QUEUE
+// ══════════════════════════════════════════════
+function renderQueue(){
+  const el=document.getElementById('queue-list');
+  if(!state.queue.length){el.innerHTML='<div class="q-empty">No players in queue</div>';return;}
+  function mkOpts(grid,day){return grid.map((s,i)=>s?'':'<option value="'+day+'-'+i+'">'+slotTime(i)+' – '+slotEnd(i)+'</option>').join('');}
+  el.innerHTML=state.queue.map(p=>{
+    const fd=p.forDay;
+    const dayLabel=fd===1?'<span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(139,105,20,0.12);color:#8b6914;border:1px solid rgba(139,105,20,0.3);font-weight:700;margin-left:4px;">🏗️ Day 1</span>'
+                  :fd===4?'<span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(61,97,122,0.12);color:#3d617a;border:1px solid rgba(61,97,122,0.3);font-weight:700;margin-left:4px;">⚔️ Day 4</span>':'';
+    let optsHtml='<option value="">Pick a slot…</option>';
+    if(!fd||fd===1) optsHtml+='<optgroup label="Day 1 — Building">'+mkOpts(state.day1,1)+'</optgroup>';
+    if(!fd||fd===4) optsHtml+='<optgroup label="Day 4 — Training">'+mkOpts(state.day4,4)+'</optgroup>';
+    const prefDisplay=p.prefStart?'⏰ '+p.prefStart+(p.prefEnd?' – '+p.prefEnd:'')+ ' UTC':'';
+    return '<div class="qi"><div class="qi-top"><div><div class="qi-name">'+p.name+dayLabel+'</div><div class="qi-meta">'+(p.pid?'ID: '+p.pid+' ':'')+'<span class="qi-tg">'+(p.tg?'TG: '+p.tg.toLocaleString():'')+' </span>'+(prefDisplay?'<span style="color:#6b4423;font-size:10px;display:block;margin-top:2px;">'+prefDisplay+'</span>':'')+' </div></div><button class="btn ghost" onclick="deleteFromQueue('+p.id+')">✕</button></div><div class="qi-row"><select id="sel-'+p.id+'">'+optsHtml+'</select><button class="btn sm primary" onclick="assignSlot('+p.id+')">Assign →</button></div></div>';
+  }).join('');
+}
+function deleteFromQueue(id){state.queue=state.queue.filter(p=>p.id!==id);debouncedSave();renderQueue();renderStats();}
+function assignSlot(id){
+  const player=state.queue.find(p=>p.id===id);if(!player)return;
+  const sel=document.getElementById('sel-'+id);if(!sel||!sel.value){toast('Pick a slot first.');return;}
+  const [dn,ix]=sel.value.split('-');const day=parseInt(dn),idx=parseInt(ix);
+  const grid=day===1?state.day1:state.day4;
+  if(grid[idx]){toast('That slot is already taken.');return;}
+  grid[idx]={...player};state.queue=state.queue.filter(p=>p.id!==id);
+  debouncedSave();renderQueue();renderGrid();renderStats();
+  if(currentDay!==day)switchDay(day);
+  toast(player.name+' assigned to '+slotTime(idx)+' Day '+day+'.');
+}
+
+// ══════════════════════════════════════════════
+//  GRID
+// ══════════════════════════════════════════════
+function switchDay(day){currentDay=day;document.querySelectorAll('.dtab').forEach((t,i)=>t.classList.toggle('active',(i===0&&day===1)||(i===1&&day===4)));document.getElementById('open-copy-btn').onclick=()=>openCopyModal(day===1?'d1':'d4');renderGrid();}
+function renderGrid(){
+  const grid=currentDay===1?state.day1:state.day4;
+  const tbody=document.getElementById('sched-body');tbody.innerHTML='';
+  grid.forEach((slot,i)=>{
+    const tr=document.createElement('tr');tr.dataset.idx=i;
+    if(slot){
+      tr.className='row-filled';
+      const speed=currentDay===1?(slot.construction||'—'):(slot.training||'—');
+      const pref=slot.prefStart?slot.prefStart+'–'+slot.prefEnd:'—';
+      const tdH=document.createElement('td');
+      const h=document.createElement('span');h.className='handle';h.textContent='⠿';h.title='Drag to move';tdH.appendChild(h);tr.appendChild(tdH);
+      [slotTime(i),slotEnd(i),slot.name,slot.tg.toLocaleString(),speed,pref].forEach((txt,ci)=>{const td=document.createElement('td');td.className=['t-time','t-end','t-name','t-tg','t-speed','t-pref'][ci];td.textContent=txt;tr.appendChild(td);});
+      const tdSt=document.createElement('td');tdSt.innerHTML='<span class="badge-f">Filled</span>';tr.appendChild(tdSt);
+      const tdAct=document.createElement('td');tdAct.innerHTML='<div class="row-acts"><button class="act q" data-action="queue" data-day="'+currentDay+'" data-idx="'+i+'">↩ Queue</button><button class="act del" data-action="del" data-day="'+currentDay+'" data-idx="'+i+'">✕</button></div>';tr.appendChild(tdAct);
+      tr.draggable=true;
+      tr.addEventListener('dragstart',e=>{dragIdx=i;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',String(i));requestAnimationFrame(()=>tr.classList.add('dragging'));});
+    }else{
+      tr.innerHTML='<td></td><td class="t-time">'+slotTime(i)+'</td><td class="t-end">'+slotEnd(i)+'</td><td class="t-empty" colspan="4">— open —</td><td><span class="badge-o">Open</span></td><td></td>';
+    }
+    tr.addEventListener('dragover',e=>{if(dragIdx===null)return;e.preventDefault();e.dataTransfer.dropEffect='move';if(dragOverIdx!==i){clearDragOver();dragOverIdx=i;tr.classList.add('drag-over');}});
+    tr.addEventListener('dragleave',e=>{if(!tr.contains(e.relatedTarget)){tr.classList.remove('drag-over');if(dragOverIdx===i)dragOverIdx=null;}});
+    tr.addEventListener('drop',e=>{e.preventDefault();tr.classList.remove('drag-over');const src=dragIdx;dragIdx=null;dragOverIdx=null;if(src===null||src===i)return;const g=currentDay===1?state.day1:state.day4;const tmp=g[i];g[i]=g[src];g[src]=tmp;debouncedSave();renderGrid();renderStats();toast('Slot moved.');});
+    tbody.appendChild(tr);
+  });
+  renderOpenBar(grid);
+  document.getElementById('fill-stat').textContent=grid.filter(Boolean).length+' / 48 slots filled';
+}
+function clearDragOver(){document.querySelectorAll('.drag-over').forEach(r=>r.classList.remove('drag-over'));}
+document.addEventListener('dragend',()=>{document.querySelectorAll('.dragging').forEach(r=>r.classList.remove('dragging'));clearDragOver();dragIdx=null;dragOverIdx=null;});
+document.getElementById('sched-body').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-action]');if(!btn)return;
+  const action=btn.dataset.action,day=parseInt(btn.dataset.day),idx=parseInt(btn.dataset.idx);
+  if(action==='queue')returnToQueue(day,idx);if(action==='del')deleteSlot(day,idx);
+});
+function returnToQueue(day,idx){const grid=day===1?state.day1:state.day4;const player=grid[idx];if(!player)return;state.queue.unshift({...player,id:Date.now()});grid[idx]=null;debouncedSave();renderQueue();renderGrid();renderStats();toast(player.name+' returned to queue.');}
+function deleteSlot(day,idx){const grid=day===1?state.day1:state.day4;const player=grid[idx];if(!player)return;if(!confirm('Delete '+player.name+' from this slot?\nThey will NOT return to queue.'))return;grid[idx]=null;debouncedSave();renderGrid();renderStats();toast(player.name+' removed.');}
+
+// ══════════════════════════════════════════════
+//  OPEN RANGES / COPY MODAL
+// ══════════════════════════════════════════════
+function getOpenRanges(grid){const runs=[];grid.forEach((_,i)=>{if(!grid[i]){if(!runs.length||runs[runs.length-1].end!==i-1)runs.push({start:i,end:i});else runs[runs.length-1].end=i;}});return runs.map(r=>slotShort(r.start)+'–'+slotShort(r.end===47?0:r.end+1));}
+function renderOpenBar(grid){const ranges=getOpenRanges(grid);const n=grid.filter(s=>!s).length;document.getElementById('open-ranges').textContent=ranges.length?ranges.join(', '):'No open slots';document.getElementById('open-count').textContent='('+n+' slots open)';}
+function buildCompactMsg(dk){const grid=dk==='d1'?state.day1:state.day4;const label=dk==='d1'?'Day 1 (Build)':'Day 4 (Train)';const ranges=getOpenRanges(grid);const n=grid.filter(s=>!s).length;if(!ranges.length)return label+' — No open slots.';return label+' open ('+n+' avail, UTC):\n'+ranges.join(', ');}
+function buildFullSummary(dk){const grid=dk==='d1'?state.day1:state.day4;const label=dk==='d1'?'Day 1 — Building':'Day 4 — Training';let out='=== '+label+' ===\n';grid.forEach((s,i)=>{if(s)out+=slotShort(i)+'  '+s.name+'  TG:'+s.tg.toLocaleString()+'\n';});const open=grid.filter(s=>!s).length;out+='\n'+(48-open)+' filled · '+open+' open';return out;}
+function openCopyModal(dk){modalDay=dk;const label=dk==='d1'?'Day 1 — Building':'Day 4 — Training';document.getElementById('modal-title-txt').textContent='Open slots — '+label;const compact=buildCompactMsg(dk);document.getElementById('copy-compact-block').textContent=compact;const chars=compact.length;const chEl=document.getElementById('copy-char-count');chEl.textContent=chars+' characters'+(chars>200?' (getting long)':'')+(chars>255?' ⚠️ may exceed limit':'');chEl.className='char-count'+(chars>200?' warn':'')+(chars>255?' over':'');document.getElementById('copy-full-block').textContent=buildFullSummary(dk);document.getElementById('copy-modal').classList.add('open');}
+function closeCopyModal(){document.getElementById('copy-modal').classList.remove('open');}
+function copyCompact(){navigator.clipboard.writeText(document.getElementById('copy-compact-block').textContent).then(()=>toast('Compact message copied!'));}
+function copyFull(){navigator.clipboard.writeText(document.getElementById('copy-full-block').textContent).then(()=>toast('Full summary copied!'));}
+
+// ══════════════════════════════════════════════
+//  STATS / TABS / MANUAL / RESET / TOAST
+// ══════════════════════════════════════════════
+function renderStats(){document.getElementById('s-d1').textContent=state.day1.filter(Boolean).length;document.getElementById('s-d4').textContent=state.day4.filter(Boolean).length;document.getElementById('s-q').textContent=state.queue.length;document.getElementById('q-cnt').textContent=state.queue.length?'('+state.queue.length+')':'';}
+function switchSTab(tab){const tabs=['intake','queue'];document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));document.querySelectorAll('.spanel').forEach((p,i)=>p.classList.toggle('active',tabs[i]===tab));if(tab==='queue')renderQueue();}
+function submitManual(){
+  const errEl=document.getElementById('man-error');errEl.style.display='none';
+  const name=document.getElementById('man-name').value.trim(),pid=document.getElementById('man-pid').value.trim();
+  const d1=document.getElementById('man-d1').checked,d4=document.getElementById('man-d4').checked;
+  const psh=document.getElementById('man-pref-sh').value,psm=document.getElementById('man-pref-sm').value;
+  const peh=document.getElementById('man-pref-eh').value,pem=document.getElementById('man-pref-em').value;
+  const tg=document.getElementById('man-tg').value.trim()?parseInt(document.getElementById('man-tg').value):0;
+  if(!name){errEl.textContent='Player name is required.';errEl.style.display='block';return;}
+  if(!d1&&!d4){errEl.textContent='Select at least one day.';errEl.style.display='block';return;}
+  const prefStart=(psh!==''&&psm!=='')?psh+':'+psm:'';
+  const prefEnd=(peh!==''&&pem!=='')?peh+':'+pem:'';
+  if(prefStart&&prefEnd){const sm=parseInt(psh)*60+parseInt(psm),em=parseInt(peh)*60+parseInt(pem);if(em<=sm&&!(em===0&&sm>0)){errEl.textContent='End time must be after start time (or wrap to next day).';errEl.style.display='block';return;}}
+  const days=[];if(d1)days.push('Day 1');if(d4)days.push('Day 4');
+  const player={name,pid,tg,general:'',training:'',construction:'',research:'',total:'',prefStart,prefEnd,requestedDays:days,manual:true,id:Date.now()};
+  // Add one entry per requested day; skip days already queued or scheduled
+  const daysToAdd=[];
+  if(d1){const fd=1;const inQ=state.queue.find(q=>q.name===player.name&&q.pid===player.pid&&q.forDay===fd);const inS=state.day1.find(s=>s&&s.name===player.name&&s.pid===player.pid);if(!inQ&&!inS)daysToAdd.push(fd);}
+  if(d4){const fd=4;const inQ=state.queue.find(q=>q.name===player.name&&q.pid===player.pid&&q.forDay===fd);const inS=state.day4.find(s=>s&&s.name===player.name&&s.pid===player.pid);if(!inQ&&!inS)daysToAdd.push(fd);}
+  if(!daysToAdd.length){errEl.textContent=name+' is already queued/scheduled for all selected days.';errEl.style.display='block';return;}
+  daysToAdd.forEach((fd,i)=>state.queue.push({...player,id:Date.now()+i,forDay:fd}));
+  debouncedSave();renderQueue();renderStats();toast(name+' added to queue'+(daysToAdd.length>1?' for both days':'')+'.');
+  ['man-name','man-pid','man-tg'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('man-d1').checked=false;document.getElementById('man-d4').checked=false;
+  ['man-pref-sh','man-pref-sm','man-pref-eh','man-pref-em'].forEach(id=>document.getElementById(id).value='');
+  switchSTab('queue');
+}
+function showReset(){document.getElementById('confirm-strip').classList.add('open');}
+function hideReset(){document.getElementById('confirm-strip').classList.remove('open');}
+function doReset(){state={queue:[],day1:new Array(48).fill(null),day4:new Array(48).fill(null)};startMinutes=0;document.getElementById('slot-start-input').value='';debouncedSave();hideReset();renderQueue();renderGrid();renderStats();toast('All data cleared.');}
+let toastTimer;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2800);}
+
+// ══════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+  const navToggle=document.getElementById('navToggle'),navMenu=document.getElementById('navMenu');
+  if(navToggle)navToggle.addEventListener('click',()=>{navToggle.classList.toggle('active');navMenu.classList.toggle('active');});
+  await initSession();
+});
+</script>
+</body>
+</html>
