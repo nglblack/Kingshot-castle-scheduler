@@ -92,6 +92,10 @@ select:focus{border-color:#8b6914;}
 /* Queue */
 .q-empty{font-size:13px;color:#8b7a5a;text-align:center;padding:20px 0;}
 .qi{background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:6px;}
+.qi.filtered-out{display:none;}
+.q-sort-btn{font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;border:1.5px solid rgba(139,111,71,.2);background:transparent;color:#8b7a5a;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;}
+.q-sort-btn:hover{background:rgba(139,111,71,.1);color:#4a3428;border-color:rgba(139,111,71,.4);}
+.q-sort-btn.active{background:linear-gradient(135deg,#8b6914,#6b5010);border-color:#6b5010;color:#ffd966;}
 .qi-stats{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;}
 .qstat{font-size:10px;font-weight:700;padding:2px 6px;border-radius:12px;white-space:nowrap;}
 .qstat.tg{background:rgba(139,105,20,.12);color:#8b6914;border:1px solid rgba(139,105,20,.25);}
@@ -484,7 +488,28 @@ True Gold: __126__
         </div>
 
         <div class="spanel" id="sp-queue">
-          <div class="slabel">Unscheduled players</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div class="slabel">Unscheduled players</div>
+              <span id="q-sort-label" style="font-size:10px;color:#8b7a5a;"></span>
+            </div>
+            <!-- Name search -->
+            <input id="q-name-search" type="text" placeholder="🔍 Search by name…"
+              style="width:100%;background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;color:#4a3428;font-size:12px;padding:6px 10px;outline:none;font-family:inherit;transition:border .15s;"
+              oninput="renderQueue()" onfocus="this.style.borderColor='#8b6914'" onblur="this.style.borderColor='rgba(139,111,71,.2)'">
+            <!-- Sort buttons -->
+            <div style="display:flex;flex-wrap:wrap;gap:4px;">
+              <span style="font-size:10px;font-weight:700;color:#8b7a5a;align-self:center;white-space:nowrap;">Sort:</span>
+              <button class="q-sort-btn active" data-sort="manual" onclick="setQueueSort('manual')">Queue order</button>
+              <button class="q-sort-btn" data-sort="name"   onclick="setQueueSort('name')">Name</button>
+              <button class="q-sort-btn" data-sort="tg"     onclick="setQueueSort('tg')">TG ↓</button>
+              <button class="q-sort-btn" data-sort="dust"   onclick="setQueueSort('dust')">Dust ↓</button>
+              <button class="q-sort-btn" data-sort="gen"    onclick="setQueueSort('gen')">General ↓</button>
+              <button class="q-sort-btn" data-sort="res"    onclick="setQueueSort('res')">Research ↓</button>
+              <button class="q-sort-btn" data-sort="train"  onclick="setQueueSort('train')">Training ↓</button>
+              <button class="q-sort-btn" data-sort="build"  onclick="setQueueSort('build')">Build ↓</button>
+            </div>
+          </div>
           <div id="queue-list"></div>
         </div>
       </aside>
@@ -750,6 +775,22 @@ let scheduleVer = 1;
 let ignoreNext  = false;
 let saveTimer   = null;
 let dragIdx = null, dragOverIdx = null;
+let queueSort = 'manual'; // manual | name | tg | dust | gen | res | train | build
+
+function setQueueSort(sort) {
+  queueSort = sort;
+  document.querySelectorAll('.q-sort-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.sort===sort);
+  });
+  renderQueue();
+}
+
+// Parse a duration string to a sortable number (extracts leading days value)
+function parseDuration(str) {
+  if (!str) return -1;
+  const m = str.match(/(\d+)/);
+  return m ? parseInt(m[1]) : -1;
+}
 
 // ══════════════════════════════════════════════
 //  UI HELPERS
@@ -1185,9 +1226,37 @@ function addToQueue(){
 // ══════════════════════════════════════════════
 //  QUEUE
 // ══════════════════════════════════════════════
+function queueMatchesFilter(p, nameSearch) {
+  if (!nameSearch) return true;
+  return p.name.toLowerCase().includes(nameSearch.toLowerCase());
+}
+
 function renderQueue(){
   const el=document.getElementById('queue-list');
   if(!state.queue.length){el.innerHTML='<div class="q-empty">No players in queue</div>';return;}
+  const nameSearch = (document.getElementById('q-name-search')||{value:''}).value.trim();
+
+  // Sort a copy — never mutate state.queue order unless manual
+  let displayQueue = [...state.queue];
+  if(queueSort !== 'manual'){
+    displayQueue.sort((a,b)=>{
+      switch(queueSort){
+        case 'name':  return a.name.localeCompare(b.name);
+        case 'tg':    return (b.tg||0)-(a.tg||0);
+        case 'dust':  return (b.tgDust||0)-(a.tgDust||0);
+        case 'gen':   return parseDuration(b.general)-parseDuration(a.general);
+        case 'res':   return parseDuration(b.research)-parseDuration(a.research);
+        case 'train': return parseDuration(b.training)-parseDuration(a.training);
+        case 'build': return parseDuration(b.construction)-parseDuration(a.construction);
+        default:      return 0;
+      }
+    });
+  }
+
+  // Update sort label
+  const sortLabels={manual:'',name:'A–Z',tg:'TG: highest first',dust:'Dust: highest first',gen:'General: highest first',res:'Research: highest first',train:'Training: highest first',build:'Construction: highest first'};
+  const lbl=document.getElementById('q-sort-label');
+  if(lbl) lbl.textContent=queueSort!=='manual'?'↕ '+sortLabels[queueSort]:'';
 
   // All open slots for a given day — no pref filtering
   function mkOpts(grid, day) {
@@ -1195,7 +1264,7 @@ function renderQueue(){
     return opts;
   }
 
-  el.innerHTML=state.queue.map(p=>{
+  el.innerHTML=displayQueue.map(p=>{
     // Stat pills
     const statPills=[];
     if(p.tg)          statPills.push('<span class="qstat tg">TG '+p.tg.toLocaleString()+'</span>');
@@ -1235,7 +1304,7 @@ function renderQueue(){
       : '';
 
     // Reorder
-    const qi=state.queue.indexOf(p);
+    const qi=state.queue.findIndex(q=>q.id===p.id);
     const isFirst=qi===0,isLast=qi===state.queue.length-1;
     const grid = activeDay===1?state.day1:activeDay===2?state.day2:state.day4;
     const dayOpts = mkOpts(grid, activeDay);
@@ -1259,7 +1328,8 @@ function renderQueue(){
       return '<button onclick="setQueueDay('+p.id+','+d+')" style="font-size:10px;padding:2px 8px;border-radius:12px;border:1.5px solid '+border+';background:'+bg+';color:'+color+';font-weight:'+weight+';cursor:pointer;font-family:inherit;">'+txt+'</button>';
     }).join('');
 
-    return '<div class="qi">'
+    const filtered = !queueMatchesFilter(p, nameSearch);
+    return '<div class="qi'+(filtered?' filtered-out':'')+'">'
       // top row
       +'<div class="qi-top" style="gap:6px;">'
         +'<div class="qi-order">'
@@ -1507,19 +1577,10 @@ function buildPlayerRows(slot, day) {
   return rows;
 }
 function buildMoveOpts(grid, idx, slot) {
+  // Show ALL open slots — pref is informational only, not a filter
   const opts = ['<option value="">Move to…</option>'];
   grid.forEach((s,si)=>{
     if(si===idx||s) return;
-    if(slot.prefTimes&&slot.prefTimes.length){
-      const sm=(startMinutes+si*30)%1440;
-      const ok=slot.prefTimes.some(({s:ts,e:te})=>{
-        let st=parseInt(ts.split(':')[0])*60+parseInt(ts.split(':')[1]);
-        let en=parseInt(te.split(':')[0])*60+parseInt(te.split(':')[1]);
-        if(en===0)en=1440; if(en<st) return sm>=st||sm<en;
-        return sm>=st&&sm<en;
-      });
-      if(!ok) return;
-    }
     opts.push('<option value="'+si+'">'+slotTime(si)+' – '+slotEnd(si)+'</option>');
   });
   return opts.join('');
