@@ -1952,7 +1952,41 @@ document.getElementById('sched-body').addEventListener('change',e=>{
   debouncedSave(); renderGrid(); renderStats();
   toast('Moved to '+slotTime(dest)+' UTC');
 });
-function returnToQueue(day,idx){const grid=day===1?state.day1:day===2?state.day2:state.day4;const player=grid[idx];if(!player)return;state.queue.unshift({...player,id:Date.now(),forDay:null,_qDay:day});grid[idx]=null;debouncedSave();renderQueue();renderGrid();renderStats();toast(player.name+' returned to queue.');}
+function returnToQueue(day, idx) {
+  const grid = day===1?state.day1:day===2?state.day2:state.day4;
+  const player = grid[idx];
+  if (!player) return;
+
+  // Clear from schedule
+  grid[idx] = null;
+
+  // Check if player is already in queue (matched by name+pid)
+  const existing = state.queue.find(q =>
+    q.name === player.name &&
+    (player.pid && q.pid ? q.pid === player.pid : !player.pid && !q.pid)
+  );
+
+  if (existing) {
+    // Already in queue — just update _qDay to the returned day so dropdown shows it
+    // and clear the dayPrefTimes entry so it's not marked as scheduled
+    existing._qDay = day;
+    // Update scheduledDays tracking if present
+    if (existing._scheduledDays) {
+      existing._scheduledDays = existing._scheduledDays.filter(d => d !== day);
+    }
+    toast(player.name + ' unscheduled from Day ' + day + ' — already in queue, card updated.');
+  } else {
+    // Not in queue — add fresh entry, pre-select the returned day
+    const {_qDay: _old, ...playerData} = player;
+    state.queue.unshift({...playerData, id: Date.now(), forDay: null, _qDay: day, _scheduledDays: []});
+    toast(player.name + ' returned to queue.');
+  }
+
+  debouncedSave();
+  renderQueue();
+  renderGrid();
+  renderStats();
+}
 function deleteSlot(day,idx){
   const grid=day===1?state.day1:day===2?state.day2:state.day4;
   const player=grid[idx]; if(!player)return;
