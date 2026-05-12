@@ -1021,12 +1021,16 @@ function parseMsg(){
     }
   }
 
-  // Look for standalone # ID line or inline digits anywhere near the name
+  // Look for ID in lines near the name
   if (!pid) {
     for (let li = 0; li < Math.min(lines.length, nameLineIdx + 5); li++) {
+      const l = lines[li].trim();
       // "# 123456" or "#123456 (player ID)"
-      const idm = lines[li].match(/#\s*(\d{6,})/);
+      const idm = l.match(/#\s*(\d{6,})/);
       if (idm) { pid = idm[1]; break; }
+      // Bare standalone number on its own line e.g. "103687429"
+      const bareId = l.match(/^(\d{6,})\s*(?:\(.*\))?\s*$/);
+      if (bareId && li !== nameLineIdx) { pid = bareId[1]; break; }
     }
   }
   // Last fallback: name line ends with bare digits e.g. "MYS Agathors 102900744"
