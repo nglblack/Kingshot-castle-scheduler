@@ -294,6 +294,15 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 .man-divider{height:1px;background:rgba(139,111,71,.12);margin:6px 0;}
 .man-check{display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:#4a3428;font-weight:600;}
 .man-check input{width:13px;height:13px;cursor:pointer;}
+.man-day-row{display:flex;align-items:center;gap:8px;padding:4px 0;flex-wrap:wrap;}
+.man-day-check{min-width:80px;flex-shrink:0;}
+.man-day-label{font-size:12px;font-weight:700;}
+.man-day-label.d1{color:#8b6914;}
+.man-day-label.d2{color:#3d7a61;}
+.man-day-label.d4{color:#3d617a;}
+.man-day-time{display:flex;align-items:center;gap:5px;flex:1;}
+.man-dash{color:#8b7a5a;font-weight:700;font-size:13px;}
+.man-utc{font-size:10px;color:#8b7a5a;font-weight:600;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -424,27 +433,48 @@ True Gold: __126__
 
               <div class="man-divider"></div>
 
-              <div class="man-row" style="align-items:flex-start;gap:6px;">
-                <span class="man-lbl" style="padding-top:2px;">⏰ Pref time UTC</span>
-                <div style="display:flex;flex-direction:column;gap:4px;flex:1;">
-                  <div style="display:flex;gap:5px;align-items:center;">
-                    <input id="man-pref-s" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
-                    <span style="color:#8b7a5a;font-weight:700;font-size:13px;">–</span>
-                    <input id="man-pref-e" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
-                    <span style="font-size:11px;color:#8b7a5a;">UTC</span>
-                  </div>
-                  <div style="font-size:10px;color:#b8a898;">Add more ranges separated by comma e.g. 12:00–24:00</div>
-                  <input id="man-pref-extra" type="text" class="man-input" placeholder="Extra range e.g. 12:00–24:00 (optional)" style="font-size:11px;">
+              <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">⏰ Schedule &amp; Preferred Time (UTC)</div>
+
+              <!-- Day 1 row -->
+              <div class="man-day-row">
+                <label class="man-check man-day-check">
+                  <input type="checkbox" id="man-d1" style="accent-color:#8b6914;" onchange="toggleDayTime(1)">
+                  <span class="man-day-label d1">🏗️ Day 1</span>
+                </label>
+                <div id="man-d1-time" class="man-day-time" style="display:none;">
+                  <input id="man-pref-s1" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+                  <span class="man-dash">–</span>
+                  <input id="man-pref-e1" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+                  <span class="man-utc">UTC</span>
                 </div>
               </div>
 
-              <div class="man-divider"></div>
+              <!-- Day 2 row -->
+              <div class="man-day-row">
+                <label class="man-check man-day-check">
+                  <input type="checkbox" id="man-d2" style="accent-color:#3d7a61;" onchange="toggleDayTime(2)">
+                  <span class="man-day-label d2">🔬 Day 2</span>
+                </label>
+                <div id="man-d2-time" class="man-day-time" style="display:none;">
+                  <input id="man-pref-s2" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+                  <span class="man-dash">–</span>
+                  <input id="man-pref-e2" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+                  <span class="man-utc">UTC</span>
+                </div>
+              </div>
 
-              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-                <span style="font-size:12px;color:#8b7a5a;font-weight:600;">Schedule for:</span>
-                <label class="man-check"><input type="checkbox" id="man-d1" style="accent-color:#8b6914;"> Day 1</label>
-                <label class="man-check"><input type="checkbox" id="man-d2" style="accent-color:#8b6914;"> Day 2</label>
-                <label class="man-check"><input type="checkbox" id="man-d4" style="accent-color:#8b6914;"> Day 4</label>
+              <!-- Day 4 row -->
+              <div class="man-day-row">
+                <label class="man-check man-day-check">
+                  <input type="checkbox" id="man-d4" style="accent-color:#3d617a;" onchange="toggleDayTime(4)">
+                  <span class="man-day-label d4">⚔️ Day 4</span>
+                </label>
+                <div id="man-d4-time" class="man-day-time" style="display:none;">
+                  <input id="man-pref-s4" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+                  <span class="man-dash">–</span>
+                  <input id="man-pref-e4" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+                  <span class="man-utc">UTC</span>
+                </div>
               </div>
 
               <div id="man-error" class="man-error" style="margin-top:4px;"></div>
@@ -627,13 +657,33 @@ True Gold: __126__
 //  SUPABASE
 // ══════════════════════════════════════════════
 const TABLE = 'kvk_schedules';
+
+// Surface any uncaught JS errors in the UI
+window.addEventListener('error', function(e) {
+  console.error('Uncaught error:', e.message, 'at', e.filename, e.lineno);
+  setSaveInfo && setSaveInfo('⚠️ JS error: ' + e.message);
+});
 let sb = null, realtimeChannel = null;
 
 function initSB() {
-  if (sb || typeof window.supabase === 'undefined') return;
+  if (sb) return;
+  if (typeof window.supabase === 'undefined') {
+    console.error('Supabase JS not loaded — check CDN or network');
+    setSyncStatus('error'); setSaveInfo('⚠️ Supabase library failed to load');
+    return;
+  }
+  if (typeof SUPABASE_CONFIG === 'undefined') {
+    console.error('supabase-config.js not loaded — check assets/js/ path');
+    setSyncStatus('error'); setSaveInfo('⚠️ Config file not found');
+    return;
+  }
   try {
     sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-  } catch(e) { console.error('Supabase init failed', e); }
+    console.log('✅ Supabase client ready');
+  } catch(e) {
+    console.error('Supabase createClient failed:', e);
+    setSyncStatus('error'); setSaveInfo('⚠️ Supabase init failed: ' + e.message);
+  }
 }
 
 // ══════════════════════════════════════════════
@@ -832,6 +882,12 @@ function slotEnd(i) { return slotTime((i + 1) % 48); }
 function slotShort(i) { return slotTime(i) + ' UTC'; }
 
 // Auto-colon for manual pref time inputs
+function toggleDayTime(day) {
+  const cb = document.getElementById('man-d'+day);
+  const row = document.getElementById('man-d'+day+'-time');
+  if (row) row.style.display = cb.checked ? 'flex' : 'none';
+}
+
 function autoColonManual(el) {
   let v = el.value.replace(/[^0-9:]/g,'');
   if (v.length === 2 && !v.includes(':')) v = v + ':';
@@ -1060,7 +1116,7 @@ function clearPv(){parsed=null;document.getElementById('pv-card').classList.remo
 
 function addToQueue(){
   if(!parsed){toast('Nothing parsed yet.');return;}
-  if(state.queue.find(q=>q.name===parsed.name&&q.pid===parsed.pid)){
+  if(state.queue.find(q=>q.name===parsed.name&&(parsed.pid&&q.pid?q.pid===parsed.pid:!parsed.pid&&!q.pid))){
     toast(parsed.name+' is already in the queue.'); return;
   }
   // Single entry — day is chosen from the queue card
@@ -1094,21 +1150,37 @@ function renderQueue(){
     if(p.construction)statPills.push('<span class="qstat spd">Build: '+p.construction+'</span>');
     const statsRow = statPills.length?'<div class="qi-stats">'+statPills.join('')+'</div>':'';
 
-    // Pref display (informational only)
-    let prefDisplay='';
-    if(p.prefTimes&&p.prefTimes.length){
-      prefDisplay='⏰ '+p.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?' – '+t.e:'')).join('  |  ')+' UTC';
-    } else if(p.prefStart){
-      prefDisplay='⏰ '+p.prefStart+(p.prefEnd&&p.prefEnd!==p.prefStart?' – '+p.prefEnd:'')+' UTC';
+    // Active day for this card (default day 1) — must be declared before use
+    const activeDay = p._qDay || 1;
+
+    // Pref display — show all per-day times if set, otherwise fall back to global pref
+    const dayNames = {1:'D1',2:'D2',4:'D4'};
+    const dayColors = {1:'#8b6914',2:'#3d7a61',4:'#3d617a'};
+    let prefParts = [];
+    if(p.dayPrefTimes){
+      [1,2,4].forEach(d=>{
+        const dt=p.dayPrefTimes[d];
+        if(dt&&dt.length){
+          const times=dt.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?' – '+t.e:'')).join(', ');
+          prefParts.push('<span style="color:'+dayColors[d]+';font-weight:700;">'+dayNames[d]+':</span> '+times+' UTC');
+        }
+      });
     }
-    const prefRow = prefDisplay?'<div class="qi-pref">'+prefDisplay+'</div>':'';
+    // Fall back to global pref if no per-day times
+    if(!prefParts.length){
+      if(p.prefTimes&&p.prefTimes.length){
+        prefParts.push('⏰ '+p.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?' – '+t.e:'')).join('  |  ')+' UTC');
+      } else if(p.prefStart){
+        prefParts.push('⏰ '+p.prefStart+(p.prefEnd&&p.prefEnd!==p.prefStart?' – '+p.prefEnd:'')+' UTC');
+      }
+    }
+    const prefRow = prefParts.length
+      ? '<div class="qi-pref" style="display:flex;flex-direction:column;gap:2px;">'+prefParts.map(t=>'<span>⏰ '+t+'</span>').join('')+'</div>'
+      : '';
 
     // Reorder
     const qi=state.queue.indexOf(p);
     const isFirst=qi===0,isLast=qi===state.queue.length-1;
-
-    // Active day for this card (default day 1)
-    const activeDay = p._qDay || 1;
     const grid = activeDay===1?state.day1:activeDay===2?state.day2:state.day4;
     const dayOpts = mkOpts(grid, activeDay);
     // Check which days this player is already scheduled on
@@ -1551,31 +1623,32 @@ function submitManual(){
   const construction=document.getElementById('man-construction').value.trim();
   const research=document.getElementById('man-research').value.trim();
   const training=document.getElementById('man-training').value.trim();
-  // Pref time — parse primary range + optional extra ranges
-  const ps=document.getElementById('man-pref-s').value.trim();
-  const pe=document.getElementById('man-pref-e').value.trim();
-  const extra=document.getElementById('man-pref-extra').value.trim();
   if(!name){errEl.textContent='Player name is required.';errEl.style.display='block';return;}
   if(!d1&&!d2&&!d4){errEl.textContent='Select at least one day.';errEl.style.display='block';return;}
-  // Build prefTimes array
-  const prefTimes=[];
-  if(ps){const s=extractTime(ps),e=extractTime(pe||'');if(s)prefTimes.push({s,e:e||s});}
-  // Parse extra ranges  e.g. "12:00–24:00, 20:00-23:00"
-  if(extra){
-    const trRe=/(\d{1,2}:\d{2})\s*[-–—]\s*(\d{1,2}:\d{2})/g;let m;
-    while((m=trRe.exec(extra))!==null){const s=extractTime(m[1]),e=extractTime(m[2]);if(s)prefTimes.push({s,e:e||s});}
+  // Read per-day preferred times
+  function readDayPref(dayNum) {
+    const ps = (document.getElementById('man-pref-s'+dayNum)||{value:''}).value.trim();
+    const pe = (document.getElementById('man-pref-e'+dayNum)||{value:''}).value.trim();
+    if (!ps) return [];
+    const s = extractTime(ps), e = extractTime(pe||'');
+    return s ? [{s, e: e||''}] : [];
   }
-  const prefStart=prefTimes.length?prefTimes[0].s:'';
-  const prefEnd=prefTimes.length?prefTimes[prefTimes.length-1].e:'';
+  const dayPrefTimes = {1: readDayPref(1), 2: readDayPref(2), 4: readDayPref(4)};
+  // Use day 1 pref as the default prefTimes (for display/backward compat)
+  const prefTimes = dayPrefTimes[1].length ? dayPrefTimes[1]
+                  : dayPrefTimes[2].length ? dayPrefTimes[2]
+                  : dayPrefTimes[4].length ? dayPrefTimes[4] : [];
+  const prefStart = prefTimes.length ? prefTimes[0].s : '';
+  const prefEnd   = prefTimes.length ? prefTimes[0].e||'' : '';
   const days=[];if(d1)days.push('Day 1');if(d2)days.push('Day 2');if(d4)days.push('Day 4');
-  const player={name,pid,tg,tgDust,general,training,construction,research,total:'',prefStart,prefEnd,prefTimes,requestedDays:days,manual:true,id:Date.now()};
-  if(state.queue.find(q=>q.name===player.name&&q.pid===player.pid)){
+  const player={name,pid,tg,tgDust,general,training,construction,research,total:'',prefStart,prefEnd,prefTimes,dayPrefTimes,requestedDays:days,manual:true,id:Date.now()};
+  if(state.queue.find(q=>q.name===player.name&&(player.pid&&q.pid?q.pid===player.pid:!player.pid&&!q.pid))){
     errEl.textContent=name+' is already in the queue.';errEl.style.display='block';return;
   }
   state.queue.push({...player, id:Date.now(), forDay:null});
   debouncedSave();renderQueue();renderStats();toast(name+' added to queue.');
-  ['man-name','man-pid','man-tg','man-tgdust','man-general','man-construction','man-research','man-training','man-pref-s','man-pref-e','man-pref-extra'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('man-d1').checked=false;document.getElementById('man-d2').checked=false;document.getElementById('man-d4').checked=false;
+  ['man-name','man-pid','man-tg','man-tgdust','man-general','man-construction','man-research','man-training','man-pref-s1','man-pref-e1','man-pref-s2','man-pref-e2','man-pref-s4','man-pref-e4'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  [1,2,4].forEach(d=>{const cb=document.getElementById('man-d'+d);if(cb)cb.checked=false;toggleDayTime(d);});
   switchSTab('queue');
 }
 function showReset(){document.getElementById('confirm-strip').classList.add('open');}
