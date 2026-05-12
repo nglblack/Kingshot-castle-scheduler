@@ -88,6 +88,13 @@ select:focus{border-color:#8b6914;}
 .pv-row{font-size:12px;color:#8b7a5a;}
 .pv-row b{color:#4a3428;font-weight:700;}
 .pref-pill{display:inline-block;background:rgba(139,111,71,.12);color:#6b4423;border:1px solid rgba(139,111,71,.3);font-size:11px;padding:3px 9px;border-radius:20px;margin-bottom:10px;}
+/* Compact day picker in preview card */
+.pv-day-block{display:flex;align-items:center;gap:6px;min-height:24px;}
+.pv-day-chk{display:flex;align-items:center;gap:4px;cursor:pointer;flex-shrink:0;width:72px;}
+.pv-day-times{display:flex;align-items:center;gap:4px;flex:1;}
+.pv-time-in{width:52px;padding:3px 5px;font-size:11px;font-family:'Courier New',monospace;font-weight:700;text-align:center;background:#f5ebe0;border:1.5px solid rgba(139,111,71,.2);border-radius:5px;color:#4a3428;outline:none;}
+.pv-time-in:focus{border-color:#8b6914;}
+.pv-time-in::placeholder{color:#c8b8a8;font-weight:400;}
 
 /* Queue */
 .q-empty{font-size:13px;color:#8b7a5a;text-align:center;padding:20px 0;}
@@ -383,7 +390,56 @@ True Gold: __126__
             <div class="pv-pid"  id="pv-pid"></div>
             <div class="pv-grid" id="pv-stats"></div>
             <div id="pv-pref"></div>
-            <div style="display:flex;gap:6px;margin-top:4px">
+            <!-- Day selection + per-day pref times — compact 2-line per day -->
+            <div style="margin-top:8px;border-top:1px solid rgba(139,111,71,.15);padding-top:8px;">
+              <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;">Schedule &amp; Pref time (UTC)</div>
+              <div style="display:flex;flex-direction:column;gap:5px;">
+
+                <!-- Day 1 -->
+                <div class="pv-day-block">
+                  <label class="pv-day-chk">
+                    <input type="checkbox" id="pv-d1" style="accent-color:#8b6914;width:13px;height:13px;" checked onchange="togglePvDayTime(1)">
+                    <span class="man-day-label d1" style="font-size:11px;">🏗️ Day 1</span>
+                  </label>
+                  <div id="pv-d1-time" class="pv-day-times">
+                    <input id="pv-ps1" type="text" class="pv-time-in" placeholder="from" maxlength="5" oninput="autoColonManual(this)">
+                    <span style="color:#8b7a5a;font-size:11px;">–</span>
+                    <input id="pv-pe1" type="text" class="pv-time-in" placeholder="to" maxlength="5" oninput="autoColonManual(this)">
+                    <span style="font-size:9px;color:#8b7a5a;">UTC</span>
+                  </div>
+                </div>
+
+                <!-- Day 2 -->
+                <div class="pv-day-block">
+                  <label class="pv-day-chk">
+                    <input type="checkbox" id="pv-d2" style="accent-color:#3d7a61;width:13px;height:13px;" checked onchange="togglePvDayTime(2)">
+                    <span class="man-day-label d2" style="font-size:11px;">🔬 Day 2</span>
+                  </label>
+                  <div id="pv-d2-time" class="pv-day-times">
+                    <input id="pv-ps2" type="text" class="pv-time-in" placeholder="from" maxlength="5" oninput="autoColonManual(this)">
+                    <span style="color:#8b7a5a;font-size:11px;">–</span>
+                    <input id="pv-pe2" type="text" class="pv-time-in" placeholder="to" maxlength="5" oninput="autoColonManual(this)">
+                    <span style="font-size:9px;color:#8b7a5a;">UTC</span>
+                  </div>
+                </div>
+
+                <!-- Day 4 -->
+                <div class="pv-day-block">
+                  <label class="pv-day-chk">
+                    <input type="checkbox" id="pv-d4" style="accent-color:#3d617a;width:13px;height:13px;" checked onchange="togglePvDayTime(4)">
+                    <span class="man-day-label d4" style="font-size:11px;">⚔️ Day 4</span>
+                  </label>
+                  <div id="pv-d4-time" class="pv-day-times">
+                    <input id="pv-ps4" type="text" class="pv-time-in" placeholder="from" maxlength="5" oninput="autoColonManual(this)">
+                    <span style="color:#8b7a5a;font-size:11px;">–</span>
+                    <input id="pv-pe4" type="text" class="pv-time-in" placeholder="to" maxlength="5" oninput="autoColonManual(this)">
+                    <span style="font-size:9px;color:#8b7a5a;">UTC</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:8px;">
               <button class="btn primary" style="flex:1" onclick="addToQueue()">+ Add to queue</button>
               <button class="btn ghost" onclick="clearPv()">✕</button>
             </div>
@@ -980,6 +1036,19 @@ function toggleDayTime(day) {
   const row = document.getElementById('man-d'+day+'-time');
   if (row) row.style.display = cb.checked ? 'flex' : 'none';
 }
+function togglePvDayTime(day) {
+  const cb = document.getElementById('pv-d'+day);
+  const row = document.getElementById('pv-d'+day+'-time');
+  if (row) {
+    row.style.display = cb.checked ? 'flex' : 'none';
+    if (!cb.checked) {
+      // clear times when unchecked
+      const ps=document.getElementById('pv-ps'+day);
+      const pe=document.getElementById('pv-pe'+day);
+      if(ps)ps.value=''; if(pe)pe.value='';
+    }
+  }
+}
 
 function autoColonManual(el) {
   let v = el.value.replace(/[^0-9:]/g,'');
@@ -1223,19 +1292,70 @@ function parseMsg(){
   document.getElementById('pv-pref').innerHTML = prefLabel
     ? '<span class="pref-pill">'+prefLabel+'</span>'
     : '<span class="pref-pill" style="background:rgba(192,57,43,.08);color:#c0392b;border-color:rgba(192,57,43,.2);">No time preference</span>';
+  // Pre-fill day checkboxes (all checked by default)
+  [1,2,4].forEach(d=>{
+    const cb=document.getElementById('pv-d'+d);
+    const row=document.getElementById('pv-d'+d+'-time');
+    if(cb) cb.checked=true;
+    if(row) row.style.display='flex';
+    if(document.getElementById('pv-ps'+d)) document.getElementById('pv-ps'+d).value='';
+    if(document.getElementById('pv-pe'+d)) document.getElementById('pv-pe'+d).value='';
+  });
+  // Pre-fill pref times from parsed data into all checked days
+  if(prefTimes.length){
+    [1,2,4].forEach(d=>{
+      const psEl=document.getElementById('pv-ps'+d);
+      const peEl=document.getElementById('pv-pe'+d);
+      if(psEl) psEl.value=prefTimes[0].s||'';
+      if(peEl) peEl.value=(prefTimes[0].e&&prefTimes[0].e!==prefTimes[0].s)?prefTimes[0].e:'';
+    });
+  }
   document.getElementById('pv-card').classList.add('show');
 }
-function clearPv(){parsed=null;document.getElementById('pv-card').classList.remove('show');}
+function clearPv(){
+  parsed=null;
+  document.getElementById('pv-card').classList.remove('show');
+  [1,2,4].forEach(d=>{
+    const cb=document.getElementById('pv-d'+d);
+    if(cb){cb.checked=true;}
+    const ps=document.getElementById('pv-ps'+d);
+    const pe=document.getElementById('pv-pe'+d);
+    if(ps)ps.value='';if(pe)pe.value='';
+  });
+}
 
 function addToQueue(){
   if(!parsed){toast('Nothing parsed yet.');return;}
   if(state.queue.find(q=>q.name===parsed.name&&(parsed.pid&&q.pid?q.pid===parsed.pid:!parsed.pid&&!q.pid))){
     toast(parsed.name+' is already in the queue.'); return;
   }
-  // Single entry — day is chosen from the queue card
-  state.queue.push({...parsed, id: Date.now(), forDay: null});
+  // Read which days are selected
+  const d1=document.getElementById('pv-d1').checked;
+  const d2=document.getElementById('pv-d2').checked;
+  const d4=document.getElementById('pv-d4').checked;
+  if(!d1&&!d2&&!d4){toast('Select at least one day.');return;}
+
+  // Read per-day pref times from preview card
+  function readPvPref(day){
+    const s=document.getElementById('pv-ps'+day).value.trim();
+    const e=document.getElementById('pv-pe'+day).value.trim();
+    const st=extractTime(s),et=extractTime(e||'');
+    return st?[{s:st,e:et||''}]:[];
+  }
+  const dayPrefTimes={1:d1?readPvPref(1):[],2:d2?readPvPref(2):[],4:d4?readPvPref(4):[]};
+  const allTimes=[1,2,4].flatMap(d=>dayPrefTimes[d]);
+  const prefStart=allTimes.length?allTimes[0].s:parsed.prefStart||'';
+  const prefEnd=allTimes.length?allTimes[allTimes.length-1].e||'':parsed.prefEnd||'';
+  const days=[];if(d1)days.push('Day 1');if(d2)days.push('Day 2');if(d4)days.push('Day 4');
+
+  const player={...parsed,id:Date.now(),forDay:null,
+    requestedDays:days,dayPrefTimes,
+    prefTimes:allTimes.length?allTimes:parsed.prefTimes,
+    prefStart,prefEnd};
+
+  state.queue.push(player);
   debouncedSave();renderQueue();renderStats();
-  toast(parsed.name+' added to queue.');
+  toast(parsed.name+' added to queue for: '+days.join(', ')+'.');
   clearPv();document.getElementById('paste-in').value='';switchSTab('queue');
 }
 
