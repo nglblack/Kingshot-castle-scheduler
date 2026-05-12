@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KvK Sign-Up — Kingshot</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Arial Rounded MT Bold','Helvetica Rounded',Arial,sans-serif;
+  background:linear-gradient(135deg,#5a7a5f 0%,#3d5a42 100%);
+  min-height:100vh;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:24px 16px 40px;color:#4a3428;
+}
+.card{width:100%;max-width:480px;background:#f5ebe0;border-radius:20px;border:2px solid rgba(139,111,71,0.3);box-shadow:0 8px 30px rgba(0,0,0,0.3);overflow:hidden;}
+.card-header{background:linear-gradient(135deg,#5a7a5f 0%,#3d5a42 100%);padding:18px 24px 14px;text-align:center;}
+.card-title{font-size:1.5em;font-weight:900;color:#ffd966;text-shadow:2px 2px 0 #8b6914,3px 3px 6px rgba(0,0,0,0.4);font-family:'Arial Black','Arial Bold',sans-serif;letter-spacing:1px;}
+.card-sub{font-size:12px;color:rgba(245,235,224,0.75);margin-top:4px;font-weight:600;}
+.schedule-badge{display:inline-block;margin-top:8px;font-size:11px;font-family:'Courier New',monospace;font-weight:700;background:rgba(255,217,102,0.15);color:#ffd966;border:1px solid rgba(255,217,102,0.3);padding:3px 10px;border-radius:12px;}
+
+/* Language picker */
+.lang-bar{background:rgba(0,0,0,0.25);padding:10px 14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;}
+.lang-btn{font-size:11px;padding:4px 10px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.14);color:#f5ebe0;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s;white-space:nowrap;letter-spacing:0.2px;}
+.lang-btn:hover{background:rgba(255,255,255,0.28);border-color:rgba(255,255,255,0.6);color:#fff;}
+.lang-btn.active{background:#8b6914;border-color:#ffd966;color:#ffd966;box-shadow:0 1px 6px rgba(0,0,0,0.3);}
+
+.card-body{padding:20px 22px;}
+.sec-label{font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;margin-top:16px;display:flex;align-items:center;gap:6px;}
+.sec-label:first-of-type{margin-top:0;}
+.sec-label::after{content:'';flex:1;height:1px;background:rgba(139,111,71,.15);}
+.field{margin-bottom:10px;}
+.field label{display:block;font-size:12px;font-weight:700;color:#6b4423;margin-bottom:4px;}
+.field input[type="text"]{width:100%;background:#fff8f0;border:2px solid rgba(139,111,71,0.2);border-radius:8px;color:#4a3428;font-size:14px;padding:9px 12px;outline:none;transition:border .15s;font-family:inherit;}
+.field input:focus{border-color:#8b6914;}
+.field input::placeholder{color:#c8b8a8;font-weight:400;}
+.hint{font-size:10px;color:#b8a898;margin-top:3px;}
+.speed-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.day-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:#fff8f0;border:1.5px solid rgba(139,111,71,.15);border-radius:8px;margin-bottom:6px;}
+.day-chk-wrap{display:flex;align-items:center;gap:5px;flex-shrink:0;width:70px;}
+.day-chk-wrap input[type="checkbox"]{width:15px;height:15px;cursor:pointer;flex-shrink:0;}
+.day-chk-wrap span{font-size:12px;font-weight:700;}
+.d1-lbl{color:#8b6914;}.d2-lbl{color:#3d7a61;}.d4-lbl{color:#3d617a;}
+.time-wrap{display:flex;align-items:center;gap:5px;flex:1;opacity:.4;transition:opacity .2s;}
+.time-wrap.active{opacity:1;}
+.time-in{width:58px;padding:5px 6px;font-size:12px;font-family:'Courier New',monospace;font-weight:700;text-align:center;background:#f5ebe0;border:1.5px solid rgba(139,111,71,.2);border-radius:6px;color:#4a3428;outline:none;}
+.time-in:focus{border-color:#8b6914;}
+.time-in::placeholder{color:#c8b8a8;font-weight:400;}
+.time-dash{color:#8b7a5a;font-size:12px;font-weight:700;}
+.time-utc{font-size:10px;color:#8b7a5a;font-weight:600;white-space:nowrap;}
+.btn-submit{width:100%;margin-top:18px;padding:14px;background:linear-gradient(135deg,#8b6914,#6b5010);border:none;border-radius:10px;color:#ffd966;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;text-shadow:1px 1px 0 rgba(0,0,0,0.3);box-shadow:0 4px 12px rgba(0,0,0,0.2);transition:opacity .2s;}
+.btn-submit:hover{opacity:.88;}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+.error-msg{display:none;font-size:12px;color:#c0392b;padding:8px 12px;background:rgba(192,57,43,.08);border-radius:8px;border:1px solid rgba(192,57,43,.25);margin-top:10px;}
+.success-screen{display:none;flex-direction:column;align-items:center;text-align:center;padding:30px 24px;gap:12px;}
+.success-icon{font-size:56px;line-height:1;}
+.success-title{font-size:1.4em;font-weight:800;color:#3d7a45;}
+.success-msg{font-size:13px;color:#6b7a6b;line-height:1.6;max-width:320px;}
+.success-name{font-weight:700;color:#4a3428;}
+.btn-again{margin-top:8px;padding:10px 24px;background:#fff8f0;border:2px solid rgba(139,111,71,.3);border-radius:8px;color:#6b4423;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;}
+.btn-again:hover{background:#ede0cc;}
+.no-schedule{padding:24px;text-align:center;font-size:13px;color:#c0392b;line-height:1.6;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:rgba(139,111,71,.3);border-radius:2px;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">⚔️ KvK Buff Sign-Up</div>
+    <div class="card-sub" id="t-subtitle">Fill in your details to join the schedule</div>
+    <div class="schedule-badge" id="schedule-badge" style="display:none;"></div>
+  </div>
+
+  <!-- Language selector -->
+  <div class="lang-bar" id="lang-bar"></div>
+
+  <!-- Main form -->
+  <div class="card-body" id="form-body">
+    <div class="sec-label" id="t-sec-player">Player info</div>
+    <div class="field">
+      <label id="t-lbl-name">Player name *</label>
+      <input id="f-name" type="text" placeholder="[ABC] YourName">
+    </div>
+    <div class="field">
+      <label id="t-lbl-pid">Player ID</label>
+      <input id="f-pid" type="text" placeholder="123456789">
+      <div class="hint" id="t-hint-pid">Found in your profile — tap your avatar → copy ID</div>
+    </div>
+
+    <div class="sec-label" id="t-sec-resources">Resources</div>
+    <div class="speed-grid">
+      <div class="field"><label id="t-lbl-tg">True Gold</label><input id="f-tg" type="text" placeholder="e.g. 3k"></div>
+      <div class="field"><label id="t-lbl-dust">True Gold Dust ✨</label><input id="f-tgdust" type="text" placeholder="e.g. 500k"></div>
+    </div>
+
+    <div class="sec-label" id="t-sec-speeds">Speed boosts</div>
+    <div class="speed-grid">
+      <div class="field"><label id="t-lbl-gen">1. General</label><input id="f-general" type="text" placeholder="e.g. 19 days"></div>
+      <div class="field"><label id="t-lbl-con">2. Construction</label><input id="f-construction" type="text" placeholder="e.g. 11 days"></div>
+      <div class="field"><label id="t-lbl-res">3. Research</label><input id="f-research" type="text" placeholder="e.g. 6 days"></div>
+      <div class="field"><label id="t-lbl-tra">4. Training</label><input id="f-training" type="text" placeholder="e.g. 3 days"></div>
+    </div>
+
+    <div class="sec-label" id="t-sec-avail">Availability (UTC) *</div>
+    <div class="hint" id="t-hint-avail" style="margin-bottom:8px;margin-top:-4px;">Check the days you can participate and enter your preferred time window</div>
+
+    <div class="day-row">
+      <div class="day-chk-wrap"><input type="checkbox" id="f-d1" onchange="toggleDay(1)"><span class="d1-lbl">🏗️ Day 1</span></div>
+      <div class="time-wrap" id="tw-d1">
+        <input id="f-ps1" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
+        <span class="time-dash">–</span>
+        <input id="f-pe1" class="time-in" type="text" placeholder="05:00" maxlength="5" oninput="autoColon(this)">
+        <span class="time-utc">UTC</span>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-chk-wrap"><input type="checkbox" id="f-d2" onchange="toggleDay(2)"><span class="d2-lbl">🔬 Day 2</span></div>
+      <div class="time-wrap" id="tw-d2">
+        <input id="f-ps2" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
+        <span class="time-dash">–</span>
+        <input id="f-pe2" class="time-in" type="text" placeholder="05:00" maxlength="5" oninput="autoColon(this)">
+        <span class="time-utc">UTC</span>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-chk-wrap"><input type="checkbox" id="f-d4" onchange="toggleDay(4)"><span class="d4-lbl">⚔️ Day 4</span></div>
+      <div class="time-wrap" id="tw-d4">
+        <input id="f-ps4" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
+        <span class="time-dash">–</span>
+        <input id="f-pe4" class="time-in" type="text" placeholder="05:00" maxlength="5" oninput="autoColon(this)">
+        <span class="time-utc">UTC</span>
+      </div>
+    </div>
+
+    <div class="error-msg" id="error-msg"></div>
+    <button class="btn-submit" id="btn-submit" onclick="submitForm()">⚔️ Join the Schedule</button>
+  </div>
+
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">🎉</div>
+    <div class="success-title" id="t-success-title">You're in!</div>
+    <div class="success-msg">
+      <span class="success-name" id="success-name"></span>
+      <span id="t-success-msg"> has been added to the queue. Your alliance officer will assign you a time slot shortly.</span><br><br>
+      <span id="t-success-close">You can close this page.</span>
+    </div>
+    <button class="btn-again" onclick="resetForm()" id="t-btn-again">Submit another player</button>
+  </div>
+
+  <div class="no-schedule" id="no-schedule" style="display:none;">
+    ⚠️ <span id="t-no-schedule">No schedule ID found. Please use the link provided by your alliance officer.</span>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ══════════════════════════════════════════════
+//  TRANSLATIONS
+// ══════════════════════════════════════════════
+const LANGS = {
+  en: {
+    flag:'🇬🇧', name:'English',
+    subtitle:'Fill in your details to join the schedule',
+    secPlayer:'Player info', secResources:'Resources', secSpeeds:'Speed boosts', secAvail:'Availability (UTC) *',
+    lblName:'Player name *', lblPid:'Player ID', hintPid:'Found in your profile — tap your avatar → copy ID',
+    lblTg:'True Gold', lblDust:'True Gold Dust ✨',
+    lblGen:'1. General', lblCon:'2. Construction', lblRes:'3. Research', lblTra:'4. Training',
+    hintAvail:'Check the days you can participate and enter your preferred time window',
+    btnSubmit:'⚔️ Join the Schedule', submitting:'Submitting…',
+    errName:'Please enter your player name.', errDay:'Please check at least one day you can participate.',
+    errLoad:'Could not load schedule. Check your link.', errSave:'Failed to save. Please try again.',
+    errDup:' is already in the queue!',
+    successTitle:"You're in!", successMsg:' has been added to the queue. Your alliance officer will assign you a time slot shortly.',
+    successClose:'You can close this page.', btnAgain:'Submit another player',
+    noSchedule:'No schedule ID found. Please use the link provided by your alliance officer.',
+  },
+  es: {
+    flag:'🇪🇸', name:'Español',
+    subtitle:'Completa tus datos para unirte al horario',
+    secPlayer:'Datos del jugador', secResources:'Recursos', secSpeeds:'Aceleradores', secAvail:'Disponibilidad (UTC) *',
+    lblName:'Nombre del jugador *', lblPid:'ID del jugador', hintPid:'Encuéntralo en tu perfil — toca tu avatar → copiar ID',
+    lblTg:'Oro verdadero', lblDust:'Polvo de oro verdadero ✨',
+    lblGen:'1. General', lblCon:'2. Construcción', lblRes:'3. Investigación', lblTra:'4. Entrenamiento',
+    hintAvail:'Marca los días que puedes participar e ingresa tu ventana de tiempo preferida',
+    btnSubmit:'⚔️ Unirme al horario', submitting:'Enviando…',
+    errName:'Por favor ingresa tu nombre.', errDay:'Selecciona al menos un día.',
+    errLoad:'No se pudo cargar el horario.', errSave:'Error al guardar. Intenta de nuevo.',
+    errDup:' ya está en la cola!',
+    successTitle:'¡Estás dentro!', successMsg:' ha sido añadido a la cola. Tu oficial de alianza te asignará un horario pronto.',
+    successClose:'Puedes cerrar esta página.', btnAgain:'Enviar otro jugador',
+    noSchedule:'ID de horario no encontrado. Usa el enlace proporcionado por tu oficial de alianza.',
+  },
+  pt: {
+    flag:'🇧🇷', name:'Português',
+    subtitle:'Preencha seus dados para entrar na agenda',
+    secPlayer:'Dados do jogador', secResources:'Recursos', secSpeeds:'Aceleradoras', secAvail:'Disponibilidade (UTC) *',
+    lblName:'Nome do jogador *', lblPid:'ID do jogador', hintPid:'Encontrado no perfil — toque no avatar → copiar ID',
+    lblTg:'Ouro verdadeiro', lblDust:'Pó de ouro verdadeiro ✨',
+    lblGen:'1. Geral', lblCon:'2. Construção', lblRes:'3. Pesquisa', lblTra:'4. Treinamento',
+    hintAvail:'Marque os dias que pode participar e insira sua janela de tempo preferida',
+    btnSubmit:'⚔️ Entrar na agenda', submitting:'Enviando…',
+    errName:'Digite seu nome de jogador.', errDay:'Selecione pelo menos um dia.',
+    errLoad:'Não foi possível carregar a agenda.', errSave:'Erro ao salvar. Tente novamente.',
+    errDup:' já está na fila!',
+    successTitle:'Você está dentro!', successMsg:' foi adicionado à fila. Seu oficial de aliança atribuirá um horário em breve.',
+    successClose:'Você pode fechar esta página.', btnAgain:'Enviar outro jogador',
+    noSchedule:'ID de agenda não encontrado. Use o link fornecido pelo seu oficial de aliança.',
+  },
+  fr: {
+    flag:'🇫🇷', name:'Français',
+    subtitle:'Remplissez vos informations pour rejoindre le planning',
+    secPlayer:'Infos joueur', secResources:'Ressources', secSpeeds:'Accélérateurs', secAvail:'Disponibilité (UTC) *',
+    lblName:'Nom du joueur *', lblPid:'ID joueur', hintPid:'Trouvé dans votre profil — appuyez sur votre avatar → copier ID',
+    lblTg:'Or véritable', lblDust:'Poussière d\'or ✨',
+    lblGen:'1. Général', lblCon:'2. Construction', lblRes:'3. Recherche', lblTra:'4. Entraînement',
+    hintAvail:'Cochez les jours où vous pouvez participer et entrez votre fenêtre horaire préférée',
+    btnSubmit:'⚔️ Rejoindre le planning', submitting:'Envoi…',
+    errName:'Veuillez entrer votre nom.', errDay:'Sélectionnez au moins un jour.',
+    errLoad:'Impossible de charger le planning.', errSave:'Échec de la sauvegarde.',
+    errDup:' est déjà dans la file!',
+    successTitle:'Vous êtes inscrit!', successMsg:' a été ajouté à la file. Votre officier d\'alliance vous assignera un créneau.',
+    successClose:'Vous pouvez fermer cette page.', btnAgain:'Soumettre un autre joueur',
+    noSchedule:'ID de planning introuvable. Utilisez le lien fourni par votre officier d\'alliance.',
+  },
+  de: {
+    flag:'🇩🇪', name:'Deutsch',
+    subtitle:'Trage deine Daten ein, um dem Zeitplan beizutreten',
+    secPlayer:'Spielerinfos', secResources:'Ressourcen', secSpeeds:'Beschleuniger', secAvail:'Verfügbarkeit (UTC) *',
+    lblName:'Spielername *', lblPid:'Spieler-ID', hintPid:'Im Profil — Avatar antippen → ID kopieren',
+    lblTg:'Echtes Gold', lblDust:'Echter Goldstaub ✨',
+    lblGen:'1. Allgemein', lblCon:'2. Bau', lblRes:'3. Forschung', lblTra:'4. Training',
+    hintAvail:'Markiere die Tage und gib dein bevorzugtes Zeitfenster ein',
+    btnSubmit:'⚔️ Zeitplan beitreten', submitting:'Senden…',
+    errName:'Bitte gib deinen Spielernamen ein.', errDay:'Wähle mindestens einen Tag.',
+    errLoad:'Zeitplan konnte nicht geladen werden.', errSave:'Speichern fehlgeschlagen.',
+    errDup:' ist bereits in der Warteschlange!',
+    successTitle:'Du bist dabei!', successMsg:' wurde zur Warteschlange hinzugefügt.',
+    successClose:'Du kannst diese Seite schließen.', btnAgain:'Weiteren Spieler einreichen',
+    noSchedule:'Keine Zeitplan-ID gefunden. Verwende den Link deines Allianzoffiziers.',
+  },
+  id: {
+    flag:'🇮🇩', name:'Indonesia',
+    subtitle:'Isi data kamu untuk bergabung ke jadwal',
+    secPlayer:'Info pemain', secResources:'Sumber daya', secSpeeds:'Akselerator', secAvail:'Ketersediaan (UTC) *',
+    lblName:'Nama pemain *', lblPid:'ID pemain', hintPid:'Ada di profil — ketuk avatar → salin ID',
+    lblTg:'Emas sejati', lblDust:'Debu emas ✨',
+    lblGen:'1. Umum', lblCon:'2. Konstruksi', lblRes:'3. Riset', lblTra:'4. Latihan',
+    hintAvail:'Centang hari yang bisa kamu ikuti dan masukkan preferensi waktu',
+    btnSubmit:'⚔️ Bergabung ke jadwal', submitting:'Mengirim…',
+    errName:'Masukkan nama pemainmu.', errDay:'Pilih setidaknya satu hari.',
+    errLoad:'Gagal memuat jadwal.', errSave:'Gagal menyimpan. Coba lagi.',
+    errDup:' sudah ada di antrian!',
+    successTitle:'Kamu masuk!', successMsg:' telah ditambahkan ke antrian.',
+    successClose:'Kamu bisa menutup halaman ini.', btnAgain:'Kirim pemain lain',
+    noSchedule:'ID jadwal tidak ditemukan. Gunakan tautan dari petugas aliansimu.',
+  },
+  tr: {
+    flag:'🇹🇷', name:'Türkçe',
+    subtitle:'Programa katılmak için bilgilerini gir',
+    secPlayer:'Oyuncu bilgileri', secResources:'Kaynaklar', secSpeeds:'Hız artırıcılar', secAvail:'Müsaitlik (UTC) *',
+    lblName:'Oyuncu adı *', lblPid:'Oyuncu ID', hintPid:'Profilinde bulunur — avatarına dokun → ID kopyala',
+    lblTg:'Gerçek altın', lblDust:'Gerçek altın tozu ✨',
+    lblGen:'1. Genel', lblCon:'2. İnşaat', lblRes:'3. Araştırma', lblTra:'4. Eğitim',
+    hintAvail:'Katılabileceğin günleri işaretle ve tercih ettiğin zaman aralığını gir',
+    btnSubmit:'⚔️ Programa katıl', submitting:'Gönderiliyor…',
+    errName:'Oyuncu adını gir.', errDay:'En az bir gün seç.',
+    errLoad:'Program yüklenemedi.', errSave:'Kaydetme başarısız. Tekrar dene.',
+    errDup:' zaten kuyrukta!',
+    successTitle:'Katıldın!', successMsg:' kuyruğa eklendi.',
+    successClose:'Bu sayfayı kapatabilirsin.', btnAgain:'Başka oyuncu gönder',
+    noSchedule:'Program ID bulunamadı. İttifak yetkilinin verdiği bağlantıyı kullan.',
+  },
+  ru: {
+    flag:'🇷🇺', name:'Русский',
+    subtitle:'Заполните данные для записи в расписание',
+    secPlayer:'Данные игрока', secResources:'Ресурсы', secSpeeds:'Ускорители', secAvail:'Доступность (UTC) *',
+    lblName:'Имя игрока *', lblPid:'ID игрока', hintPid:'Найдите в профиле — нажмите на аватар → скопировать ID',
+    lblTg:'Настоящее золото', lblDust:'Золотая пыль ✨',
+    lblGen:'1. Общий', lblCon:'2. Строительство', lblRes:'3. Исследования', lblTra:'4. Обучение',
+    hintAvail:'Отметьте дни участия и укажите предпочтительный временной промежуток',
+    btnSubmit:'⚔️ Записаться', submitting:'Отправка…',
+    errName:'Введите имя игрока.', errDay:'Выберите хотя бы один день.',
+    errLoad:'Не удалось загрузить расписание.', errSave:'Ошибка сохранения.',
+    errDup:' уже в очереди!',
+    successTitle:'Вы записаны!', successMsg:' добавлен в очередь.',
+    successClose:'Можете закрыть эту страницу.', btnAgain:'Отправить ещё игрока',
+    noSchedule:'ID расписания не найден. Используйте ссылку от офицера альянса.',
+  },
+  ar: {
+    flag:'🇸🇦', name:'العربية',
+    subtitle:'أدخل بياناتك للانضمام إلى الجدول',
+    secPlayer:'معلومات اللاعب', secResources:'الموارد', secSpeeds:'مسرّعات السرعة', secAvail:'التوفر (UTC) *',
+    lblName:'اسم اللاعب *', lblPid:'معرّف اللاعب', hintPid:'موجود في ملفك الشخصي — انقر على صورتك ← نسخ المعرّف',
+    lblTg:'الذهب الحقيقي', lblDust:'غبار الذهب ✨',
+    lblGen:'١. عام', lblCon:'٢. بناء', lblRes:'٣. بحث', lblTra:'٤. تدريب',
+    hintAvail:'حدّد الأيام التي يمكنك المشاركة فيها وأدخل الفترة الزمنية المفضّلة',
+    btnSubmit:'⚔️ انضم إلى الجدول', submitting:'جارٍ الإرسال…',
+    errName:'أدخل اسم اللاعب.', errDay:'حدد يومًا واحدًا على الأقل.',
+    errLoad:'تعذّر تحميل الجدول.', errSave:'فشل الحفظ. حاول مجدداً.',
+    errDup:' موجود بالفعل في الطابور!',
+    successTitle:'تمّ التسجيل!', successMsg:' تمّت إضافته إلى الطابور.',
+    successClose:'يمكنك إغلاق هذه الصفحة.', btnAgain:'إرسال لاعب آخر',
+    noSchedule:'معرّف الجدول غير موجود. استخدم الرابط الذي أرسله مسؤول التحالف.',
+  },
+  zh: {
+    flag:'🇨🇳', name:'中文',
+    subtitle:'填写您的信息以加入排班',
+    secPlayer:'玩家信息', secResources:'资源', secSpeeds:'加速道具', secAvail:'可用时间 (UTC) *',
+    lblName:'玩家名称 *', lblPid:'玩家ID', hintPid:'在个人资料中找到 — 点击头像 → 复制ID',
+    lblTg:'真金', lblDust:'真金尘 ✨',
+    lblGen:'1. 通用', lblCon:'2. 建筑', lblRes:'3. 研究', lblTra:'4. 训练',
+    hintAvail:'勾选您可以参与的日期，并输入您偏好的时间段',
+    btnSubmit:'⚔️ 加入排班', submitting:'提交中…',
+    errName:'请输入您的玩家名称。', errDay:'请至少选择一天。',
+    errLoad:'无法加载排班表。', errSave:'保存失败，请重试。',
+    errDup:' 已在队列中！',
+    successTitle:'已加入！', successMsg:' 已添加到队列中。',
+    successClose:'您可以关闭此页面。', btnAgain:'提交另一位玩家',
+    noSchedule:'未找到排班ID。请使用联盟官员提供的链接。',
+  },
+  ko: {
+    flag:'🇰🇷', name:'한국어',
+    subtitle:'일정에 참가하려면 정보를 입력하세요',
+    secPlayer:'플레이어 정보', secResources:'자원', secSpeeds:'속도 부스터', secAvail:'참가 가능 시간 (UTC) *',
+    lblName:'플레이어 이름 *', lblPid:'플레이어 ID', hintPid:'프로필에서 확인 — 아바타 탭 → ID 복사',
+    lblTg:'진짜 금', lblDust:'진짜 금가루 ✨',
+    lblGen:'1. 일반', lblCon:'2. 건설', lblRes:'3. 연구', lblTra:'4. 훈련',
+    hintAvail:'참가 가능한 날짜를 체크하고 선호 시간대를 입력하세요',
+    btnSubmit:'⚔️ 일정 참가', submitting:'제출 중…',
+    errName:'플레이어 이름을 입력하세요.', errDay:'최소 하루를 선택하세요.',
+    errLoad:'일정을 불러올 수 없습니다.', errSave:'저장 실패. 다시 시도하세요.',
+    errDup:' 은(는) 이미 대기열에 있습니다!',
+    successTitle:'참가 완료!', successMsg:' 이(가) 대기열에 추가되었습니다.',
+    successClose:'이 페이지를 닫을 수 있습니다.', btnAgain:'다른 플레이어 제출',
+    noSchedule:'일정 ID를 찾을 수 없습니다. 동맹 임원이 제공한 링크를 사용하세요.',
+  },
+  ja: {
+    flag:'🇯🇵', name:'日本語',
+    subtitle:'スケジュールに参加するには情報を入力してください',
+    secPlayer:'プレイヤー情報', secResources:'リソース', secSpeeds:'スピードブースト', secAvail:'参加可能時間 (UTC) *',
+    lblName:'プレイヤー名 *', lblPid:'プレイヤーID', hintPid:'プロフィールで確認 — アバターをタップ → IDをコピー',
+    lblTg:'真のゴールド', lblDust:'真のゴールドダスト ✨',
+    lblGen:'1. 一般', lblCon:'2. 建設', lblRes:'3. 研究', lblTra:'4. 訓練',
+    hintAvail:'参加できる日にチェックを入れ、希望の時間帯を入力してください',
+    btnSubmit:'⚔️ スケジュールに参加', submitting:'送信中…',
+    errName:'プレイヤー名を入力してください。', errDay:'少なくとも1日選択してください。',
+    errLoad:'スケジュールを読み込めません。', errSave:'保存に失敗しました。',
+    errDup:' はすでにキューにいます！',
+    successTitle:'参加完了！', successMsg:' がキューに追加されました。',
+    successClose:'このページを閉じることができます。', btnAgain:'別のプレイヤーを送信',
+    noSchedule:'スケジュールIDが見つかりません。アライアンス担当者のリンクを使用してください。',
+  },
+};
+
+// ══════════════════════════════════════════════
+//  LANG LOGIC
+// ══════════════════════════════════════════════
+let currentLang = 'en';
+
+function applyLang(code) {
+  currentLang = code;
+  const t = LANGS[code];
+  if (!t) return;
+  document.documentElement.lang = code;
+  // RTL for Arabic
+  document.body.dir = code === 'ar' ? 'rtl' : 'ltr';
+
+  const set = (id, txt) => { const el=document.getElementById(id); if(el) el.textContent=txt; };
+  set('t-subtitle',    t.subtitle);
+  set('t-sec-player',  t.secPlayer);
+  set('t-sec-resources', t.secResources);
+  set('t-sec-speeds',  t.secSpeeds);
+  set('t-sec-avail',   t.secAvail);
+  set('t-lbl-name',    t.lblName);
+  set('t-lbl-pid',     t.lblPid);
+  set('t-hint-pid',    t.hintPid);
+  set('t-lbl-tg',      t.lblTg);
+  set('t-lbl-dust',    t.lblDust);
+  set('t-lbl-gen',     t.lblGen);
+  set('t-lbl-con',     t.lblCon);
+  set('t-lbl-res',     t.lblRes);
+  set('t-lbl-tra',     t.lblTra);
+  set('t-hint-avail',  t.hintAvail);
+  set('btn-submit',    t.btnSubmit);
+  set('t-success-title', t.successTitle);
+  set('t-success-msg',   t.successMsg);
+  set('t-success-close', t.successClose);
+  set('t-btn-again',     t.btnAgain);
+  set('t-no-schedule',   t.noSchedule);
+
+  // Update active button
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === code));
+  // Save preference
+  try { localStorage.setItem('kvk_intake_lang', code); } catch(e){}
+}
+
+function buildLangBar() {
+  const bar = document.getElementById('lang-bar');
+  Object.entries(LANGS).forEach(([code, t]) => {
+    const btn = document.createElement('button');
+    btn.className = 'lang-btn';
+    btn.dataset.lang = code;
+    btn.textContent = t.flag + ' ' + t.name;
+    btn.onclick = () => applyLang(code);
+    bar.appendChild(btn);
+  });
+}
+
+// ══════════════════════════════════════════════
+//  SUPABASE + FORM
+// ══════════════════════════════════════════════
+const SUPABASE_URL = 'https://wyyysrjqkcvdixugkadl.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_sL2weLDcSf4Rsq1otKCy6Q_sRN9xIbG';
+const TABLE = 'kvk_schedules';
+let sb = null, scheduleId = null;
+
+window.addEventListener('DOMContentLoaded', () => {
+  buildLangBar();
+
+  // Detect browser language
+  const browserLang = (navigator.language || 'en').toLowerCase().slice(0,2);
+  const savedLang   = (() => { try { return localStorage.getItem('kvk_intake_lang'); } catch(e){ return null; } })();
+  const initLang    = savedLang || (LANGS[browserLang] ? browserLang : 'en');
+  applyLang(initLang);
+
+  // Schedule ID from URL
+  const params = new URLSearchParams(window.location.search);
+  scheduleId = params.get('schedule') || params.get('id') || window.location.hash.replace('#','').trim() || null;
+
+  if (!scheduleId || scheduleId.length !== 8) {
+    document.getElementById('form-body').style.display = 'none';
+    document.getElementById('no-schedule').style.display = 'block';
+    return;
+  }
+  document.getElementById('schedule-badge').textContent = 'Schedule: ' + scheduleId;
+  document.getElementById('schedule-badge').style.display = 'inline-block';
+
+  try { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e) {}
+  [1,2,4].forEach(d => toggleDay(d));
+});
+
+function toggleDay(day) {
+  const cb = document.getElementById('f-d'+day);
+  const tw = document.getElementById('tw-d'+day);
+  const active = cb.checked;
+  tw.classList.toggle('active', active);
+  tw.querySelectorAll('.time-in').forEach(el => el.disabled = !active);
+  if (!active) { document.getElementById('f-ps'+day).value=''; document.getElementById('f-pe'+day).value=''; }
+}
+
+function autoColon(el) {
+  let v = el.value.replace(/[^0-9:]/g,'');
+  if (v.length===2 && !v.includes(':')) v+=':';
+  if (v.length>5) v=v.slice(0,5);
+  el.value=v;
+}
+
+function extractTime(s) {
+  const m=(s||'').match(/(\d{1,2})\s*:\s*(\d{2})/);
+  if(!m) return null;
+  let h=parseInt(m[1]),mn=parseInt(m[2]);
+  if(h===24)h=0; if(h>23||mn>59) return null;
+  return String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0');
+}
+function parseTG(s){
+  if(!s)return 0;
+  s=s.replace(/,/g,'').trim().toLowerCase();
+  if(s.endsWith('k'))return Math.round(parseFloat(s)*1000);
+  return parseInt(s)||0;
+}
+function showError(msg){const el=document.getElementById('error-msg');el.textContent=msg;el.style.display='block';}
+function clearError(){document.getElementById('error-msg').style.display='none';}
+
+async function submitForm() {
+  clearError();
+  const t = LANGS[currentLang];
+  const name         = document.getElementById('f-name').value.trim();
+  const pid          = document.getElementById('f-pid').value.trim().replace(/^#\s*/,'');
+  const tg           = parseTG(document.getElementById('f-tg').value.trim());
+  const tgDust       = parseTG(document.getElementById('f-tgdust').value.trim());
+  const general      = document.getElementById('f-general').value.trim();
+  const construction = document.getElementById('f-construction').value.trim();
+  const research     = document.getElementById('f-research').value.trim();
+  const training     = document.getElementById('f-training').value.trim();
+  const d1=document.getElementById('f-d1').checked, d2=document.getElementById('f-d2').checked, d4=document.getElementById('f-d4').checked;
+
+  if (!name)           { showError(t.errName); return; }
+  if (!d1&&!d2&&!d4)  { showError(t.errDay);  return; }
+
+  function readPref(day){
+    const s=extractTime(document.getElementById('f-ps'+day).value.trim());
+    const e=extractTime(document.getElementById('f-pe'+day).value.trim()||'');
+    return s?[{s,e:e||''}]:[];
+  }
+  const dayPrefTimes={1:d1?readPref(1):[],2:d2?readPref(2):[],4:d4?readPref(4):[]};
+  const allTimes=[1,2,4].flatMap(d=>dayPrefTimes[d]);
+  const days=[]; if(d1)days.push('Day 1'); if(d2)days.push('Day 2'); if(d4)days.push('Day 4');
+
+  const player={
+    name,pid,tg,tgDust,general,construction,research,training,
+    total:'',prefStart:allTimes.length?allTimes[0].s:'',prefEnd:allTimes.length?allTimes[allTimes.length-1].e||'':'',
+    prefTimes:allTimes,dayPrefTimes,requestedDays:days,forDay:null,_qDay:d1?1:d2?2:4,
+    manual:false,submittedViaForm:true,id:Date.now(),
+  };
+
+  const btn=document.getElementById('btn-submit');
+  btn.disabled=true; btn.textContent=t.submitting;
+
+  try {
+    const {data,error}=await sb.from(TABLE).select('queue,version').eq('id',scheduleId).single();
+    if(error||!data) throw new Error(t.errLoad);
+    const queue=Array.isArray(data.queue)?data.queue:[];
+    const dup=queue.find(q=>q.name===player.name&&(pid&&q.pid?q.pid===pid:!pid&&!q.pid));
+    if(dup){ showError(name+t.errDup); btn.disabled=false; btn.textContent=t.btnSubmit; return; }
+    queue.push(player);
+    const {error:saveErr}=await sb.from(TABLE).update({queue,version:(data.version||1)+1}).eq('id',scheduleId);
+    if(saveErr) throw new Error(t.errSave);
+    document.getElementById('form-body').style.display='none';
+    document.getElementById('success-name').textContent=name;
+    document.getElementById('t-success-msg').textContent=t.successMsg;
+    document.getElementById('success-screen').style.display='flex';
+  } catch(e) {
+    showError(e.message||t.errSave);
+    btn.disabled=false; btn.textContent=t.btnSubmit;
+  }
+}
+
+function resetForm(){
+  ['f-name','f-pid','f-tg','f-tgdust','f-general','f-construction','f-research','f-training'].forEach(id=>document.getElementById(id).value='');
+  [1,2,4].forEach(d=>{ document.getElementById('f-d'+d).checked=false; document.getElementById('f-ps'+d).value=''; document.getElementById('f-pe'+d).value=''; toggleDay(d); });
+  clearError();
+  document.getElementById('success-screen').style.display='none';
+  document.getElementById('form-body').style.display='block';
+  const btn=document.getElementById('btn-submit');
+  btn.disabled=false; btn.textContent=LANGS[currentLang].btnSubmit;
+}
+</script>
+</body>
+</html>

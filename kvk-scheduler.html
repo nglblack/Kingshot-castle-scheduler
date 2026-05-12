@@ -338,6 +338,7 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
     <span class="lbl">Schedule ID:</span>
     <span class="session-id-display" id="session-id-display">—</span>
     <button class="btn sm" onclick="copyShareLink()" title="Copy shareable link">🔗 Share</button>
+    <button class="btn sm" onclick="copyIntakeLink()" title="Copy sign-up form link for alliance members" style="background:rgba(61,122,69,.1);border-color:rgba(61,122,69,.35);color:#3d7a45;">📋 Intake form</button>
     <button class="btn sm" onclick="promptLoadId()" title="Load by ID">📂 Load</button>
     <button class="btn sm primary" onclick="createNewSchedule()" title="Start fresh">＋ New</button>
     <span class="spacer"></span>
@@ -1013,6 +1014,12 @@ function copyShareLink() {
   if (!scheduleId) { toast('No schedule loaded.'); return; }
   const url = window.location.origin + window.location.pathname + '#' + scheduleId;
   navigator.clipboard.writeText(url).then(()=>toast('🔗 Share link copied!'));
+}
+function copyIntakeLink() {
+  if (!scheduleId) { toast('No schedule loaded yet.'); return; }
+  const base = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+  const url = base + 'kvk-intake.html?schedule=' + scheduleId;
+  navigator.clipboard.writeText(url).then(()=>toast('📋 Intake form link copied! Share with your alliance.'));
 }
 
 // ══════════════════════════════════════════════
