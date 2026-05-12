@@ -778,9 +778,9 @@ function subscribeRealtime(id) {
     }, payload => {
       if (ignoreNext) { ignoreNext = false; return; }   // our own write — skip
       const row = payload.new;
-      state.day1  = row.day1  || new Array(48).fill(null);
-      state.day2  = row.day2  || new Array(48).fill(null);
-      state.day4  = row.day4  || new Array(48).fill(null);
+      state.day1  = (Array.isArray(row.day1)&&row.day1.length===48) ? row.day1 : new Array(48).fill(null);
+      state.day2  = (Array.isArray(row.day2)&&row.day2.length===48) ? row.day2 : new Array(48).fill(null);
+      state.day4  = (Array.isArray(row.day4)&&row.day4.length===48) ? row.day4 : new Array(48).fill(null);
       state.queue = row.queue || [];
       scheduleVer = row.version;
       renderQueue(); renderGrid(); renderStats();
@@ -831,9 +831,9 @@ async function initSession() {
 function applyRow(row) {
   scheduleId  = row.id;
   scheduleVer = row.version;
-  state.day1  = row.day1  || new Array(48).fill(null);
-  state.day2  = row.day2  || new Array(48).fill(null);
-  state.day4  = row.day4  || new Array(48).fill(null);
+  state.day1  = (Array.isArray(row.day1)&&row.day1.length===48) ? row.day1 : new Array(48).fill(null);
+  state.day2  = (Array.isArray(row.day2)&&row.day2.length===48) ? row.day2 : new Array(48).fill(null);
+  state.day4  = (Array.isArray(row.day4)&&row.day4.length===48) ? row.day4 : new Array(48).fill(null);
   state.queue = row.queue || [];
   if (typeof state.startMinutes === 'number') startMinutes = state.startMinutes;
   localStorage.setItem('kvk_last_id', scheduleId);
