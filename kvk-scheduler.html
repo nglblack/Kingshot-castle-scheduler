@@ -1034,6 +1034,20 @@ function applySlotStart() {
 //  PARSE — robust, handles messy player input
 // ══════════════════════════════════════════════
 
+// Format name: keep [TAG] as prefix, strip trailing junk
+function formatName(raw) {
+  // Grab [TAG] if present at start
+  const tagMatch = raw.match(/^(\[[^\]]*\])/);
+  const tag = tagMatch ? tagMatch[1] : '';
+  // Strip the tag from raw, then strip inline IDs, parens, trailing numbers
+  let rest = raw.replace(/^\[[^\]]*\]/, '')
+                .replace(/\s*[\(#].*$/, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+  // Combine: "[WTF] FRED" or just "FRED"
+  return tag ? tag + ' ' + rest : rest;
+}
+
 // Parse "3k", "1.5k", "10,000", "3000" → number
 function parseTG(s) {
   if (!s) return 0;
@@ -1084,7 +1098,7 @@ function parseMsg(){
     if (!c) return true;
     if (/^\*+/.test(c)) return true;               // ** header lines
     if (/^please\s+use/i.test(c)) return true;      // "Please use this format"
-    if (/^(true\s*gold|tg\s*dust|general|construction|research|training|total|pref)/i.test(c)) return true;
+    if (/^(true\s*gold|tg\s*dust|general|construction|research|training|total|pref|player\s*id|\bid\s*:)/i.test(c)) return true;
     if (/^\d+[\.\)]/.test(c)) return true;        // numbered list items
     if (/^[#⏰]/.test(c)) return true;              // ID lines, pref time lines
     return false;
@@ -1105,23 +1119,25 @@ function parseMsg(){
     // Extract inline ID if present: "Name #123456" or "Name (123456)"
     const fm = nameLine.match(/^(.+?)\s*[#(]\s*(\d{6,})\s*[)]?\s*$/);
     if (fm) {
-      // Strip [TAG] brackets from name part
-      name = fm[1].replace(/\[[^\]]*\]/g, '').replace(/\s+/g,' ').trim();
+      name = formatName(fm[1]);
       pid  = fm[2];
     } else {
-      // No inline ID — strip [TAG] and any trailing parens
-      name = nameLine.replace(/\[[^\]]*\]/g, '').replace(/\s*[\(\[].*$/,'').replace(/\s+/g,' ').trim();
+      name = formatName(nameLine);
     }
   }
 
-  // Look for ID in lines near the name
+  // Look for ID in lines near the name — handle many formats
   if (!pid) {
-    for (let li = 0; li < Math.min(lines.length, nameLineIdx + 5); li++) {
+    for (let li = 0; li < Math.min(lines.length, nameLineIdx + 6); li++) {
       const l = lines[li].trim();
+      const cl = cleanLine(l);
+      // "Player ID: 123456" or "player id : 123456" or "ID: 123456"
+      const labelId = cl.match(/(?:player\s*id|\bid)[:\s]+([\d]{6,})/i);
+      if (labelId) { pid = labelId[1]; break; }
       // "# 123456" or "#123456 (player ID)"
-      const idm = l.match(/#\s*(\d{6,})/);
-      if (idm) { pid = idm[1]; break; }
-      // Bare standalone number on its own line e.g. "103687429"
+      const hashId = l.match(/#\s*(\d{6,})/);
+      if (hashId) { pid = hashId[1]; break; }
+      // Bare standalone number on its own line
       const bareId = l.match(/^(\d{6,})\s*(?:\(.*\))?\s*$/);
       if (bareId && li !== nameLineIdx) { pid = bareId[1]; break; }
     }
@@ -1164,7 +1180,7 @@ function parseMsg(){
     // Only replace when surrounded by non-digit or start/end/UTC/dash context
     const lNorm = lStripped.replace(/\b([01]\d|2[0-3])([0-5]\d)\b(?!\s*:)/g, '$1:$2');
     const cl3 = cleanLine(l);
-    const isPrefLine = /pref|preferred|⏰/i.test(cl3) ||
+    const isPrefLine = /pref|preferred|⏰|anytime|between/i.test(cl3) ||
                        /^\s*\d{1,2}\s*:\s*\d{2}/.test(lNorm);
 
     // Try full range: HH:MM – HH:MM (both sides must have real digits)
