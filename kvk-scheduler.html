@@ -566,6 +566,58 @@ True Gold: __126__
     </div>
   </div>
 
+  <!-- Queue edit modal -->
+  <div class="modal-bg" id="edit-modal">
+    <div class="modal" style="width:480px;max-height:90vh;overflow-y:auto;">
+      <div class="modal-title">
+        <span>✏️ Edit Player</span>
+        <button class="btn ghost" onclick="closeEditModal()">✕</button>
+      </div>
+
+      <div class="man-form" style="gap:0;">
+        <div class="man-row"><span class="man-lbl">Name *</span><input id="eq-name" type="text" class="man-input"></div>
+        <div class="man-row"><span class="man-lbl"># Player ID</span><input id="eq-pid" type="text" class="man-input"></div>
+        <div class="man-divider"></div>
+        <div class="man-row"><span class="man-lbl">True Gold</span><input id="eq-tg" type="text" class="man-input man-input-sm" placeholder="e.g. 3k"></div>
+        <div class="man-row"><span class="man-lbl">TG Dust ✨</span><input id="eq-tgdust" type="text" class="man-input man-input-sm" placeholder="e.g. 500k"></div>
+        <div class="man-divider"></div>
+        <div class="man-row"><span class="man-lbl man-num">1. General</span><input id="eq-general" type="text" class="man-input" placeholder="e.g. 19 days"></div>
+        <div class="man-row"><span class="man-lbl man-num">2. Construction</span><input id="eq-construction" type="text" class="man-input"></div>
+        <div class="man-row"><span class="man-lbl man-num">3. Research</span><input id="eq-research" type="text" class="man-input"></div>
+        <div class="man-row"><span class="man-lbl man-num">4. Training</span><input id="eq-training" type="text" class="man-input"></div>
+        <div class="man-divider"></div>
+        <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">⏰ Preferred times (UTC)</div>
+        <div class="man-day-row">
+          <span class="man-day-label d1" style="min-width:50px;">🏗️ Day 1</span>
+          <input id="eq-ps1" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+          <span class="man-dash">–</span>
+          <input id="eq-pe1" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+          <span class="man-utc">UTC</span>
+        </div>
+        <div class="man-day-row">
+          <span class="man-day-label d2" style="min-width:50px;">🔬 Day 2</span>
+          <input id="eq-ps2" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+          <span class="man-dash">–</span>
+          <input id="eq-pe2" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+          <span class="man-utc">UTC</span>
+        </div>
+        <div class="man-day-row">
+          <span class="man-day-label d4" style="min-width:50px;">⚔️ Day 4</span>
+          <input id="eq-ps4" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+          <span class="man-dash">–</span>
+          <input id="eq-pe4" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+          <span class="man-utc">UTC</span>
+        </div>
+      </div>
+
+      <div id="eq-error" class="man-error" style="margin-top:4px;"></div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeEditModal()">Cancel</button>
+        <button class="btn primary" onclick="saveEditModal()">Save changes</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Action sheet (mobile + desktop gear click) -->
   <div class="action-sheet-bg" id="action-sheet-bg" onclick="closeActionSheet()"></div>
   <div class="action-sheet" id="action-sheet">
@@ -1219,6 +1271,7 @@ function renderQueue(){
           +statsRow
           +prefRow
         +'</div>'
+        +'<button class="btn ghost" onclick="openEditModal('+p.id+')" title="Edit" style="font-size:13px;">✏️</button>'
         +'<button class="btn ghost" onclick="deleteFromQueue('+p.id+')">✕</button>'
       +'</div>'
       // day selector
@@ -1238,6 +1291,75 @@ function renderQueue(){
   }).join('');
 }
 function deleteFromQueue(id){state.queue=state.queue.filter(p=>p.id!==id);debouncedSave();renderQueue();renderStats();}
+
+let editingId = null;
+function openEditModal(id) {
+  const p = state.queue.find(q=>q.id===id);
+  if (!p) return;
+  editingId = id;
+
+  document.getElementById('eq-name').value        = p.name        || '';
+  document.getElementById('eq-pid').value         = p.pid         || '';
+  document.getElementById('eq-tg').value          = p.tg          ? p.tg.toLocaleString() : '';
+  document.getElementById('eq-tgdust').value      = p.tgDust      ? p.tgDust.toLocaleString() : '';
+  document.getElementById('eq-general').value     = p.general     || '';
+  document.getElementById('eq-construction').value= p.construction|| '';
+  document.getElementById('eq-research').value    = p.research    || '';
+  document.getElementById('eq-training').value    = p.training    || '';
+
+  // Per-day pref times
+  [1,2,4].forEach(d=>{
+    const dt = (p.dayPrefTimes && p.dayPrefTimes[d] && p.dayPrefTimes[d][0]) || null;
+    document.getElementById('eq-ps'+d).value = dt ? dt.s : '';
+    document.getElementById('eq-pe'+d).value = dt ? (dt.e||'') : '';
+  });
+
+  document.getElementById('eq-error').style.display='none';
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+  editingId = null;
+}
+
+function saveEditModal() {
+  const errEl = document.getElementById('eq-error');
+  errEl.style.display='none';
+  const name = document.getElementById('eq-name').value.trim();
+  if (!name) { errEl.textContent='Name is required.'; errEl.style.display='block'; return; }
+
+  const p = state.queue.find(q=>q.id===editingId);
+  if (!p) { closeEditModal(); return; }
+
+  p.name         = name;
+  p.pid          = document.getElementById('eq-pid').value.trim().replace(/^#\s*/,'');
+  p.tg           = parseTG(document.getElementById('eq-tg').value.trim());
+  p.tgDust       = parseTG(document.getElementById('eq-tgdust').value.trim());
+  p.general      = document.getElementById('eq-general').value.trim();
+  p.construction = document.getElementById('eq-construction').value.trim();
+  p.research     = document.getElementById('eq-research').value.trim();
+  p.training     = document.getElementById('eq-training').value.trim();
+
+  // Per-day pref times
+  if (!p.dayPrefTimes) p.dayPrefTimes = {};
+  [1,2,4].forEach(d=>{
+    const s = document.getElementById('eq-ps'+d).value.trim();
+    const e = document.getElementById('eq-pe'+d).value.trim();
+    const st = extractTime(s), et = extractTime(e||'');
+    p.dayPrefTimes[d] = st ? [{s:st, e:et||''}] : [];
+  });
+
+  // Update global prefTimes/prefStart from day pref times
+  const allTimes = [1,2,4].flatMap(d=>p.dayPrefTimes[d]||[]);
+  p.prefTimes  = allTimes;
+  p.prefStart  = allTimes.length ? allTimes[0].s : '';
+  p.prefEnd    = allTimes.length ? allTimes[allTimes.length-1].e||'' : '';
+
+  debouncedSave(); renderQueue(); renderStats();
+  toast(name+' updated.');
+  closeEditModal();
+}
 function setQueueDay(id, day) {
   const p = state.queue.find(q=>q.id===id);
   if (!p) return;
