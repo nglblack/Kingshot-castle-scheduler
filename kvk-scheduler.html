@@ -91,7 +91,17 @@ select:focus{border-color:#8b6914;}
 
 /* Queue */
 .q-empty{font-size:13px;color:#8b7a5a;text-align:center;padding:20px 0;}
-.qi{background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:7px;}
+.qi{background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:6px;}
+.qi-stats{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;}
+.qstat{font-size:10px;font-weight:700;padding:2px 6px;border-radius:12px;white-space:nowrap;}
+.qstat.tg{background:rgba(139,105,20,.12);color:#8b6914;border:1px solid rgba(139,105,20,.25);}
+.qstat.dust{background:rgba(139,58,139,.1);color:#8b3a8b;border:1px solid rgba(139,58,139,.2);}
+.qstat.spd{background:rgba(61,90,66,.08);color:#3d5a42;border:1px solid rgba(61,90,66,.2);}
+.qi-pref{font-size:10px;color:#6b4423;font-family:'Courier New',monospace;font-weight:600;}
+.qi-order{display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
+.qi-order button{padding:0 4px;width:22px;height:18px;border-radius:4px;border:1px solid rgba(139,111,71,.25);background:transparent;color:#8b7a5a;cursor:pointer;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.qi-order button:hover{background:#ede0cc;color:#4a3428;}
+.qi-order button:disabled{opacity:.25;cursor:default;}
 .qi-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
 .qi-name{font-size:13px;font-weight:700;color:#4a3428;}
 .qi-meta{font-size:11px;color:#8b7a5a;}
@@ -114,22 +124,26 @@ select:focus{border-color:#8b6914;}
 .open-ranges{font-size:12px;color:#3d7a45;font-family:'Courier New',monospace;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .open-count{font-size:11px;color:#8b7a5a;white-space:nowrap;}
 
-/* Table */
-.sched-wrap{flex:1;overflow-y:auto;}
-table{width:100%;border-collapse:collapse;table-layout:fixed;}
+/* Table — desktop */
+.sched-wrap{flex:1;overflow-y:auto;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;table-layout:fixed;min-width:560px;}
 thead th{font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.06em;padding:9px 14px;text-align:left;border-bottom:2px solid rgba(139,111,71,.2);background:#f5ebe0;position:sticky;top:0;z-index:10;}
-tbody td{padding:7px 14px;border-bottom:1px solid rgba(139,111,71,.1);vertical-align:middle;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#4a3428;}
+tbody td{padding:7px 12px;border-bottom:1px solid rgba(139,111,71,.1);vertical-align:middle;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#4a3428;}
+tbody td.t-name{overflow:visible;text-overflow:unset;white-space:normal;}
 .row-filled td{background:rgba(61,122,69,.05);}
 .row-filled:hover td{background:rgba(61,122,69,.1);}
 tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 .drag-over td{background:rgba(139,105,20,.12) !important;outline:2px dashed #8b6914;outline-offset:-2px;}
 .dragging{opacity:.25;pointer-events:none;}
-.t-time{font-family:'Courier New',monospace;font-size:12px;color:#8b7a5a;font-weight:700;white-space:nowrap;}
+.t-time{font-family:'Courier New',monospace;font-size:13px;color:#4a3428;font-weight:900;white-space:nowrap;}
 .t-end{font-size:11px;color:#b8a898;}
-.t-name{font-weight:700;color:#4a3428;}
+.t-name{font-weight:800;color:#4a3428;font-size:14px;white-space:normal;max-width:180px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 .t-tg{color:#8b6914;font-size:12px;font-weight:700;}
 .t-speed{font-size:11px;color:#8b7a5a;}
 .t-pref{font-size:11px;color:#6b4423;}
+.t-tgdust{font-size:12px;color:#8b3a8b;font-weight:700;}
+.col-pref{opacity:.6;}
+@media(max-width:900px){.col-pref{display:none;}}
 .t-empty{color:#b8a898;font-size:12px;}
 .handle{cursor:grab;color:#b8a898;font-size:18px;user-select:none;display:inline-block;line-height:1;padding:0 2px;}
 .handle:active{cursor:grabbing;color:#8b6914;}
@@ -142,6 +156,27 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 .act.q:hover{background:rgba(139,111,71,.15);}
 .act.del{border-color:transparent;color:#b8a898;}
 .act.del:hover{color:#c0392b;border-color:rgba(192,57,43,.3);background:rgba(192,57,43,.06);}
+
+/* ── Mobile table ── */
+@media(max-width:768px){
+  table{table-layout:auto;min-width:unset;width:100%;}
+  .col-end,.col-status,.th-handle,.td-handle,.th-actions{display:none;}
+  thead th:nth-child(n){position:static;}
+  tbody td:nth-child(n){position:static;background:unset !important;}
+  .row-acts{display:none;}
+  .t-pref{display:none;}
+  .t-name{font-size:13px;}
+  .t-tg,.t-tgdust,.t-speed{font-size:12px;}
+  /* Hide gear column on mobile — use row tap instead */
+  .td-tap-btn{display:none !important;}
+  .th-tap-btn{display:none !important;}
+  /* Show construction/speed col on mobile */
+  .t-speed{display:table-cell;}
+  .row-filled{cursor:pointer;}
+}
+/* Desktop: gear button visible */
+.td-tap-btn{display:table-cell;}
+.th-tap-btn{display:table-cell;}
 
 /* Status bar */
 .status-bar{padding:8px 18px;border-top:2px solid rgba(139,111,71,.2);display:flex;gap:18px;background:#ede0cc;flex-shrink:0;}
@@ -182,7 +217,83 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 .footer-divider{color:rgba(255,255,255,.3);font-size:1.1em;}
 .footer-copyright{color:rgba(232,220,200,.6);font-size:.85em;}
 
-@media(max-width:768px){.page-outer{padding:10px 10px 0;}h1.page-title{font-size:1.8em;}.layout{flex-direction:column;height:auto;}.sidebar{width:100%;min-width:unset;height:auto;max-height:380px;}.main{height:55vh;}}
+/* Action sheet (mobile row editor) */
+.action-sheet-bg{display:none;position:fixed;inset:0;background:rgba(74,52,40,.5);z-index:400;backdrop-filter:blur(2px);}
+.action-sheet-bg.open{display:block;}
+.action-sheet{
+  position:fixed;bottom:-100%;left:0;right:0;z-index:401;
+  background:#f5ebe0;border-radius:20px 20px 0 0;
+  border-top:3px solid rgba(139,111,71,.3);
+  padding:16px 20px 32px;
+  box-shadow:0 -8px 30px rgba(0,0,0,.3);
+  transition:bottom .3s cubic-bezier(.4,0,.2,1);
+  max-height:70vh;overflow-y:auto;
+}
+.action-sheet.open{bottom:0;}
+.action-sheet-handle{width:40px;height:4px;background:rgba(139,111,71,.3);border-radius:2px;margin:0 auto 14px;}
+.action-sheet-name{font-size:16px;font-weight:800;color:#4a3428;margin-bottom:2px;}
+.action-sheet-time{font-family:'Courier New',monospace;font-size:13px;color:#8b7a5a;font-weight:700;margin-bottom:12px;}
+
+@media(max-width:768px){
+  .page-outer{padding:10px 10px 0;}
+  h1.page-title{font-size:1.8em;}
+  .layout{flex-direction:column;height:auto;}
+  .sidebar{width:100%;min-width:unset;height:auto;max-height:380px;}
+  .main{height:55vh;}
+  /* row-acts hidden via .row-acts{display:none} in mobile table CSS above */
+}
+
+/* ── Desktop gear popover ── */
+.gear-popover{
+  position:fixed;z-index:500;
+  background:#f5ebe0;
+  border:2px solid rgba(139,111,71,.4);
+  border-radius:14px;
+  padding:16px 18px;
+  width:300px;
+  box-shadow:0 10px 32px rgba(0,0,0,.28);
+  display:none;
+}
+.gear-popover.open{display:block;}
+.gp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px;}
+.gp-name{font-size:15px;font-weight:800;color:#4a3428;line-height:1.2;}
+.gp-pid{font-size:10px;color:#8b7a5a;font-weight:600;margin-top:1px;}
+.gp-time{font-family:'Courier New',monospace;font-size:11px;color:#8b7a5a;font-weight:700;background:rgba(139,111,71,.08);padding:3px 7px;border-radius:5px;white-space:nowrap;}
+.gp-close{background:none;border:none;cursor:pointer;font-size:16px;color:#b8a898;padding:0;line-height:1;flex-shrink:0;}
+.gp-close:hover{color:#c0392b;}
+.gp-stats{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin-bottom:12px;background:#fff8f0;border:1px solid rgba(139,111,71,.15);border-radius:8px;padding:10px 12px;}
+.gp-stats .gk{font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;align-self:center;}
+.gp-stats .gv{font-size:13px;font-weight:700;color:#4a3428;align-self:center;}
+.gp-pref{font-size:11px;color:#6b4423;font-family:'Courier New',monospace;font-weight:600;background:rgba(107,68,35,.07);border:1px solid rgba(107,68,35,.15);border-radius:6px;padding:5px 9px;margin-bottom:12px;display:none;}
+.gp-section-label{font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+.gp-move-row{display:flex;gap:6px;align-items:center;margin-bottom:10px;}
+.gp-move-sel{flex:1;padding:7px 8px;font-size:13px;border-radius:8px;border:2px solid rgba(139,111,71,.25);background:#fff8f0;color:#4a3428;font-family:inherit;outline:none;cursor:pointer;}
+.gp-move-sel:focus{border-color:#8b6914;}
+.gp-act-row{display:flex;gap:6px;}
+.gp-act-btn{flex:1;padding:7px 8px;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;border:2px solid rgba(139,111,71,.25);background:#fff8f0;color:#4a3428;transition:.15s;font-family:inherit;text-align:center;}
+.gp-act-btn:hover{background:#ede0cc;border-color:rgba(139,111,71,.4);}
+.gp-act-btn.move-btn{background:linear-gradient(135deg,#8b6914,#6b5010);border-color:#6b5010;color:#ffd966;text-shadow:1px 1px 0 rgba(0,0,0,.3);}
+.gp-act-btn.move-btn:hover{opacity:.88;}
+.gp-act-btn.del-btn{border-color:rgba(192,57,43,.3);color:#c0392b;}
+.gp-act-btn.del-btn:hover{background:rgba(192,57,43,.08);}
+
+@media(max-width:768px){
+  .gear-popover{display:none !important;}
+}
+
+/* ── Manual entry form ── */
+.man-form{display:flex;flex-direction:column;gap:0;}
+.man-row{display:flex;align-items:center;gap:8px;padding:5px 0;}
+.man-lbl{font-size:11px;font-weight:700;color:#8b7a5a;width:110px;flex-shrink:0;white-space:nowrap;}
+.man-lbl.man-num{color:#6b4423;}
+.man-input{flex:1;background:#fff8f0;border:1.5px solid rgba(139,111,71,.2);border-radius:6px;color:#4a3428;font-size:12px;padding:5px 8px;outline:none;transition:border .15s;font-family:inherit;min-width:0;}
+.man-input:focus{border-color:#8b6914;}
+.man-input::placeholder{color:#c8b8a8;}
+.man-input-sm{max-width:100px;}
+.man-time-input{width:68px;flex:none;font-family:'Courier New',monospace;font-weight:700;text-align:center;}
+.man-divider{height:1px;background:rgba(139,111,71,.12);margin:6px 0;}
+.man-check{display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:#4a3428;font-weight:600;}
+.man-check input{width:13px;height:13px;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -228,6 +339,7 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
           <button class="btn sm primary" onclick="applySlotStart()" style="padding:3px 9px;font-size:11px;">Apply</button>
         </div>
         <button class="btn sm" onclick="openCopyModal('d1')">📋 Day 1 open slots</button>
+        <button class="btn sm" onclick="openCopyModal('d2')">📋 Day 2 open slots</button>
         <button class="btn sm" onclick="openCopyModal('d4')">📋 Day 4 open slots</button>
         <button class="btn sm warn" onclick="showReset()">Reset all</button>
       </div>
@@ -265,38 +377,78 @@ True Gold: __126__
           </div>
           <div style="border-top:2px solid rgba(139,111,71,.15);padding-top:10px;">
             <div class="slabel" style="margin-bottom:8px">✏️ Manual entry</div>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <input id="man-name" type="text" placeholder="Player name *">
-              <input id="man-pid"  type="text" placeholder="Player ID (optional)">
-              <div style="display:flex;gap:12px;align-items:center;">
-                <span style="font-size:12px;color:#8b7a5a;font-weight:600;">Day:</span>
-                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;color:#4a3428;font-weight:600;"><input type="checkbox" id="man-d1" style="accent-color:#8b6914;width:14px;height:14px;cursor:pointer;"> Day 1</label>
-                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;color:#4a3428;font-weight:600;"><input type="checkbox" id="man-d4" style="accent-color:#8b6914;width:14px;height:14px;cursor:pointer;"> Day 4</label>
+
+            <!-- Official form template -->
+            <div class="man-form">
+
+              <div class="man-row">
+                <span class="man-lbl">Player name *</span>
+                <input id="man-name" type="text" class="man-input" placeholder="[ABC] Player Name">
               </div>
-              <div style="display:flex;flex-direction:column;gap:6px;">
-                <span style="font-size:12px;color:#8b7a5a;font-weight:600;">Pref time window (UTC):</span>
-                <div style="display:flex;gap:6px;align-items:center;">
-                  <span style="font-size:11px;color:#8b7a5a;font-weight:600;white-space:nowrap;">From:</span>
-                  <select id="man-pref-sh">
-                    <option value="">hr</option><option value="00">00</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
-                  </select>
-                  <span style="color:#8b7a5a;font-weight:700;">:</span>
-                  <select id="man-pref-sm">
-                    <option value="">min</option><option value="00">00</option><option value="30">30</option>
-                  </select>
-                  <span style="font-size:11px;color:#8b7a5a;font-weight:600;white-space:nowrap;margin-left:6px;">To:</span>
-                  <select id="man-pref-eh">
-                    <option value="">hr</option><option value="00">00</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
-                  </select>
-                  <span style="color:#8b7a5a;font-weight:700;">:</span>
-                  <select id="man-pref-em">
-                    <option value="">min</option><option value="00">00</option><option value="30">30</option>
-                  </select>
+
+              <div class="man-row">
+                <span class="man-lbl"># Player ID</span>
+                <input id="man-pid" type="text" class="man-input" placeholder="123456789">
+              </div>
+
+              <div class="man-divider"></div>
+
+              <div class="man-row">
+                <span class="man-lbl">True Gold</span>
+                <input id="man-tg" type="text" class="man-input man-input-sm" placeholder="e.g. 3k or 3000">
+              </div>
+
+              <div class="man-row">
+                <span class="man-lbl">True Gold Dust ✨</span>
+                <input id="man-tgdust" type="text" class="man-input man-input-sm" placeholder="e.g. 500k">
+              </div>
+
+              <div class="man-divider"></div>
+
+              <div class="man-row">
+                <span class="man-lbl man-num">1. General</span>
+                <input id="man-general" type="text" class="man-input" placeholder="e.g. 19 days">
+              </div>
+              <div class="man-row">
+                <span class="man-lbl man-num">2. Construction</span>
+                <input id="man-construction" type="text" class="man-input" placeholder="e.g. 11 days 8hr">
+              </div>
+              <div class="man-row">
+                <span class="man-lbl man-num">3. Research</span>
+                <input id="man-research" type="text" class="man-input" placeholder="e.g. 6 days 11hr">
+              </div>
+              <div class="man-row">
+                <span class="man-lbl man-num">4. Training</span>
+                <input id="man-training" type="text" class="man-input" placeholder="e.g. 3 days 20hr">
+              </div>
+
+              <div class="man-divider"></div>
+
+              <div class="man-row" style="align-items:flex-start;gap:6px;">
+                <span class="man-lbl" style="padding-top:2px;">⏰ Pref time UTC</span>
+                <div style="display:flex;flex-direction:column;gap:4px;flex:1;">
+                  <div style="display:flex;gap:5px;align-items:center;">
+                    <input id="man-pref-s" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+                    <span style="color:#8b7a5a;font-weight:700;font-size:13px;">–</span>
+                    <input id="man-pref-e" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+                    <span style="font-size:11px;color:#8b7a5a;">UTC</span>
+                  </div>
+                  <div style="font-size:10px;color:#b8a898;">Add more ranges separated by comma e.g. 12:00–24:00</div>
+                  <input id="man-pref-extra" type="text" class="man-input" placeholder="Extra range e.g. 12:00–24:00 (optional)" style="font-size:11px;">
                 </div>
               </div>
-              <input id="man-tg" type="number" min="0" placeholder="True Gold (optional)">
-              <div id="man-error" class="man-error"></div>
-              <button class="btn primary full" onclick="submitManual()">+ Add to queue</button>
+
+              <div class="man-divider"></div>
+
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                <span style="font-size:12px;color:#8b7a5a;font-weight:600;">Schedule for:</span>
+                <label class="man-check"><input type="checkbox" id="man-d1" style="accent-color:#8b6914;"> Day 1</label>
+                <label class="man-check"><input type="checkbox" id="man-d2" style="accent-color:#8b6914;"> Day 2</label>
+                <label class="man-check"><input type="checkbox" id="man-d4" style="accent-color:#8b6914;"> Day 4</label>
+              </div>
+
+              <div id="man-error" class="man-error" style="margin-top:4px;"></div>
+              <button class="btn primary full" onclick="submitManual()" style="margin-top:8px;">+ Add to queue</button>
             </div>
           </div>
         </div>
@@ -311,6 +463,7 @@ True Gold: __126__
         <div class="main-hdr">
           <div class="dtabs">
             <button class="dtab active" onclick="switchDay(1)">Day 1 — Building 🏗️</button>
+            <button class="dtab"        onclick="switchDay(2)">Day 2 — Research 🔬</button>
             <button class="dtab"        onclick="switchDay(4)">Day 4 — Training ⚔️</button>
           </div>
           <span class="fill-stat" id="fill-stat"></span>
@@ -326,20 +479,101 @@ True Gold: __126__
         <div class="sched-wrap">
           <table id="sched-table">
             <colgroup>
-              <col style="width:32px"><col style="width:82px"><col style="width:76px">
-              <col><col style="width:82px"><col style="width:130px">
-              <col style="width:110px"><col style="width:60px"><col style="width:118px">
+              <col class="th-handle" style="width:28px">
+              <col style="width:72px">
+              <col style="width:auto">
+              <col id="col-a-col" style="width:100px">
+              <col id="col-b-col" style="width:110px">
+              <col id="col-c-col" style="width:120px">
+              <col style="width:36px">
             </colgroup>
-            <thead><tr><th></th><th>Start</th><th>End</th><th>Player</th><th>TG</th><th>Key Speed</th><th>Pref window</th><th>Status</th><th></th></tr></thead>
+            <thead><tr>
+              <th class="th-handle"></th>
+              <th>Start</th>
+              <th>Player</th>
+              <th id="col-a-hdr">TG</th>
+              <th id="col-b-hdr">TG Dust</th>
+              <th id="col-c-hdr">Construction</th>
+              <th class="th-tap-btn" style="padding:0;"></th>
+            </tr></thead>
             <tbody id="sched-body"></tbody>
           </table>
         </div>
         <div class="status-bar">
           <div class="stat-pill">Day 1: <span class="n" id="s-d1">0</span>/48 filled</div>
+          <div class="stat-pill">Day 2: <span class="n" id="s-d2">0</span>/48 filled</div>
           <div class="stat-pill">Day 4: <span class="n" id="s-d4">0</span>/48 filled</div>
           <div class="stat-pill">Queue: <span class="n" id="s-q">0</span></div>
         </div>
       </main>
+    </div>
+  </div>
+
+  <!-- Desktop gear popover -->
+  <div class="gear-popover" id="gear-popover">
+    <div class="gp-header">
+      <div>
+        <div class="gp-name" id="gp-name"></div>
+        <div class="gp-pid" id="gp-pid"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <span class="gp-time" id="gp-time"></span>
+        <button class="gp-close" onclick="closeGearPopover()">✕</button>
+      </div>
+    </div>
+    <div class="gp-stats" id="gp-grid"></div>
+    <div class="gp-pref" id="gp-pref"></div>
+    <div class="gp-section-label">Move to slot</div>
+    <div class="gp-move-row">
+      <select class="gp-move-sel" id="gp-move-sel">
+        <option value="">Pick a slot…</option>
+      </select>
+      <button class="gp-act-btn move-btn" onclick="gpMove()">Move →</button>
+    </div>
+    <div class="gp-act-row">
+      <button class="gp-act-btn" onclick="gpQueue()">↩ Return to queue</button>
+      <button class="gp-act-btn del-btn" onclick="gpDelete()">✕ Remove</button>
+    </div>
+  </div>
+
+  <!-- Action sheet (mobile + desktop gear click) -->
+  <div class="action-sheet-bg" id="action-sheet-bg" onclick="closeActionSheet()"></div>
+  <div class="action-sheet" id="action-sheet">
+    <div class="action-sheet-handle"></div>
+
+    <!-- Header: name + current slot -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;">
+      <div>
+        <div class="action-sheet-name" id="as-name"></div>
+        <div class="action-sheet-time" id="as-time"></div>
+      </div>
+      <button class="btn ghost" onclick="closeActionSheet()" style="font-size:18px;padding:2px 6px;">✕</button>
+    </div>
+
+    <!-- Player details grid -->
+    <div id="as-details" style="background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:10px;padding:12px;margin-bottom:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;"></div>
+
+    <!-- Preferred time -->
+    <div id="as-pref-wrap" style="margin-bottom:14px;display:none;">
+      <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;">Preferred Window</div>
+      <div id="as-pref" style="font-size:13px;color:#6b4423;font-weight:600;font-family:'Courier New',monospace;"></div>
+    </div>
+
+    <!-- Move to slot -->
+    <div style="margin-bottom:10px;">
+      <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">Move to slot</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <select id="as-move-sel" style="flex:1;padding:8px 10px;font-size:14px;border-radius:8px;border:2px solid rgba(139,111,71,.25);background:#fff8f0;color:#4a3428;font-family:inherit;outline:none;">
+          <option value="">Pick a slot…</option>
+        </select>
+        <button class="btn primary" onclick="actionSheetMove()" style="white-space:nowrap;">Move →</button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:8px;">
+      <button class="btn full" onclick="actionSheetQueue()" style="flex:1;">↩ Return to queue</button>
+      <button class="btn warn" onclick="actionSheetDelete()" style="flex:1;">✕ Remove</button>
     </div>
   </div>
 
@@ -405,7 +639,7 @@ function initSB() {
 // ══════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════
-let state       = { queue:[], day1:new Array(48).fill(null), day4:new Array(48).fill(null) };
+let state       = { queue:[], day1:new Array(48).fill(null), day2:new Array(48).fill(null), day4:new Array(48).fill(null) };
 let currentDay  = 1;
 let parsed      = null;
 let modalDay    = 'd1';
@@ -451,7 +685,7 @@ async function cloudCreate() {
   if (!sb) return null;
   const id = genId();
   const { data, error } = await sb.from(TABLE)
-    .insert([{ id, name: genName(), day1: state.day1, day4: state.day4, queue: state.queue, version: 1 }])
+    .insert([{ id, name: genName(), day1: state.day1, day2: state.day2, day4: state.day4, queue: state.queue, version: 1 }])
     .select().single();
   return error ? null : data;
 }
@@ -461,7 +695,7 @@ async function cloudSave() {
   setSyncStatus('saving');
   ignoreNext = true;
   const { data, error } = await sb.from(TABLE)
-    .update({ day1: state.day1, day4: state.day4, queue: state.queue, version: scheduleVer + 1 })
+    .update({ day1: state.day1, day2: state.day2, day4: state.day4, queue: state.queue, version: scheduleVer + 1 })
     .eq('id', scheduleId)
     .select().single();
   if (error) {
@@ -495,6 +729,7 @@ function subscribeRealtime(id) {
       if (ignoreNext) { ignoreNext = false; return; }   // our own write — skip
       const row = payload.new;
       state.day1  = row.day1  || new Array(48).fill(null);
+      state.day2  = row.day2  || new Array(48).fill(null);
       state.day4  = row.day4  || new Array(48).fill(null);
       state.queue = row.queue || [];
       scheduleVer = row.version;
@@ -547,6 +782,7 @@ function applyRow(row) {
   scheduleId  = row.id;
   scheduleVer = row.version;
   state.day1  = row.day1  || new Array(48).fill(null);
+  state.day2  = row.day2  || new Array(48).fill(null);
   state.day4  = row.day4  || new Array(48).fill(null);
   state.queue = row.queue || [];
   if (typeof state.startMinutes === 'number') startMinutes = state.startMinutes;
@@ -557,7 +793,7 @@ function applyRow(row) {
 }
 
 async function createNewSchedule() {
-  state = { queue:[], day1:new Array(48).fill(null), day4:new Array(48).fill(null) };
+  state = { queue:[], day1:new Array(48).fill(null), day2:new Array(48).fill(null), day4:new Array(48).fill(null) };
   renderQueue(); renderGrid(); renderStats();
   const row = await cloudCreate();
   if (!row) { setSyncStatus('error'); setSaveInfo('⚠️ Could not create cloud schedule'); return; }
@@ -594,6 +830,14 @@ function slotTime(i) {
 }
 function slotEnd(i) { return slotTime((i + 1) % 48); }
 function slotShort(i) { return slotTime(i) + ' UTC'; }
+
+// Auto-colon for manual pref time inputs
+function autoColonManual(el) {
+  let v = el.value.replace(/[^0-9:]/g,'');
+  if (v.length === 2 && !v.includes(':')) v = v + ':';
+  if (v.length > 5) v = v.slice(0,5);
+  el.value = v;
+}
 
 // Auto-insert colon after 2 digits
 function autoColonSlotInput(el) {
@@ -638,53 +882,191 @@ function applySlotStart() {
 }
 
 // ══════════════════════════════════════════════
-//  PARSE
+//  PARSE — robust, handles messy player input
 // ══════════════════════════════════════════════
+
+// Parse "3k", "1.5k", "10,000", "3000" → number
+function parseTG(s) {
+  if (!s) return 0;
+  s = s.replace(/,/g,'').trim().toLowerCase();
+  if (s.endsWith('k')) return Math.round(parseFloat(s)*1000);
+  return parseInt(s)||0;
+}
+
+// Extract a time HH:MM from messy text like "00:00", "0:00", "24:00"→"00:00"
+function extractTime(s) {
+  const m = s.match(/(\d{1,2})\s*:\s*(\d{2})/);
+  if (!m) return null;
+  let h = parseInt(m[1]), min = parseInt(m[2]);
+  if (h === 24) h = 0;
+  if (h > 23 || min > 59) return null;
+  return String(h).padStart(2,'0') + ':' + String(min).padStart(2,'0');
+}
+
+// Strip non-printable / special unicode (emoji, □, etc.) from a line
+function cleanLine(line) {
+  // Keep ASCII printable + common punctuation + digits + spaces
+  return line.replace(/[^\x20-\x7E]/g, ' ').replace(/\s+/g,' ').trim();
+}
+
+// Strip numbered list prefix and category label, return just the value
+function extractDuration(line) {
+  const c = cleanLine(line);
+  const val = c
+    .replace(/^\s*\d+[\.\)]\s*/, '')   // "1. " or "1) "
+    .replace(/^[\w\s]+[:\-]\s*/, '')    // "General : " or "Training - "
+    .trim();
+  // Reject template placeholders like ____, __, or just dashes
+  if (!val || /^[_\-\.\s]+$/.test(val)) return '';
+  return val;
+}
+
 function parseMsg(){
   const raw=document.getElementById('paste-in').value.trim();
   if(!raw){toast('Paste a player message first.');return;}
   const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
-  let name='',pid='',tg=0,general='',training='',construction='',research='',total='',prefStart='',prefEnd='';
-  const first=lines[0]||'';
-  const fm=first.match(/^(.+?)\s+(\d{6,})/);
-  if(fm){name=fm[1].trim();pid=fm[2];}else{name=first.replace(/\s*\(.*?\)/g,'').trim();const pm=first.match(/\((\d+)\)/);if(pm)pid=pm[1];}
+  let name='',pid='',tg=0,tgDust=0,general='',training='',construction='',research='',total='';
+  let prefTimes=[];
+
+  // ── Find name and ID ──
+  // Skip template/header lines: lines starting with *, #, numbers-only, or common labels
+  function isTemplateLine(l) {
+    const c = l.trim();
+    if (!c) return true;
+    if (/^\*+/.test(c)) return true;               // ** header lines
+    if (/^please\s+use/i.test(c)) return true;      // "Please use this format"
+    if (/^(true\s*gold|tg\s*dust|general|construction|research|training|total|pref)/i.test(c)) return true;
+    if (/^\d+[\.\)]/.test(c)) return true;        // numbered list items
+    if (/^[#⏰]/.test(c)) return true;              // ID lines, pref time lines
+    return false;
+  }
+
+  // Find the first non-template line as the name line
+  let nameLine = '';
+  let nameLineIdx = -1;
+  for (let li = 0; li < lines.length; li++) {
+    if (!isTemplateLine(lines[li])) {
+      nameLine = lines[li].trim();
+      nameLineIdx = li;
+      break;
+    }
+  }
+
+  if (nameLine) {
+    // Extract inline ID if present: "Name #123456" or "Name (123456)"
+    const fm = nameLine.match(/^(.+?)\s*[#(]\s*(\d{6,})\s*[)]?\s*$/);
+    if (fm) {
+      // Strip [TAG] brackets from name part
+      name = fm[1].replace(/\[[^\]]*\]/g, '').replace(/\s+/g,' ').trim();
+      pid  = fm[2];
+    } else {
+      // No inline ID — strip [TAG] and any trailing parens
+      name = nameLine.replace(/\[[^\]]*\]/g, '').replace(/\s*[\(\[].*$/,'').replace(/\s+/g,' ').trim();
+    }
+  }
+
+  // Look for standalone # ID line or inline digits anywhere near the name
+  if (!pid) {
+    for (let li = 0; li < Math.min(lines.length, nameLineIdx + 5); li++) {
+      // "# 123456" or "#123456 (player ID)"
+      const idm = lines[li].match(/#\s*(\d{6,})/);
+      if (idm) { pid = idm[1]; break; }
+    }
+  }
+  // Last fallback: name line ends with bare digits e.g. "MYS Agathors 102900744"
+  if (!pid && nameLine) {
+    const trailing = nameLine.match(/\s(\d{6,})\s*$/);
+    if (trailing) {
+      pid  = trailing[1];
+      name = name.replace(trailing[1], '').replace(/\s+/g,' ').trim();
+    }
+  }
+
   lines.forEach(l=>{
-    const tgm=l.match(/true\s*gold[:\s_*]*(\d+)/i);if(tgm)tg=parseInt(tgm[1]);
-    const gm=l.match(/general[:\s]+(.+)/i);if(gm)general=gm[1].trim();
-    const tm=l.match(/training[:\s]+(.+)/i);if(tm)training=tm[1].trim();
-    const cm=l.match(/construction[:\s]+(.+)/i);if(cm)construction=cm[1].trim();
-    const rm=l.match(/research[:\s]+(.+)/i);if(rm)research=rm[1].trim();
-    const tlm=l.match(/total[:\s]+(.+)/i);if(tlm)total=tlm[1].trim();
-    const pm=l.match(/(?:preferred?|pref(?:er+ed?)?)\s*time[^:]*[:_\s]+_*(\d{1,2})_*:(\d{2})\s*UTC\s*[-–]\s*_*(\d{1,2})_*:(\d{2})/i);
-    if(pm){prefStart=pm[1].padStart(2,'0')+':'+pm[2];prefEnd=pm[3].padStart(2,'0')+':'+pm[4];}
-    else{const pm2=l.match(/(?:⏰|preferred?|pref(?:er+ed?)?)[^0-9]*(\d{1,2})[:\s._*]+(\d{2})/i);if(pm2){prefStart=pm2[1].padStart(2,'0')+':'+pm2[2];const tot=parseInt(pm2[1])*60+parseInt(pm2[2])+30;prefEnd=String(Math.floor(tot/60)%24).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');}}
+    const cl2=cleanLine(l);
+    // TG Dust — check FIRST so "True Gold Dust" line doesn't match "True Gold"
+    if(!tgDust){
+      const tdm=cl2.match(/(?:true\s*gold\s*dust|tg\s*dust)[:\s_*]*([0-9][0-9,\.]*k?)/i);
+      if(tdm) tgDust=parseTG(tdm[1]);
+    }
+    // TG — only match lines that don't also contain "dust"
+    if(!tg){
+      if(!/dust/i.test(cl2)){
+        const tgm=cl2.match(/(?:true\s*gold|\btg\b)[:\s_*]*([0-9][0-9,\.]*k?)/i);
+        if(tgm) tg=parseTG(tgm[1]);
+      }
+    }
+
+    // Speed categories — strip special chars first, then match
+    const cl = cleanLine(l);
+    if(!general      && /gen(eral)?\s*[:\-]/i.test(cl))         general      = extractDuration(l);
+    if(!training     && /train(ing)?\s*[:\-]/i.test(cl))        training     = extractDuration(l);
+    if(!construction && /con(str(uction)?)?\s*[:\-]/i.test(cl)) construction = extractDuration(l);
+    if(!research     && /res(earch)?\s*[:\-]/i.test(cl))        research     = extractDuration(l);
+    if(!total        && /total\s*[:\-]/i.test(cl))              total        = extractDuration(l);
+
+    // Pref time — strip underscores, normalise bare 4-digit times to HH:MM
+    const lStripped = l.replace(/_/g,' ');
+    // Convert bare 4-digit times: 1400 → 14:00, 0200 → 02:00
+    // Only replace when surrounded by non-digit or start/end/UTC/dash context
+    const lNorm = lStripped.replace(/\b([01]\d|2[0-3])([0-5]\d)\b(?!\s*:)/g, '$1:$2');
+    const cl3 = cleanLine(l);
+    const isPrefLine = /pref|preferred|⏰/i.test(cl3) ||
+                       /^\s*\d{1,2}\s*:\s*\d{2}/.test(lNorm);
+
+    // Try full range: HH:MM – HH:MM (both sides must have real digits)
+    const trRe=/(\d{1,2}\s*:\s*\d{2})\s*(?:UTC)?\s*[-–—]\s*(\d{1,2}\s*:\s*\d{2})\s*(?:UTC)?/g;
+    let rm, foundOnLine=false;
+    while((rm=trRe.exec(lNorm))!==null){
+      const s=extractTime(rm[1]), e=extractTime(rm[2]);
+      if(s){ prefTimes.push({s, e:e||s}); foundOnLine=true; }
+    }
+    // If no full range found but line looks like a pref line,
+    // grab any single valid time (handles "__:__" blank end)
+    if(!foundOnLine && isPrefLine){
+      const singleRe=/(\d{1,2}\s*:\s*\d{2})/g;
+      let sm;
+      while((sm=singleRe.exec(lNorm))!==null){
+        const s=extractTime(sm[1]);
+        if(s && !prefTimes.find(t=>t.s===s)) prefTimes.push({s, e:''});
+      }
+    }
   });
+
+  const prefStart = prefTimes.length ? prefTimes[0].s : '';
+  const prefEnd   = prefTimes.length ? prefTimes[prefTimes.length-1].e : '';
+
   if(!name){toast('Could not parse player name.');return;}
-  parsed={name,pid,tg,general,training,construction,research,total,prefStart,prefEnd,requestedDays:['Day 1','Day 4'],id:Date.now()};
+  parsed={name,pid,tg,tgDust,general,training,construction,research,total,
+          prefStart,prefEnd,prefTimes,requestedDays:['Day 1','Day 4'],id:Date.now()};
+
   document.getElementById('pv-name').textContent=name;
   document.getElementById('pv-pid').textContent=pid?'ID: '+pid:'No ID found';
-  document.getElementById('pv-stats').innerHTML=[['General',general||'—'],['Training',training||'—'],['Construction',construction||'—'],['Research',research||'—'],['Total',total||'—'],['TG',tg?tg.toLocaleString():'—']].map(([k,v])=>'<div class="pv-row"><b>'+k+'</b><br>'+v+'</div>').join('');
-  document.getElementById('pv-pref').innerHTML=prefStart?'<span class="pref-pill">⏰ '+prefStart+' – '+prefEnd+' UTC</span>':'<span class="pref-pill" style="background:rgba(192,57,43,.08);color:#c0392b;border-color:rgba(192,57,43,.2);">No time preference</span>';
+  document.getElementById('pv-stats').innerHTML=[
+    ['General',general||'—'],['Training',training||'—'],
+    ['Construction',construction||'—'],['Research',research||'—'],
+    ['Total',total||'—'],['TG',tg?tg.toLocaleString():'—'],['TG Dust (D1)',tgDust?tgDust.toLocaleString():'—']
+  ].map(([k,v])=>'<div class="pv-row"><b>'+k+'</b><br>'+v+'</div>').join('');
+
+  const prefLabel = prefTimes.length
+    ? '⏰ ' + prefTimes.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?' – '+t.e:'')).join('  |  ') + ' UTC'
+    : null;
+  document.getElementById('pv-pref').innerHTML = prefLabel
+    ? '<span class="pref-pill">'+prefLabel+'</span>'
+    : '<span class="pref-pill" style="background:rgba(192,57,43,.08);color:#c0392b;border-color:rgba(192,57,43,.2);">No time preference</span>';
   document.getElementById('pv-card').classList.add('show');
 }
 function clearPv(){parsed=null;document.getElementById('pv-card').classList.remove('show');}
 
 function addToQueue(){
   if(!parsed){toast('Nothing parsed yet.');return;}
-  // Add a separate queue entry for each requested day
-  const days = parsed.requestedDays && parsed.requestedDays.length ? parsed.requestedDays : ['Day 1','Day 4'];
-  let added = 0;
-  days.forEach(day => {
-    const forDay = day === 'Day 1' ? 1 : 4;
-    const alreadyInQueue = state.queue.find(q => q.name===parsed.name && q.pid===parsed.pid && q.forDay===forDay);
-    const alreadyScheduled = (forDay===1 ? state.day1 : state.day4).find(s => s && s.name===parsed.name && s.pid===parsed.pid);
-    if (alreadyInQueue || alreadyScheduled) return; // skip this day — already there
-    state.queue.push({...parsed, id: Date.now() + forDay, forDay});
-    added++;
-  });
-  if (!added) { toast(parsed.name+' is already queued/scheduled for all selected days.'); return; }
+  if(state.queue.find(q=>q.name===parsed.name&&q.pid===parsed.pid)){
+    toast(parsed.name+' is already in the queue.'); return;
+  }
+  // Single entry — day is chosen from the queue card
+  state.queue.push({...parsed, id: Date.now(), forDay: null});
   debouncedSave();renderQueue();renderStats();
-  toast(parsed.name+' added to queue' + (added > 1 ? ' for both days' : '') + '.');
+  toast(parsed.name+' added to queue.');
   clearPv();document.getElementById('paste-in').value='';switchSTab('queue');
 }
 
@@ -694,80 +1076,461 @@ function addToQueue(){
 function renderQueue(){
   const el=document.getElementById('queue-list');
   if(!state.queue.length){el.innerHTML='<div class="q-empty">No players in queue</div>';return;}
-  function mkOpts(grid,day){return grid.map((s,i)=>s?'':'<option value="'+day+'-'+i+'">'+slotTime(i)+' – '+slotEnd(i)+'</option>').join('');}
+
+  // All open slots for a given day — no pref filtering
+  function mkOpts(grid, day) {
+    const opts = grid.map((s,i)=>s?'':'<option value="'+day+'-'+i+'">'+slotTime(i)+'</option>').join('');
+    return opts;
+  }
+
   el.innerHTML=state.queue.map(p=>{
-    const fd=p.forDay;
-    const dayLabel=fd===1?'<span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(139,105,20,0.12);color:#8b6914;border:1px solid rgba(139,105,20,0.3);font-weight:700;margin-left:4px;">🏗️ Day 1</span>'
-                  :fd===4?'<span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(61,97,122,0.12);color:#3d617a;border:1px solid rgba(61,97,122,0.3);font-weight:700;margin-left:4px;">⚔️ Day 4</span>':'';
-    let optsHtml='<option value="">Pick a slot…</option>';
-    if(!fd||fd===1) optsHtml+='<optgroup label="Day 1 — Building">'+mkOpts(state.day1,1)+'</optgroup>';
-    if(!fd||fd===4) optsHtml+='<optgroup label="Day 4 — Training">'+mkOpts(state.day4,4)+'</optgroup>';
-    const prefDisplay=p.prefStart?'⏰ '+p.prefStart+(p.prefEnd?' – '+p.prefEnd:'')+ ' UTC':'';
-    return '<div class="qi"><div class="qi-top"><div><div class="qi-name">'+p.name+dayLabel+'</div><div class="qi-meta">'+(p.pid?'ID: '+p.pid+' ':'')+'<span class="qi-tg">'+(p.tg?'TG: '+p.tg.toLocaleString():'')+' </span>'+(prefDisplay?'<span style="color:#6b4423;font-size:10px;display:block;margin-top:2px;">'+prefDisplay+'</span>':'')+' </div></div><button class="btn ghost" onclick="deleteFromQueue('+p.id+')">✕</button></div><div class="qi-row"><select id="sel-'+p.id+'">'+optsHtml+'</select><button class="btn sm primary" onclick="assignSlot('+p.id+')">Assign →</button></div></div>';
+    // Stat pills
+    const statPills=[];
+    if(p.tg)          statPills.push('<span class="qstat tg">TG '+p.tg.toLocaleString()+'</span>');
+    if(p.tgDust)      statPills.push('<span class="qstat dust">Dust '+p.tgDust.toLocaleString()+'</span>');
+    if(p.general)     statPills.push('<span class="qstat spd">Gen: '+p.general+'</span>');
+    if(p.research)    statPills.push('<span class="qstat spd">Res: '+p.research+'</span>');
+    if(p.training)    statPills.push('<span class="qstat spd">Train: '+p.training+'</span>');
+    if(p.construction)statPills.push('<span class="qstat spd">Build: '+p.construction+'</span>');
+    const statsRow = statPills.length?'<div class="qi-stats">'+statPills.join('')+'</div>':'';
+
+    // Pref display (informational only)
+    let prefDisplay='';
+    if(p.prefTimes&&p.prefTimes.length){
+      prefDisplay='⏰ '+p.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?' – '+t.e:'')).join('  |  ')+' UTC';
+    } else if(p.prefStart){
+      prefDisplay='⏰ '+p.prefStart+(p.prefEnd&&p.prefEnd!==p.prefStart?' – '+p.prefEnd:'')+' UTC';
+    }
+    const prefRow = prefDisplay?'<div class="qi-pref">'+prefDisplay+'</div>':'';
+
+    // Reorder
+    const qi=state.queue.indexOf(p);
+    const isFirst=qi===0,isLast=qi===state.queue.length-1;
+
+    // Active day for this card (default day 1)
+    const activeDay = p._qDay || 1;
+    const grid = activeDay===1?state.day1:activeDay===2?state.day2:state.day4;
+    const dayOpts = mkOpts(grid, activeDay);
+    // Check which days this player is already scheduled on
+    const scheduledOn = [1,2,4].filter(d=>{
+      const g=d===1?state.day1:d===2?state.day2:state.day4;
+      return g.some(s=>s&&s.name===p.name&&s.pid===p.pid);
+    });
+    const dayBtns = [
+      {d:1,label:'Day 1',col:'#8b6914'},
+      {d:2,label:'Day 2',col:'#3d7a61'},
+      {d:4,label:'Day 4',col:'#3d617a'}
+    ].map(({d,label,col})=>{
+      const active = activeDay===d;
+      const done = scheduledOn.includes(d);
+      const txt = done ? label+' ✓' : label;
+      const bg = done ? 'rgba(61,122,69,.1)' : active ? 'rgba(139,111,71,.12)' : 'transparent';
+      const border = done ? 'rgba(61,122,69,.4)' : active ? col : 'rgba(139,111,71,.2)';
+      const color = done ? '#3d7a45' : active ? col : '#8b7a5a';
+      const weight = (active||done) ? '700' : '600';
+      return '<button onclick="setQueueDay('+p.id+','+d+')" style="font-size:10px;padding:2px 8px;border-radius:12px;border:1.5px solid '+border+';background:'+bg+';color:'+color+';font-weight:'+weight+';cursor:pointer;font-family:inherit;">'+txt+'</button>';
+    }).join('');
+
+    return '<div class="qi">'
+      // top row
+      +'<div class="qi-top" style="gap:6px;">'
+        +'<div class="qi-order">'
+          +'<button onclick="queueMove('+p.id+',-1)" '+(isFirst?'disabled':'')+' title="Move up">▲</button>'
+          +'<button onclick="queueMove('+p.id+',1)" '+(isLast?'disabled':'')+' title="Move down">▼</button>'
+        +'</div>'
+        +'<div style="flex:1;min-width:0;">'
+          +'<div class="qi-name">'+p.name+'</div>'
+          +statsRow
+          +prefRow
+        +'</div>'
+        +'<button class="btn ghost" onclick="deleteFromQueue('+p.id+')">✕</button>'
+      +'</div>'
+      // day selector
+      +'<div style="display:flex;gap:5px;align-items:center;margin:2px 0;">'
+        +'<span style="font-size:10px;color:#8b7a5a;font-weight:700;">Schedule for:</span>'
+        +dayBtns
+      +'</div>'
+      // slot + assign
+      +'<div class="qi-row">'
+        +'<select id="sel-'+p.id+'">'
+          +'<option value="">Pick a slot…</option>'
+          +dayOpts
+        +'</select>'
+        +'<button class="btn sm primary" onclick="assignSlot('+p.id+')">Assign →</button>'
+      +'</div>'
+    +'</div>';
   }).join('');
 }
 function deleteFromQueue(id){state.queue=state.queue.filter(p=>p.id!==id);debouncedSave();renderQueue();renderStats();}
+function setQueueDay(id, day) {
+  const p = state.queue.find(q=>q.id===id);
+  if (!p) return;
+  p._qDay = day;
+  renderQueue(); // re-render to update slot dropdown and button states
+}
+function queueMove(id, dir) {
+  const idx = state.queue.findIndex(p=>p.id===id);
+  if(idx<0) return;
+  const newIdx = idx+dir;
+  if(newIdx<0||newIdx>=state.queue.length) return;
+  const tmp = state.queue[idx];
+  state.queue[idx] = state.queue[newIdx];
+  state.queue[newIdx] = tmp;
+  debouncedSave(); renderQueue();
+}
 function assignSlot(id){
   const player=state.queue.find(p=>p.id===id);if(!player)return;
   const sel=document.getElementById('sel-'+id);if(!sel||!sel.value){toast('Pick a slot first.');return;}
   const [dn,ix]=sel.value.split('-');const day=parseInt(dn),idx=parseInt(ix);
-  const grid=day===1?state.day1:state.day4;
+  const grid=day===1?state.day1:day===2?state.day2:state.day4;
   if(grid[idx]){toast('That slot is already taken.');return;}
-  grid[idx]={...player};state.queue=state.queue.filter(p=>p.id!==id);
+  const {_qDay,...playerData}=player; // strip internal _qDay before storing
+  grid[idx]={...playerData};
+
+  // Track which days this player has been scheduled for
+  if(!player._scheduledDays) player._scheduledDays=[];
+  player._scheduledDays.push(day);
+
+  // Check if all 3 days are now scheduled — if so, offer to remove from queue
+  const allDays=[1,2,4];
+  const remaining = allDays.filter(d=>{
+    const g=d===1?state.day1:d===2?state.day2:state.day4;
+    return !g.find(s=>s&&s.name===playerData.name&&s.pid===playerData.pid);
+  });
+
+  if(remaining.length===0){
+    // Scheduled on all 3 days — auto remove
+    state.queue=state.queue.filter(p=>p.id!==id);
+    toast(playerData.name+' assigned to Day '+day+'. All days scheduled — removed from queue.');
+  } else {
+    // Stay in queue — switch day selector to next unscheduled day
+    player._qDay = remaining[0];
+    toast(playerData.name+' → Day '+day+' ✓  Still in queue for Day '+remaining.join(' & Day ')+'.');
+  }
+
   debouncedSave();renderQueue();renderGrid();renderStats();
   if(currentDay!==day)switchDay(day);
-  toast(player.name+' assigned to '+slotTime(idx)+' Day '+day+'.');
 }
 
 // ══════════════════════════════════════════════
 //  GRID
 // ══════════════════════════════════════════════
-function switchDay(day){currentDay=day;document.querySelectorAll('.dtab').forEach((t,i)=>t.classList.toggle('active',(i===0&&day===1)||(i===1&&day===4)));document.getElementById('open-copy-btn').onclick=()=>openCopyModal(day===1?'d1':'d4');renderGrid();}
+function switchDay(day){
+  currentDay=day;
+  const dayKeys=[1,2,4];
+  document.querySelectorAll('.dtab').forEach((t,i)=>t.classList.toggle('active',dayKeys[i]===day));
+  document.getElementById('open-copy-btn').onclick=()=>openCopyModal('d'+day);
+  // Update column headers per day
+  const aHdr=document.getElementById('col-a-hdr');
+  const bHdr=document.getElementById('col-b-hdr');
+  if(aHdr) aHdr.textContent = day===1 ? 'TG' : day===2 ? 'Research' : 'Training';
+  if(bHdr) bHdr.textContent = day===1 ? 'TG Dust' : 'General';
+  const cHdr=document.getElementById('col-c-hdr');
+  const cCol=document.getElementById('col-c-col');
+  if(cHdr) cHdr.textContent = 'Construction';
+  if(cCol) cCol.style.width = '120px';
+  renderGrid();
+}
 function renderGrid(){
-  const grid=currentDay===1?state.day1:state.day4;
+  const grid=currentDay===1?state.day1:currentDay===2?state.day2:state.day4;
   const tbody=document.getElementById('sched-body');tbody.innerHTML='';
   grid.forEach((slot,i)=>{
     const tr=document.createElement('tr');tr.dataset.idx=i;
     if(slot){
       tr.className='row-filled';
-      const speed=currentDay===1?(slot.construction||'—'):(slot.training||'—');
-      const pref=slot.prefStart?slot.prefStart+'–'+slot.prefEnd:'—';
-      const tdH=document.createElement('td');
+      // Per-day col A and col B values
+      let colA='—', colB='—';
+      if(currentDay===1){
+        colA = slot.tg     ? slot.tg.toLocaleString()     : '—';
+        colB = slot.tgDust ? slot.tgDust.toLocaleString() : '—';
+      } else if(currentDay===2){
+        colA = slot.research  || '—';
+        colB = slot.general   || '—';
+      } else {
+        colA = slot.training  || '—';
+        colB = slot.general   || '—';
+      }
+      // col C: construction for all days
+      const colC = slot.construction || '—';
+      // drag handle
+      const tdH=document.createElement('td');tdH.className='td-handle';
       const h=document.createElement('span');h.className='handle';h.textContent='⠿';h.title='Drag to move';tdH.appendChild(h);tr.appendChild(tdH);
-      [slotTime(i),slotEnd(i),slot.name,slot.tg.toLocaleString(),speed,pref].forEach((txt,ci)=>{const td=document.createElement('td');td.className=['t-time','t-end','t-name','t-tg','t-speed','t-pref'][ci];td.textContent=txt;tr.appendChild(td);});
-      const tdSt=document.createElement('td');tdSt.innerHTML='<span class="badge-f">Filled</span>';tr.appendChild(tdSt);
-      const tdAct=document.createElement('td');tdAct.innerHTML='<div class="row-acts"><button class="act q" data-action="queue" data-day="'+currentDay+'" data-idx="'+i+'">↩ Queue</button><button class="act del" data-action="del" data-day="'+currentDay+'" data-idx="'+i+'">✕</button></div>';tr.appendChild(tdAct);
+      // start time
+      const tdT=document.createElement('td');tdT.className='t-time';tdT.textContent=slotTime(i);tr.appendChild(tdT);
+      // name
+      const tdN=document.createElement('td');tdN.className='t-name';tdN.textContent=slot.name;tr.appendChild(tdN);
+      // col A
+      const tdA=document.createElement('td');tdA.className=currentDay===1?'t-tg':'t-speed';tdA.style.fontWeight='700';tdA.textContent=colA;tr.appendChild(tdA);
+      // col B
+      const tdB=document.createElement('td');tdB.className=currentDay===1?'t-tgdust':'t-speed';tdB.textContent=colB;tr.appendChild(tdB);
+      // col C: construction speed
+      const tdC=document.createElement('td');tdC.className='t-speed';tdC.style.color='#4a3428';tdC.textContent=String(colC);tr.appendChild(tdC);
+      // gear button (all devices) — use addEventListener to avoid CSP/scope issues
+      const tdTap=document.createElement('td');tdTap.className='td-tap-btn';tdTap.style.padding='2px';
+      const gearBtn=document.createElement('button');
+      gearBtn.className='gear-btn';gearBtn.title='Details / move';gearBtn.textContent='⚙️';
+      gearBtn.addEventListener('click',function(e){e.stopPropagation();openActionSheet(currentDay,i,this);});
+      tdTap.appendChild(gearBtn);tr.appendChild(tdTap);
+      // actions handled by gear popover/sheet
       tr.draggable=true;
       tr.addEventListener('dragstart',e=>{dragIdx=i;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',String(i));requestAnimationFrame(()=>tr.classList.add('dragging'));});
+      // Mobile: tap filled row to open action sheet (gear button hidden)
+      tr.addEventListener('click',e=>{
+        if(window.innerWidth>768) return;
+        if(e.target.closest('.gear-btn')) return;
+        openActionSheet(currentDay,i,null);
+      });
+
     }else{
-      tr.innerHTML='<td></td><td class="t-time">'+slotTime(i)+'</td><td class="t-end">'+slotEnd(i)+'</td><td class="t-empty" colspan="4">— open —</td><td><span class="badge-o">Open</span></td><td></td>';
+      tr.innerHTML='<td class="td-handle"></td><td class="t-time">'+slotTime(i)+'</td><td class="t-empty" colspan="4">— open —</td><td class="td-tap-btn"></td>';
     }
     tr.addEventListener('dragover',e=>{if(dragIdx===null)return;e.preventDefault();e.dataTransfer.dropEffect='move';if(dragOverIdx!==i){clearDragOver();dragOverIdx=i;tr.classList.add('drag-over');}});
     tr.addEventListener('dragleave',e=>{if(!tr.contains(e.relatedTarget)){tr.classList.remove('drag-over');if(dragOverIdx===i)dragOverIdx=null;}});
-    tr.addEventListener('drop',e=>{e.preventDefault();tr.classList.remove('drag-over');const src=dragIdx;dragIdx=null;dragOverIdx=null;if(src===null||src===i)return;const g=currentDay===1?state.day1:state.day4;const tmp=g[i];g[i]=g[src];g[src]=tmp;debouncedSave();renderGrid();renderStats();toast('Slot moved.');});
+    tr.addEventListener('drop',e=>{e.preventDefault();tr.classList.remove('drag-over');const src=dragIdx;dragIdx=null;dragOverIdx=null;if(src===null||src===i)return;const g=currentDay===1?state.day1:currentDay===2?state.day2:state.day4;const tmp=g[i];g[i]=g[src];g[src]=tmp;debouncedSave();renderGrid();renderStats();toast('Slot moved.');});
     tbody.appendChild(tr);
   });
   renderOpenBar(grid);
   document.getElementById('fill-stat').textContent=grid.filter(Boolean).length+' / 48 slots filled';
 }
 function clearDragOver(){document.querySelectorAll('.drag-over').forEach(r=>r.classList.remove('drag-over'));}
+
+// ── Mobile action sheet ──
+let asDay = null, asIdx = null;
+
+function buildPlayerRows(slot, day) {
+  const rows = [];
+  if(day===1){ if(slot.tg) rows.push(['TG',slot.tg.toLocaleString()]); if(slot.tgDust) rows.push(['TG Dust',slot.tgDust.toLocaleString()]); }
+  else { if(slot.tg) rows.push(['TG',slot.tg.toLocaleString()]); }
+  if(slot.general)      rows.push(['General',     slot.general]);
+  if(slot.training)     rows.push(['Training',    slot.training]);
+  if(slot.construction) rows.push(['Construction',slot.construction]);
+  if(slot.research)     rows.push(['Research',    slot.research]);
+  if(slot.total)        rows.push(['Total',       slot.total]);
+  return rows;
+}
+function buildMoveOpts(grid, idx, slot) {
+  const opts = ['<option value="">Move to…</option>'];
+  grid.forEach((s,si)=>{
+    if(si===idx||s) return;
+    if(slot.prefTimes&&slot.prefTimes.length){
+      const sm=(startMinutes+si*30)%1440;
+      const ok=slot.prefTimes.some(({s:ts,e:te})=>{
+        let st=parseInt(ts.split(':')[0])*60+parseInt(ts.split(':')[1]);
+        let en=parseInt(te.split(':')[0])*60+parseInt(te.split(':')[1]);
+        if(en===0)en=1440; if(en<st) return sm>=st||sm<en;
+        return sm>=st&&sm<en;
+      });
+      if(!ok) return;
+    }
+    opts.push('<option value="'+si+'">'+slotTime(si)+' – '+slotEnd(si)+'</option>');
+  });
+  return opts.join('');
+}
+function buildPrefStr(slot) {
+  if(slot.prefTimes&&slot.prefTimes.length) return '⏰ '+slot.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?' – '+t.e:'')).join('  |  ')+' UTC';
+  if(slot.prefStart) return '⏰ '+slot.prefStart+(slot.prefEnd&&slot.prefEnd!==slot.prefStart?' – '+slot.prefEnd:'')+' UTC';
+  return '';
+}
+
+let gpDay=null,gpIdx=null;
+function closeGearPopover(){document.getElementById('gear-popover').classList.remove('open');gpDay=null;gpIdx=null;}
+function gpMove(){
+  const v=parseInt(document.getElementById('gp-move-sel').value);if(isNaN(v)){toast('Pick a slot.');return;}
+  const g=gpDay===1?state.day1:gpDay===2?state.day2:state.day4;
+  if(g[v]){toast('Slot already taken.');return;}
+  g[v]=g[gpIdx];g[gpIdx]=null;debouncedSave();renderGrid();renderStats();toast('Moved.');closeGearPopover();
+}
+function gpQueue(){returnToQueue(gpDay,gpIdx);closeGearPopover();}
+function gpDelete(){if(!confirm('Remove player? They will NOT return to queue.'))return;deleteSlot(gpDay,gpIdx);closeGearPopover();}
+
+// Close popover when clicking outside
+document.addEventListener('click',e=>{
+  const pop=document.getElementById('gear-popover');
+  if(pop.classList.contains('open')&&!pop.contains(e.target)&&!e.target.closest('.gear-btn'))closeGearPopover();
+});
+
+function openActionSheet(day, idx, triggerEl) {
+  const grid = day===1?state.day1:day===2?state.day2:state.day4;
+  const slot = grid[idx];
+  if (!slot) return;
+  asDay = day; asIdx = idx;
+
+  // Desktop: use compact popover positioned near button
+  if (window.innerWidth > 768 && triggerEl) { // desktop popover
+    gpDay=day; gpIdx=idx;
+    const pop = document.getElementById('gear-popover');
+    const rows = buildPlayerRows(slot, day);
+    document.getElementById('gp-name').textContent = slot.name;
+    document.getElementById('gp-pid').textContent = slot.pid ? 'ID: '+slot.pid : '';
+    document.getElementById('gp-time').textContent = slotTime(idx)+' – '+slotEnd(idx)+' UTC';
+    document.getElementById('gp-grid').innerHTML = rows.length
+      ? rows.map(([k,v])=>'<span class="gk">'+k+'</span><span class="gv">'+v+'</span>').join('')
+      : '<span class="gk" style="grid-column:1/-1;color:#b8a898;">No details recorded</span>';
+    const pref=buildPrefStr(slot);
+    const prefEl=document.getElementById('gp-pref');
+    prefEl.textContent=pref; prefEl.style.display=pref?'block':'none';
+    document.getElementById('gp-move-sel').innerHTML=buildMoveOpts(grid,idx,slot);
+    // Position near button — flip left if too close to right edge
+    const rect=triggerEl.getBoundingClientRect();
+    const popW=308, popH=360; // estimated max popover height
+    const scrollY=window.scrollY||document.documentElement.scrollTop;
+    let left=rect.left;
+    // Flip left if too close to right edge
+    if(left+popW>window.innerWidth-8) left=window.innerWidth-popW-8;
+    if(left<8) left=8;
+    // Flip upward if not enough space below
+    let top;
+    const spaceBelow=window.innerHeight-(rect.bottom+6);
+    if(spaceBelow<popH && rect.top>popH){
+      // open above the button
+      top=rect.top-6-popH+scrollY;
+    } else {
+      top=rect.bottom+6+scrollY;
+    }
+    pop.style.top=top+'px'; pop.style.left=left+'px';
+    // Show off-screen first to measure actual height, then reposition
+    pop.style.visibility='hidden';
+    pop.style.top='-9999px';
+    pop.classList.add('open');
+    requestAnimationFrame(()=>{
+      const actualH = pop.offsetHeight;
+      const spaceBelow = window.innerHeight-(rect.bottom+6);
+      let finalTop;
+      if(spaceBelow<actualH+8 && rect.top>actualH+8){
+        finalTop = rect.top - actualH - 6 + scrollY; // flip up
+      } else {
+        finalTop = rect.bottom + 6 + scrollY;        // open below
+      }
+      pop.style.top = finalTop+'px';
+      pop.style.left = left+'px';
+      pop.style.visibility = '';
+    });
+    return;
+  }
+
+  // Mobile: use bottom sheet
+  document.getElementById('as-name').textContent = slot.name + (slot.pid ? '  #'+slot.pid : '');
+  document.getElementById('as-time').textContent = slotTime(idx) + ' – ' + slotEnd(idx) + ' UTC  ·  Day ' + day;
+
+  // Build details grid
+  const rows = [];
+  // TG / TG Dust
+  if (day === 1) {
+    if (slot.tg)     rows.push(['True Gold',   slot.tg.toLocaleString()]);
+    if (slot.tgDust) rows.push(['TG Dust',      slot.tgDust.toLocaleString()]);
+  } else {
+    if (slot.tg)     rows.push(['True Gold',   slot.tg.toLocaleString()]);
+  }
+  // Speeds — show all that have values
+  if (slot.general)      rows.push(['General',      slot.general]);
+  if (slot.training)     rows.push(['Training',     slot.training]);
+  if (slot.construction) rows.push(['Construction', slot.construction]);
+  if (slot.research)     rows.push(['Research',     slot.research]);
+  if (slot.total)        rows.push(['Total',        slot.total]);
+
+  document.getElementById('as-details').innerHTML = rows.length
+    ? rows.map(([k,v]) =>
+        '<div style="font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.05em;">'+k+'</div>'
+       +'<div style="font-size:13px;font-weight:700;color:#4a3428;">'+v+'</div>'
+      ).join('')
+    : '<div style="font-size:12px;color:#b8a898;grid-column:1/-1;">No details recorded</div>';
+
+  // Pref time
+  const prefWrap = document.getElementById('as-pref-wrap');
+  const prefEl   = document.getElementById('as-pref');
+  if (slot.prefTimes && slot.prefTimes.length) {
+    prefEl.textContent = slot.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s?' – '+t.e:'')).join('  |  ') + ' UTC';
+    prefWrap.style.display = 'block';
+  } else if (slot.prefStart) {
+    prefEl.textContent = slot.prefStart + (slot.prefEnd && slot.prefEnd!==slot.prefStart?' – '+slot.prefEnd:'') + ' UTC';
+    prefWrap.style.display = 'block';
+  } else {
+    prefWrap.style.display = 'none';
+  }
+
+  // Build slot options filtered to player pref if available
+  const sel = document.getElementById('as-move-sel');
+  sel.innerHTML = '<option value="">Pick a slot…</option>';
+  grid.forEach((s, si) => {
+    if (si === idx || s) return; // skip current and taken slots
+    // filter by pref if set
+    if (slot.prefTimes && slot.prefTimes.length) {
+      const sm = (startMinutes + si * 30) % 1440;
+      const ok = slot.prefTimes.some(({s:ts, e:te}) => {
+        let start = parseInt(ts.split(':')[0])*60+parseInt(ts.split(':')[1]);
+        let end   = parseInt(te.split(':')[0])*60+parseInt(te.split(':')[1]);
+        if (end === 0) end = 1440;
+        if (end < start) return sm >= start || sm < end;
+        return sm >= start && sm < end;
+      });
+      if (!ok) return;
+    }
+    const opt = document.createElement('option');
+    opt.value = si;
+    opt.textContent = slotTime(si) + ' – ' + slotEnd(si);
+    sel.appendChild(opt);
+  });
+
+  document.getElementById('action-sheet-bg').classList.add('open');
+  document.getElementById('action-sheet').classList.add('open');
+}
+
+function closeActionSheet() {
+  document.getElementById('action-sheet-bg').classList.remove('open');
+  document.getElementById('action-sheet').classList.remove('open');
+  asDay = null; asIdx = null;
+}
+
+function actionSheetMove() {
+  const sel = document.getElementById('as-move-sel');
+  const dest = parseInt(sel.value);
+  if (isNaN(dest)) { toast('Pick a slot first.'); return; }
+  const grid = asDay===1?state.day1:asDay===2?state.day2:state.day4;
+  if (grid[dest]) { toast('That slot is already taken.'); return; }
+  grid[dest] = grid[asIdx]; grid[asIdx] = null;
+  debouncedSave(); renderGrid(); renderStats();
+  toast('Moved to ' + slotTime(dest) + ' UTC');
+  closeActionSheet();
+}
+
+function actionSheetQueue() {
+  returnToQueue(asDay, asIdx);
+  closeActionSheet();
+}
+
+function actionSheetDelete() {
+  if (!confirm('Remove this player? They will NOT return to queue.')) return;
+  deleteSlot(asDay, asIdx);
+  closeActionSheet();
+}
 document.addEventListener('dragend',()=>{document.querySelectorAll('.dragging').forEach(r=>r.classList.remove('dragging'));clearDragOver();dragIdx=null;dragOverIdx=null;});
 document.getElementById('sched-body').addEventListener('click',e=>{
   const btn=e.target.closest('[data-action]');if(!btn)return;
   const action=btn.dataset.action,day=parseInt(btn.dataset.day),idx=parseInt(btn.dataset.idx);
   if(action==='queue')returnToQueue(day,idx);if(action==='del')deleteSlot(day,idx);
 });
-function returnToQueue(day,idx){const grid=day===1?state.day1:state.day4;const player=grid[idx];if(!player)return;state.queue.unshift({...player,id:Date.now()});grid[idx]=null;debouncedSave();renderQueue();renderGrid();renderStats();toast(player.name+' returned to queue.');}
-function deleteSlot(day,idx){const grid=day===1?state.day1:state.day4;const player=grid[idx];if(!player)return;if(!confirm('Delete '+player.name+' from this slot?\nThey will NOT return to queue.'))return;grid[idx]=null;debouncedSave();renderGrid();renderStats();toast(player.name+' removed.');}
+document.getElementById('sched-body').addEventListener('change',e=>{
+  const sel=e.target.closest('.act-move-sel');if(!sel)return;
+  const destStr=sel.value; if(!destStr)return;
+  const day=parseInt(sel.dataset.day), src=parseInt(sel.dataset.src), dest=parseInt(destStr);
+  if(src===dest){sel.value='';return;}
+  const grid=day===1?state.day1:day===2?state.day2:state.day4;
+  if(grid[dest]){toast('That slot is already taken.');sel.value='';return;}
+  grid[dest]=grid[src]; grid[src]=null;
+  debouncedSave(); renderGrid(); renderStats();
+  toast('Moved to '+slotTime(dest)+' UTC');
+});
+function returnToQueue(day,idx){const grid=day===1?state.day1:day===2?state.day2:state.day4;const player=grid[idx];if(!player)return;state.queue.unshift({...player,id:Date.now(),forDay:null,_qDay:day});grid[idx]=null;debouncedSave();renderQueue();renderGrid();renderStats();toast(player.name+' returned to queue.');}
+function deleteSlot(day,idx){const grid=day===1?state.day1:day===2?state.day2:state.day4;const player=grid[idx];if(!player)return;if(!confirm('Delete '+player.name+' from this slot?\nThey will NOT return to queue.'))return;grid[idx]=null;debouncedSave();renderGrid();renderStats();toast(player.name+' removed.');}
 
 // ══════════════════════════════════════════════
 //  OPEN RANGES / COPY MODAL
 // ══════════════════════════════════════════════
 function getOpenRanges(grid){const runs=[];grid.forEach((_,i)=>{if(!grid[i]){if(!runs.length||runs[runs.length-1].end!==i-1)runs.push({start:i,end:i});else runs[runs.length-1].end=i;}});return runs.map(r=>slotShort(r.start)+'–'+slotShort(r.end===47?0:r.end+1));}
 function renderOpenBar(grid){const ranges=getOpenRanges(grid);const n=grid.filter(s=>!s).length;document.getElementById('open-ranges').textContent=ranges.length?ranges.join(', '):'No open slots';document.getElementById('open-count').textContent='('+n+' slots open)';}
-function buildCompactMsg(dk){const grid=dk==='d1'?state.day1:state.day4;const label=dk==='d1'?'Day 1 (Build)':'Day 4 (Train)';const ranges=getOpenRanges(grid);const n=grid.filter(s=>!s).length;if(!ranges.length)return label+' — No open slots.';return label+' open ('+n+' avail, UTC):\n'+ranges.join(', ');}
-function buildFullSummary(dk){const grid=dk==='d1'?state.day1:state.day4;const label=dk==='d1'?'Day 1 — Building':'Day 4 — Training';let out='=== '+label+' ===\n';grid.forEach((s,i)=>{if(s)out+=slotShort(i)+'  '+s.name+'  TG:'+s.tg.toLocaleString()+'\n';});const open=grid.filter(s=>!s).length;out+='\n'+(48-open)+' filled · '+open+' open';return out;}
-function openCopyModal(dk){modalDay=dk;const label=dk==='d1'?'Day 1 — Building':'Day 4 — Training';document.getElementById('modal-title-txt').textContent='Open slots — '+label;const compact=buildCompactMsg(dk);document.getElementById('copy-compact-block').textContent=compact;const chars=compact.length;const chEl=document.getElementById('copy-char-count');chEl.textContent=chars+' characters'+(chars>200?' (getting long)':'')+(chars>255?' ⚠️ may exceed limit':'');chEl.className='char-count'+(chars>200?' warn':'')+(chars>255?' over':'');document.getElementById('copy-full-block').textContent=buildFullSummary(dk);document.getElementById('copy-modal').classList.add('open');}
+function buildCompactMsg(dk){const grid=dk==='d1'?state.day1:dk==='d2'?state.day2:state.day4;const label=dk==='d1'?'Day 1 (Build)':dk==='d2'?'Day 2 (Research)':'Day 4 (Train)';const ranges=getOpenRanges(grid);const n=grid.filter(s=>!s).length;if(!ranges.length)return label+' — No open slots.';return label+' open ('+n+' avail, UTC):\n'+ranges.join(', ');}
+function buildFullSummary(dk){const grid=dk==='d1'?state.day1:dk==='d2'?state.day2:state.day4;const label=dk==='d1'?'Day 1 — Building':dk==='d2'?'Day 2 — Research':'Day 4 — Training';let out='=== '+label+' ===\n';grid.forEach((s,i)=>{if(s)out+=slotShort(i)+'  '+s.name+'  TG:'+s.tg.toLocaleString()+'\n';});const open=grid.filter(s=>!s).length;out+='\n'+(48-open)+' filled · '+open+' open';return out;}
+function openCopyModal(dk){modalDay=dk;const label=dk==='d1'?'Day 1 — Building':dk==='d2'?'Day 2 — Research':'Day 4 — Training';document.getElementById('modal-title-txt').textContent='Open slots — '+label;const compact=buildCompactMsg(dk);document.getElementById('copy-compact-block').textContent=compact;const chars=compact.length;const chEl=document.getElementById('copy-char-count');chEl.textContent=chars+' characters'+(chars>200?' (getting long)':'')+(chars>255?' ⚠️ may exceed limit':'');chEl.className='char-count'+(chars>200?' warn':'')+(chars>255?' over':'');document.getElementById('copy-full-block').textContent=buildFullSummary(dk);document.getElementById('copy-modal').classList.add('open');}
 function closeCopyModal(){document.getElementById('copy-modal').classList.remove('open');}
 function copyCompact(){navigator.clipboard.writeText(document.getElementById('copy-compact-block').textContent).then(()=>toast('Compact message copied!'));}
 function copyFull(){navigator.clipboard.writeText(document.getElementById('copy-full-block').textContent).then(()=>toast('Full summary copied!'));}
@@ -775,37 +1538,49 @@ function copyFull(){navigator.clipboard.writeText(document.getElementById('copy-
 // ══════════════════════════════════════════════
 //  STATS / TABS / MANUAL / RESET / TOAST
 // ══════════════════════════════════════════════
-function renderStats(){document.getElementById('s-d1').textContent=state.day1.filter(Boolean).length;document.getElementById('s-d4').textContent=state.day4.filter(Boolean).length;document.getElementById('s-q').textContent=state.queue.length;document.getElementById('q-cnt').textContent=state.queue.length?'('+state.queue.length+')':'';}
+function renderStats(){document.getElementById('s-d1').textContent=state.day1.filter(Boolean).length;document.getElementById('s-d2').textContent=state.day2.filter(Boolean).length;document.getElementById('s-d4').textContent=state.day4.filter(Boolean).length;document.getElementById('s-q').textContent=state.queue.length;document.getElementById('q-cnt').textContent=state.queue.length?'('+state.queue.length+')':'';}
 function switchSTab(tab){const tabs=['intake','queue'];document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));document.querySelectorAll('.spanel').forEach((p,i)=>p.classList.toggle('active',tabs[i]===tab));if(tab==='queue')renderQueue();}
 function submitManual(){
   const errEl=document.getElementById('man-error');errEl.style.display='none';
-  const name=document.getElementById('man-name').value.trim(),pid=document.getElementById('man-pid').value.trim();
-  const d1=document.getElementById('man-d1').checked,d4=document.getElementById('man-d4').checked;
-  const psh=document.getElementById('man-pref-sh').value,psm=document.getElementById('man-pref-sm').value;
-  const peh=document.getElementById('man-pref-eh').value,pem=document.getElementById('man-pref-em').value;
-  const tg=document.getElementById('man-tg').value.trim()?parseInt(document.getElementById('man-tg').value):0;
+  const name=document.getElementById('man-name').value.trim();
+  const pid=document.getElementById('man-pid').value.trim().replace(/^#\s*/,'');
+  const d1=document.getElementById('man-d1').checked,d2=document.getElementById('man-d2').checked,d4=document.getElementById('man-d4').checked;
+  const tg=parseTG(document.getElementById('man-tg').value.trim());
+  const tgDust=parseTG(document.getElementById('man-tgdust').value.trim());
+  const general=document.getElementById('man-general').value.trim();
+  const construction=document.getElementById('man-construction').value.trim();
+  const research=document.getElementById('man-research').value.trim();
+  const training=document.getElementById('man-training').value.trim();
+  // Pref time — parse primary range + optional extra ranges
+  const ps=document.getElementById('man-pref-s').value.trim();
+  const pe=document.getElementById('man-pref-e').value.trim();
+  const extra=document.getElementById('man-pref-extra').value.trim();
   if(!name){errEl.textContent='Player name is required.';errEl.style.display='block';return;}
-  if(!d1&&!d4){errEl.textContent='Select at least one day.';errEl.style.display='block';return;}
-  const prefStart=(psh!==''&&psm!=='')?psh+':'+psm:'';
-  const prefEnd=(peh!==''&&pem!=='')?peh+':'+pem:'';
-  if(prefStart&&prefEnd){const sm=parseInt(psh)*60+parseInt(psm),em=parseInt(peh)*60+parseInt(pem);if(em<=sm&&!(em===0&&sm>0)){errEl.textContent='End time must be after start time (or wrap to next day).';errEl.style.display='block';return;}}
-  const days=[];if(d1)days.push('Day 1');if(d4)days.push('Day 4');
-  const player={name,pid,tg,general:'',training:'',construction:'',research:'',total:'',prefStart,prefEnd,requestedDays:days,manual:true,id:Date.now()};
-  // Add one entry per requested day; skip days already queued or scheduled
-  const daysToAdd=[];
-  if(d1){const fd=1;const inQ=state.queue.find(q=>q.name===player.name&&q.pid===player.pid&&q.forDay===fd);const inS=state.day1.find(s=>s&&s.name===player.name&&s.pid===player.pid);if(!inQ&&!inS)daysToAdd.push(fd);}
-  if(d4){const fd=4;const inQ=state.queue.find(q=>q.name===player.name&&q.pid===player.pid&&q.forDay===fd);const inS=state.day4.find(s=>s&&s.name===player.name&&s.pid===player.pid);if(!inQ&&!inS)daysToAdd.push(fd);}
-  if(!daysToAdd.length){errEl.textContent=name+' is already queued/scheduled for all selected days.';errEl.style.display='block';return;}
-  daysToAdd.forEach((fd,i)=>state.queue.push({...player,id:Date.now()+i,forDay:fd}));
-  debouncedSave();renderQueue();renderStats();toast(name+' added to queue'+(daysToAdd.length>1?' for both days':'')+'.');
-  ['man-name','man-pid','man-tg'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('man-d1').checked=false;document.getElementById('man-d4').checked=false;
-  ['man-pref-sh','man-pref-sm','man-pref-eh','man-pref-em'].forEach(id=>document.getElementById(id).value='');
+  if(!d1&&!d2&&!d4){errEl.textContent='Select at least one day.';errEl.style.display='block';return;}
+  // Build prefTimes array
+  const prefTimes=[];
+  if(ps){const s=extractTime(ps),e=extractTime(pe||'');if(s)prefTimes.push({s,e:e||s});}
+  // Parse extra ranges  e.g. "12:00–24:00, 20:00-23:00"
+  if(extra){
+    const trRe=/(\d{1,2}:\d{2})\s*[-–—]\s*(\d{1,2}:\d{2})/g;let m;
+    while((m=trRe.exec(extra))!==null){const s=extractTime(m[1]),e=extractTime(m[2]);if(s)prefTimes.push({s,e:e||s});}
+  }
+  const prefStart=prefTimes.length?prefTimes[0].s:'';
+  const prefEnd=prefTimes.length?prefTimes[prefTimes.length-1].e:'';
+  const days=[];if(d1)days.push('Day 1');if(d2)days.push('Day 2');if(d4)days.push('Day 4');
+  const player={name,pid,tg,tgDust,general,training,construction,research,total:'',prefStart,prefEnd,prefTimes,requestedDays:days,manual:true,id:Date.now()};
+  if(state.queue.find(q=>q.name===player.name&&q.pid===player.pid)){
+    errEl.textContent=name+' is already in the queue.';errEl.style.display='block';return;
+  }
+  state.queue.push({...player, id:Date.now(), forDay:null});
+  debouncedSave();renderQueue();renderStats();toast(name+' added to queue.');
+  ['man-name','man-pid','man-tg','man-tgdust','man-general','man-construction','man-research','man-training','man-pref-s','man-pref-e','man-pref-extra'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('man-d1').checked=false;document.getElementById('man-d2').checked=false;document.getElementById('man-d4').checked=false;
   switchSTab('queue');
 }
 function showReset(){document.getElementById('confirm-strip').classList.add('open');}
 function hideReset(){document.getElementById('confirm-strip').classList.remove('open');}
-function doReset(){state={queue:[],day1:new Array(48).fill(null),day4:new Array(48).fill(null)};startMinutes=0;document.getElementById('slot-start-input').value='';debouncedSave();hideReset();renderQueue();renderGrid();renderStats();toast('All data cleared.');}
+function doReset(){state={queue:[],day1:new Array(48).fill(null),day2:new Array(48).fill(null),day4:new Array(48).fill(null)};startMinutes=0;document.getElementById('slot-start-input').value='';debouncedSave();hideReset();renderQueue();renderGrid();renderStats();toast('All data cleared.');}
 let toastTimer;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2800);}
 
