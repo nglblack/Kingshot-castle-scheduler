@@ -364,7 +364,7 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
     <button class="btn sm" onclick="copyShareLink()" title="Copy shareable link">🔗 <span class="btn-txt">Share</span></button>
     <button class="btn sm" onclick="copyIntakeLink()" title="Copy intake form link" style="background:rgba(61,122,69,.1);border-color:rgba(61,122,69,.35);color:#3d7a45;">📋 <span class="btn-txt">Intake form</span></button>
     <button class="btn sm" onclick="promptLoadId()" title="Load by ID">📂 <span class="btn-txt">Load</span></button>
-    <button class="btn sm primary" onclick="createNewSchedule()" title="Start fresh">＋ <span class="btn-txt">New</span></button>
+    <button class="btn sm primary" onclick="confirmNewSchedule()" title="Start fresh">＋ <span class="btn-txt">New</span></button>
     <span class="spacer"></span>
     <span class="sync-dot" id="sync-dot"></span>
     <span class="sync-status" id="sync-status">Connecting…</span>
@@ -1090,6 +1090,35 @@ function copyShareLink() {
   if (!scheduleId) { toast('No schedule loaded.'); return; }
   const url = window.location.origin + window.location.pathname + '#' + scheduleId;
   navigator.clipboard.writeText(url).then(()=>toast('🔗 Share link copied!'));
+}
+
+function confirmNewSchedule() {
+  if (!scheduleId) { createNewSchedule(); return; } // nothing to lose
+  const url = window.location.origin + window.location.pathname + '#' + scheduleId;
+  document.getElementById('new-modal-id').textContent  = scheduleId;
+  document.getElementById('new-modal-url').textContent = url;
+  document.getElementById('new-schedule-modal').classList.add('open');
+}
+function closeNewModal() {
+  document.getElementById('new-schedule-modal').classList.remove('open');
+  // Reset copy buttons
+  document.getElementById('copy-id-btn').textContent   = '📋 Copy ID';
+  document.getElementById('copy-link-btn').textContent = '🔗 Copy link';
+}
+function copyCurrentId() {
+  navigator.clipboard.writeText(scheduleId).then(()=>{
+    document.getElementById('copy-id-btn').textContent = '✅ Copied!';
+  });
+}
+function copyCurrentLink() {
+  const url = window.location.origin + window.location.pathname + '#' + scheduleId;
+  navigator.clipboard.writeText(url).then(()=>{
+    document.getElementById('copy-link-btn').textContent = '✅ Copied!';
+  });
+}
+async function proceedNewSchedule() {
+  closeNewModal();
+  await createNewSchedule();
 }
 function copyIntakeLink() {
   if (!scheduleId) { toast('No schedule loaded yet.'); return; }
@@ -2322,5 +2351,36 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initSession();
 });
 </script>
+
+<!-- New schedule warning modal -->
+<div class="modal-bg" id="new-schedule-modal">
+  <div class="modal" style="width:420px;max-width:calc(100vw - 32px);">
+    <div class="modal-title">
+      <span>⚠️ Start a new schedule?</span>
+      <button class="btn ghost" onclick="closeNewModal()">✕</button>
+    </div>
+    <p style="font-size:13px;color:#6b4423;line-height:1.6;background:rgba(139,111,71,.08);padding:10px 12px;border-radius:8px;border:1px solid rgba(139,111,71,.2);">
+      Your current schedule will <strong>remain saved</strong> in the cloud — but you'll need the link or ID to get back to it.
+    </p>
+    <div style="margin-top:4px;">
+      <div class="slabel" style="margin-bottom:6px;">Current schedule ID</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <code id="new-modal-id" style="flex:1;font-family:'Courier New',monospace;font-size:15px;font-weight:700;color:#4a3428;background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;padding:8px 12px;letter-spacing:1px;"></code>
+        <button class="btn sm" onclick="copyCurrentId()" id="copy-id-btn">📋 Copy ID</button>
+      </div>
+    </div>
+    <div style="margin-top:8px;">
+      <div class="slabel" style="margin-bottom:6px;">Share link (bookmark this!)</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div id="new-modal-url" style="flex:1;font-size:11px;color:#8b7a5a;background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;padding:8px 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+        <button class="btn sm primary" onclick="copyCurrentLink()" id="copy-link-btn">🔗 Copy link</button>
+      </div>
+    </div>
+    <div class="modal-footer" style="margin-top:16px;">
+      <button class="btn" onclick="closeNewModal()">Cancel — keep current</button>
+      <button class="btn warn" onclick="proceedNewSchedule()">Yes, create new →</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
