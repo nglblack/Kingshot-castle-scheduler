@@ -1,0 +1,518 @@
+{
+  "scheduleId": "8WyI0tLp",
+  "exportedAt": "2026-05-15T01:55:06.428Z",
+  "slotStartTime": "00:15",
+  "day1": [
+    {
+      "id": 1778601069677,
+      "tg": 0,
+      "pid": "",
+      "name": "Deck",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "00:00"
+          }
+        ],
+        "2": [],
+        "4": [
+          {
+            "e": "",
+            "s": "03:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        1
+      ]
+    },
+    null,
+    {
+      "id": 1778601396846,
+      "tg": 1540,
+      "pid": "103687429",
+      "name": "Lady",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1075,
+      "general": "22 day",
+      "prefEnd": "02:00",
+      "research": "16days",
+      "training": "12days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "15 days",
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ]
+    },
+    null,
+    null,
+    {
+      "id": 1778601406190,
+      "tg": 1540,
+      "pid": "103687429",
+      "name": "Terry",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1075,
+      "general": "22 day",
+      "prefEnd": "02:00",
+      "research": "16days",
+      "training": "12days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "15 days",
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ]
+    },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "day2": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "day4": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    {
+      "id": 1778598242180,
+      "tg": 70000,
+      "pid": "",
+      "name": "msmysteria",
+      "total": "",
+      "forDay": 4,
+      "tgDust": 3500,
+      "general": "1 day",
+      "prefEnd": "",
+      "research": "3 days",
+      "training": "4 days",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "2 days",
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ]
+    },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "queue": [
+    {
+      "id": 1778628209573,
+      "tg": 1540,
+      "pid": "",
+      "name": "LadySandney",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "tgDust": 1075,
+      "general": "22 day",
+      "prefEnd": "02:00",
+      "research": "16days",
+      "training": "12days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "15 days",
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": []
+    },
+    {
+      "id": 1778601069677,
+      "tg": 0,
+      "pid": "",
+      "name": "Deck",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "00:00"
+          }
+        ],
+        "2": [],
+        "4": [
+          {
+            "e": "",
+            "s": "03:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": 1778612195583,
+      "tg": 1365,
+      "pid": "103687429",
+      "name": "Lady",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1045,
+      "general": "21 day",
+      "prefEnd": "02:00",
+      "research": "14days",
+      "training": "12days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "16 days",
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778612222545,
+      "tg": 54,
+      "pid": "103687429",
+      "name": "Sandney",
+      "total": "",
+      "forDay": null,
+      "tgDust": 641,
+      "general": "10 day",
+      "prefEnd": "02:00",
+      "research": "5 days",
+      "training": "12days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "2 days",
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778616490942,
+      "tg": 1466,
+      "pid": "100803175",
+      "name": "[WTF] FRED",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1176,
+      "general": "28 days",
+      "prefEnd": "00:00",
+      "research": "15 days",
+      "training": "22 days",
+      "prefStart": "12:00",
+      "prefTimes": [
+        {
+          "e": "00:00",
+          "s": "12:00"
+        }
+      ],
+      "construction": "31 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": [
+          {
+            "e": "00:00",
+            "s": "12:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778617353161,
+      "tg": 3578,
+      "pid": "",
+      "name": "msmysteria",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1200,
+      "general": "20 days",
+      "prefEnd": "12:00",
+      "research": "11 days",
+      "training": "13 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "12:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "50 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "12:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778629358075,
+      "tg": 1000,
+      "pid": "101917247",
+      "name": "Queen999",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1200,
+      "general": "56 days",
+      "prefEnd": "20:00",
+      "research": "54days",
+      "training": "63 days",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        }
+      ],
+      "construction": "33 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    }
+  ]
+}

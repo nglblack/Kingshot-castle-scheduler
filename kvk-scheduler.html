@@ -25,7 +25,16 @@ body{font-family:'Arial Rounded MT Bold','Helvetica Rounded',Arial,sans-serif;ba
 h1.page-title{text-align:center;margin-bottom:14px;font-size:2.6em;color:#ffd966;text-shadow:3px 3px 0 #8b6914,-2px -2px 0 #fff9e6,-2px 2px 0 #8b6914,2px -2px 0 #8b6914,4px 4px 0 #6b5010,5px 5px 0 #4a3508,6px 6px 15px rgba(0,0,0,0.5);font-weight:900;letter-spacing:2px;font-family:'Arial Black','Arial Bold',sans-serif;-webkit-text-stroke:1px #8b6914;paint-order:stroke fill;}
 
 /* Session bar */
-.session-bar{background:#fff8f0;border:2px solid rgba(139,111,71,0.25);border-radius:12px;padding:10px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.session-bar{background:#fff8f0;border:2px solid rgba(139,111,71,0.25);border-radius:12px;padding:10px 16px;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+/* Hide button text labels on iPad/medium screens — icons only */
+@media(max-width:1024px) and (min-width:769px){
+  .btn-txt{display:none;}
+  .session-id-display{max-width:90px;overflow:hidden;text-overflow:ellipsis;}
+  .slot-start-label{display:none;}
+}
+@media(max-width:480px){
+  .btn-txt{display:none;}
+}
 .session-bar .lbl{font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;}
 .session-id-display{font-family:'Courier New',monospace;font-size:13px;font-weight:700;color:#4a3428;background:#f5ebe0;border:2px solid rgba(139,111,71,0.2);border-radius:6px;padding:4px 10px;min-width:110px;}
 .spacer{flex:1;}
@@ -136,7 +145,7 @@ select:focus{border-color:#8b6914;}
 .open-count{font-size:11px;color:#8b7a5a;white-space:nowrap;}
 
 /* Table — desktop */
-.sched-wrap{flex:1;overflow-y:auto;overflow-x:auto;}
+.sched-wrap{flex:1;overflow-y:auto;overflow-x:auto;display:flex;flex-direction:column;}
 table{width:100%;border-collapse:collapse;table-layout:fixed;min-width:560px;}
 thead th{font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.06em;padding:9px 14px;text-align:left;border-bottom:2px solid rgba(139,111,71,.2);background:#f5ebe0;position:sticky;top:0;z-index:10;}
 tbody td{padding:7px 12px;border-bottom:1px solid rgba(139,111,71,.1);vertical-align:middle;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#4a3428;}
@@ -350,12 +359,12 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 
   <!-- Session / share bar -->
   <div class="session-bar">
-    <span class="lbl">Schedule ID:</span>
+    <span class="lbl">ID:</span>
     <span class="session-id-display" id="session-id-display">—</span>
-    <button class="btn sm" onclick="copyShareLink()" title="Copy shareable link">🔗 Share</button>
-    <button class="btn sm" onclick="copyIntakeLink()" title="Copy sign-up form link for alliance members" style="background:rgba(61,122,69,.1);border-color:rgba(61,122,69,.35);color:#3d7a45;">📋 Intake form</button>
-    <button class="btn sm" onclick="promptLoadId()" title="Load by ID">📂 Load</button>
-    <button class="btn sm primary" onclick="createNewSchedule()" title="Start fresh">＋ New</button>
+    <button class="btn sm" onclick="copyShareLink()" title="Copy shareable link">🔗 <span class="btn-txt">Share</span></button>
+    <button class="btn sm" onclick="copyIntakeLink()" title="Copy intake form link" style="background:rgba(61,122,69,.1);border-color:rgba(61,122,69,.35);color:#3d7a45;">📋 <span class="btn-txt">Intake form</span></button>
+    <button class="btn sm" onclick="promptLoadId()" title="Load by ID">📂 <span class="btn-txt">Load</span></button>
+    <button class="btn sm primary" onclick="createNewSchedule()" title="Start fresh">＋ <span class="btn-txt">New</span></button>
     <span class="spacer"></span>
     <span class="sync-dot" id="sync-dot"></span>
     <span class="sync-status" id="sync-status">Connecting…</span>
@@ -366,7 +375,7 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
       <div class="toolbar-left"><span class="save-info" id="save-info">Not saved yet</span></div>
       <div class="toolbar-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:5px;background:rgba(139,111,71,0.12);border:2px solid rgba(139,111,71,0.25);border-radius:8px;padding:4px 10px;">
-          <span style="font-size:11px;font-weight:700;color:#8b7a5a;white-space:nowrap;">🕐 Slots start:</span>
+          <span class="slot-start-label" style="font-size:11px;font-weight:700;color:#8b7a5a;white-space:nowrap;">🕐 Slots start:</span>
           <input id="slot-start-input" type="text" placeholder="e.g. 12:11" maxlength="5"
             style="width:72px;padding:3px 7px;font-size:13px;border-radius:6px;border:1px solid rgba(139,111,71,0.3);background:#fff8f0;color:#4a3428;font-family:'Courier New',monospace;font-weight:700;outline:none;text-align:center;"
             onkeydown="if(event.key==='Enter')applySlotStart()"
@@ -374,10 +383,11 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
           <span style="font-size:11px;color:#8b7a5a;font-weight:600;">UTC</span>
           <button class="btn sm primary" onclick="applySlotStart()" style="padding:3px 9px;font-size:11px;">Apply</button>
         </div>
-        <button class="btn sm" onclick="openCopyModal('d1')">📋 Day 1 open slots</button>
-        <button class="btn sm" onclick="openCopyModal('d2')">📋 Day 2 open slots</button>
-        <button class="btn sm" onclick="openCopyModal('d4')">📋 Day 4 open slots</button>
-        <button class="btn sm warn" onclick="showReset()">Reset all</button>
+        <button class="btn sm" onclick="openCopyModal('d1')" title="Day 1 open slots">📋 <span class="btn-txt">Day 1</span></button>
+        <button class="btn sm" onclick="openCopyModal('d2')" title="Day 2 open slots">📋 <span class="btn-txt">Day 2</span></button>
+        <button class="btn sm" onclick="openCopyModal('d4')" title="Day 4 open slots">📋 <span class="btn-txt">Day 4</span></button>
+        <button class="btn sm warn" onclick="showReset()" title="Reset all">🗑️ <span class="btn-txt">Reset</span></button>
+        <button class="btn sm" onclick="showExportModal()" title="Export schedule" style="background:rgba(61,90,122,.08);border-color:rgba(61,90,122,.3);color:#3d5a7a;">💾 <span class="btn-txt">Export</span></button>
       </div>
     </div>
 
@@ -607,12 +617,12 @@ True Gold: __126__
           <table id="sched-table">
             <colgroup>
               <col class="th-handle" style="width:28px">
-              <col style="width:72px">
-              <col style="width:auto">
-              <col id="col-a-col" style="width:100px">
-              <col id="col-b-col" style="width:110px">
-              <col id="col-c-col" style="width:120px">
-              <col style="width:36px">
+              <col style="width:80px">
+              <col style="min-width:160px;width:25%">
+              <col id="col-a-col" style="min-width:90px;width:13%">
+              <col id="col-b-col" style="min-width:100px;width:15%">
+              <col id="col-c-col" style="min-width:120px;width:20%">
+              <col style="width:44px">
             </colgroup>
             <thead><tr>
               <th class="th-handle"></th>
@@ -785,6 +795,52 @@ True Gold: __126__
       <div style="display:flex;justify-content:flex-end;margin-top:4px"><button class="btn sm" onclick="copyFull()">📋 Copy full</button></div>
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeCopyModal()">Done</button></div>
+  </div>
+</div>
+
+<!-- Export modal -->
+<div class="modal-bg" id="export-modal">
+  <div class="modal" style="width:420px;max-width:calc(100vw - 32px);">
+    <div class="modal-title">
+      <span>💾 Export Schedule</span>
+      <button class="btn ghost" onclick="closeExportModal()">✕</button>
+    </div>
+    <p style="font-size:13px;color:#6b4423;line-height:1.6;">
+      Download a backup of your current schedule. Your data is already saved in the cloud — this gives you a local copy you can keep or re-import.
+    </p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+
+      <button class="btn full" onclick="exportCSV()" style="justify-content:flex-start;gap:10px;padding:12px 14px;white-space:normal;text-align:left;min-width:0;">
+        <span style="font-size:20px;flex-shrink:0;">📊</span>
+        <div style="min-width:0;">
+          <div style="font-weight:700;color:#4a3428;">Download as CSV</div>
+          <div style="font-size:11px;color:#8b7a5a;white-space:normal;line-height:1.4;">Opens in Excel / Google Sheets — all players across all days</div>
+        </div>
+      </button>
+
+      <button class="btn full" onclick="exportJSON()" style="justify-content:flex-start;gap:10px;padding:12px 14px;white-space:normal;text-align:left;min-width:0;">
+        <span style="font-size:20px;flex-shrink:0;">📄</span>
+        <div style="min-width:0;">
+          <div style="font-weight:700;color:#4a3428;">Download as JSON</div>
+          <div style="font-size:11px;color:#8b7a5a;white-space:normal;line-height:1.4;">Full backup — can be re-imported later if needed</div>
+        </div>
+      </button>
+
+    </div>
+
+    <div style="border-top:1px solid rgba(139,111,71,.15);margin-top:4px;padding-top:12px;">
+      <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Import backup</div>
+      <label style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;cursor:pointer;transition:border .15s;" onmouseover="this.style.borderColor='#8b6914'" onmouseout="this.style.borderColor='rgba(139,111,71,.2)'">
+        <span style="font-size:20px;flex-shrink:0;">📂</span>
+        <div style="min-width:0;">
+          <div style="font-weight:700;color:#4a3428;font-size:13px;">Load from JSON backup</div>
+          <div style="font-size:11px;color:#8b7a5a;white-space:normal;line-height:1.4;">Select a previously exported .json file to restore</div>
+        </div>
+        <input type="file" accept=".json" style="display:none;" onchange="importJSON(this)">
+      </label>
+      <div id="import-error" style="display:none;font-size:12px;color:#c0392b;margin-top:6px;padding:6px 10px;background:rgba(192,57,43,.08);border-radius:6px;border:1px solid rgba(192,57,43,.25);"></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeExportModal()">Close</button></div>
   </div>
 </div>
 
@@ -1720,9 +1776,11 @@ function renderGrid(){
       // col C: construction speed
       const tdC=document.createElement('td');tdC.className='t-speed';tdC.style.color='#4a3428';tdC.textContent=String(colC);tr.appendChild(tdC);
       // gear button (all devices) — use addEventListener to avoid CSP/scope issues
-      const tdTap=document.createElement('td');tdTap.className='td-tap-btn';tdTap.style.padding='2px';
-      const gearBtn=document.createElement('button');
-      gearBtn.className='gear-btn';gearBtn.title='Details / move';gearBtn.textContent='⚙️';
+      const tdTap=document.createElement('td');tdTap.className='td-tap-btn';tdTap.style.cssText='padding:4px 6px;cursor:pointer;text-align:center;';
+      const gearBtn=document.createElement('div');
+      gearBtn.className='gear-btn';gearBtn.title='Details / move';
+      gearBtn.textContent='•••';
+      gearBtn.style.cursor='pointer';
       gearBtn.addEventListener('click',function(e){e.stopPropagation();openActionSheet(currentDay,i,this);});
       tdTap.appendChild(gearBtn);tr.appendChild(tdTap);
       // actions handled by gear popover/sheet
@@ -2064,6 +2122,147 @@ function submitManual(){
 function showReset(){document.getElementById('confirm-strip').classList.add('open');}
 function hideReset(){document.getElementById('confirm-strip').classList.remove('open');}
 function doReset(){state={queue:[],day1:new Array(48).fill(null),day2:new Array(48).fill(null),day4:new Array(48).fill(null)};startMinutes=0;document.getElementById('slot-start-input').value='';debouncedSave();hideReset();renderQueue();renderGrid();renderStats();toast('All data cleared.');}
+// ══════════════════════════════════════════════
+//  EXPORT
+// ══════════════════════════════════════════════
+function showExportModal(){ document.getElementById('export-modal').classList.add('open'); }
+function closeExportModal(){ document.getElementById('export-modal').classList.remove('open'); }
+
+function downloadFile(filename, content, mime) {
+  const blob = new Blob([content], {type: mime});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function escCSV(val) {
+  if (val === null || val === undefined) return '';
+  const s = String(val);
+  return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+function formatPref(player) {
+  if (player.prefTimes && player.prefTimes.length) {
+    return player.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s?' – '+t.e:'')).join(' | ') + ' UTC';
+  }
+  if (player.prefStart) return player.prefStart + (player.prefEnd?' – '+player.prefEnd:'') + ' UTC';
+  return '';
+}
+
+function exportCSV() {
+  const now = new Date();
+  const stamp = now.toISOString().slice(0,10);
+  const headers = ['Day','Slot (UTC)','Player','Player ID','TG','TG Dust','General','Construction','Research','Training','Pref Time'];
+  const rows = [headers];
+
+  const dayLabels = {1:'Day 1 — Building', 2:'Day 2 — Research', 4:'Day 4 — Training'};
+  [[1,state.day1],[2,state.day2],[4,state.day4]].forEach(([day,grid])=>{
+    grid.forEach((p,i)=>{
+      if (!p) return;
+      rows.push([
+        dayLabels[day],
+        slotTime(i) + ' – ' + slotEnd(i),
+        p.name, p.pid||'',
+        p.tg||'', p.tgDust||'',
+        p.general||'', p.construction||'', p.research||'', p.training||'',
+        formatPref(p)
+      ].map(escCSV));
+    });
+  });
+
+  // Queue section
+  if (state.queue.length) {
+    rows.push([]);
+    rows.push(['QUEUE (unscheduled)', '', 'Player', 'Player ID', 'TG', 'TG Dust', 'General', 'Construction', 'Research', 'Training', 'Pref Time']);
+    state.queue.forEach(p=>{
+      rows.push([
+        '—','—',
+        p.name, p.pid||'',
+        p.tg||'', p.tgDust||'',
+        p.general||'', p.construction||'', p.research||'', p.training||'',
+        formatPref(p)
+      ].map(escCSV));
+    });
+  }
+
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  downloadFile('kvk-schedule-' + (scheduleId||'export') + '-' + stamp + '.csv', csv, 'text/csv;charset=utf-8;');
+  toast('📊 CSV downloaded');
+  closeExportModal();
+}
+
+function exportJSON() {
+  const now = new Date();
+  const stamp = now.toISOString().slice(0,10);
+  const backup = {
+    scheduleId,
+    exportedAt: now.toISOString(),
+    slotStartTime: startMinutes ? (String(Math.floor(startMinutes/60)).padStart(2,'0')+':'+String(startMinutes%60).padStart(2,'0')) : '00:00',
+    day1: state.day1,
+    day2: state.day2,
+    day4: state.day4,
+    queue: state.queue,
+  };
+  downloadFile('kvk-schedule-' + (scheduleId||'export') + '-' + stamp + '.json', JSON.stringify(backup, null, 2), 'application/json');
+  toast('📄 JSON downloaded');
+  closeExportModal();
+}
+
+function importJSON(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const errEl = document.getElementById('import-error');
+  errEl.style.display = 'none';
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+
+      // Validate it looks like a schedule backup
+      if (!data.day1 || !data.day4) throw new Error('This does not look like a valid schedule backup file.');
+
+      // Restore state
+      state.day1  = (Array.isArray(data.day1)&&data.day1.length===48)  ? data.day1  : new Array(48).fill(null);
+      state.day2  = (Array.isArray(data.day2)&&data.day2.length===48)  ? data.day2  : new Array(48).fill(null);
+      state.day4  = (Array.isArray(data.day4)&&data.day4.length===48)  ? data.day4  : new Array(48).fill(null);
+      state.queue = Array.isArray(data.queue) ? data.queue : [];
+
+      // Restore slot start time if present
+      if (data.slotStartTime) {
+        const mins = parseTimeInput(data.slotStartTime);
+        if (mins !== null) {
+          startMinutes = mins;
+          state.startMinutes = mins;
+          localStorage.setItem('kvk_slot_start', mins);
+          const el = document.getElementById('slot-start-input');
+          if (el) el.value = data.slotStartTime;
+        }
+      }
+
+      // Save to current cloud schedule
+      debouncedSave();
+      renderQueue();
+      renderGrid();
+      renderStats();
+      closeExportModal();
+      toast('✅ Schedule restored from backup — ' + (data.exportedAt ? 'saved ' + new Date(data.exportedAt).toLocaleDateString() : 'imported'));
+
+    } catch(err) {
+      errEl.textContent = err.message || 'Could not read file. Make sure it is a valid JSON backup.';
+      errEl.style.display = 'block';
+    }
+    // Reset file input so same file can be re-selected
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
 let toastTimer;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2800);}
 
