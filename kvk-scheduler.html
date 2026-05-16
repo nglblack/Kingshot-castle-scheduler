@@ -235,9 +235,7 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 .undo-btn:hover{background:rgba(255,217,102,0.3);}
 
 /* Confirm */
-.confirm-strip{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(192,57,43,.08);border-top:2px solid rgba(192,57,43,.3);padding:10px 20px;align-items:center;justify-content:space-between;gap:10px;z-index:150;backdrop-filter:blur(4px);}
-.confirm-strip.open{display:flex;}
-.confirm-strip span{font-size:13px;color:#c0392b;font-weight:700;}
+/* confirm-strip removed */
 .man-error{display:none;font-size:12px;color:#c0392b;padding:6px 10px;background:rgba(192,57,43,.08);border-radius:8px;border:1px solid rgba(192,57,43,.3);}
 
 ::-webkit-scrollbar{width:5px;}
@@ -844,11 +842,29 @@ True Gold: __126__
   </div>
 </div>
 
-<div class="confirm-strip" id="confirm-strip">
-  <span>⚠️ This will erase all players and schedule data. Are you sure?</span>
-  <div style="display:flex;gap:8px">
-    <button class="btn sm" onclick="hideReset()">Cancel</button>
-    <button class="btn sm warn" onclick="doReset()">Yes, reset everything</button>
+<!-- Reset confirmation modal -->
+<div class="modal-bg" id="reset-modal" style="z-index:450;">
+  <div class="modal" style="width:420px;max-width:calc(100vw-32px);border:2px solid rgba(192,57,43,.4);">
+    <div class="modal-title" style="color:#c0392b;">
+      <span>🗑️ Reset entire schedule?</span>
+      <button class="btn ghost" onclick="hideReset()">✕</button>
+    </div>
+    <div style="background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.2);border-radius:8px;padding:12px 14px;font-size:13px;color:#c0392b;line-height:1.6;">
+      <strong>This will permanently erase ALL data</strong> — every player on Day 1, Day 2, Day 4, and the entire queue.<br><br>
+      This action will auto-confirm in <strong id="reset-countdown">10</strong> seconds unless you cancel.
+    </div>
+    <!-- countdown bar -->
+    <div style="margin-top:10px;height:5px;background:rgba(192,57,43,.15);border-radius:3px;overflow:hidden;">
+      <div id="reset-bar" style="height:100%;width:100%;background:#c0392b;border-radius:3px;transition:width linear;"></div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:#8b7a5a;text-align:center;">Type <strong style="color:#c0392b;font-family:'Courier New',monospace;">RESET</strong> to confirm, then click the button</div>
+    <input id="reset-confirm-input" type="text" placeholder='Type RESET to confirm'
+      style="width:100%;margin-top:6px;padding:9px 12px;font-size:14px;font-family:'Courier New',monospace;font-weight:700;border:2px solid rgba(192,57,43,.3);border-radius:8px;background:#fff8f0;color:#c0392b;outline:none;text-align:center;"
+      oninput="checkResetInput(this)">
+    <div class="modal-footer" style="margin-top:12px;">
+      <button class="btn" style="flex:1;" onclick="hideReset()">Cancel — keep everything</button>
+      <button class="btn warn" id="reset-confirm-btn" disabled onclick="doReset()" style="flex:1;opacity:.4;cursor:not-allowed;">Yes, reset everything</button>
+    </div>
   </div>
 </div>
 
@@ -2148,9 +2164,45 @@ function submitManual(){
   [1,2,4].forEach(d=>{const cb=document.getElementById('man-d'+d);if(cb)cb.checked=false;toggleDayTime(d);});
   switchSTab('queue');
 }
-function showReset(){document.getElementById('confirm-strip').classList.add('open');}
-function hideReset(){document.getElementById('confirm-strip').classList.remove('open');}
-function doReset(){state={queue:[],day1:new Array(48).fill(null),day2:new Array(48).fill(null),day4:new Array(48).fill(null)};startMinutes=0;document.getElementById('slot-start-input').value='';debouncedSave();hideReset();renderQueue();renderGrid();renderStats();toast('All data cleared.');}
+let resetCountdownTimer=null, resetBarAnim=null;
+function showReset(){
+  // Clear input
+  const inp=document.getElementById('reset-confirm-input');
+  if(inp){inp.value='';checkResetInput(inp);}
+  document.getElementById('reset-modal').classList.add('open');
+  // Start 10-second countdown
+  let secs=10;
+  const cd=document.getElementById('reset-countdown');
+  const bar=document.getElementById('reset-bar');
+  if(bar){bar.style.transition='none';bar.style.width='100%';}
+  if(cd) cd.textContent=secs;
+  clearInterval(resetCountdownTimer);
+  resetCountdownTimer=setInterval(()=>{
+    secs--;
+    if(cd) cd.textContent=secs;
+    if(bar){bar.style.transition='width 1s linear';bar.style.width=(secs/10*100)+'%';}
+    if(secs<=0){clearInterval(resetCountdownTimer);hideReset();}
+  },1000);
+}
+function hideReset(){
+  clearInterval(resetCountdownTimer);
+  document.getElementById('reset-modal').classList.remove('open');
+  const inp=document.getElementById('reset-confirm-input');
+  if(inp){inp.value='';checkResetInput(inp);}
+}
+function checkResetInput(el){
+  const btn=document.getElementById('reset-confirm-btn');
+  const ok=el.value.trim().toUpperCase()==='RESET';
+  if(btn){btn.disabled=!ok;btn.style.opacity=ok?'1':'0.4';btn.style.cursor=ok?'pointer':'not-allowed';}
+}
+function doReset(){
+  clearInterval(resetCountdownTimer);
+  state={queue:[],day1:new Array(48).fill(null),day2:new Array(48).fill(null),day4:new Array(48).fill(null)};
+  startMinutes=0;
+  const si=document.getElementById('slot-start-input');if(si)si.value='';
+  debouncedSave();hideReset();renderQueue();renderGrid();renderStats();
+  toast('Schedule cleared.');
+}
 // ══════════════════════════════════════════════
 //  EXPORT
 // ══════════════════════════════════════════════
