@@ -981,19 +981,10 @@ function checkPinState() {
 }
 
 function toggleLock() {
-    if (isUnlocked) {
-    // Lock — or offer to change PIN
-    const choice = confirm('Lock the scheduler?
-
-OK = Lock now
-Cancel = Stay unlocked');
-    if (choice) lock();
+  if (isUnlocked) {
+    if (confirm('Lock the scheduler?\nOthers will need the PIN to make changes.')) lock();
   } else {
-    if (!schedulePinHash) {
-      setPinFlow();
-    } else {
-      openPinModal();
-    }
+    if (!schedulePinHash) { setPinFlow(); } else { openPinModal(); }
   }
 }
 
