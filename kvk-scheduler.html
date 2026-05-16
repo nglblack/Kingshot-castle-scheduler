@@ -971,13 +971,14 @@ function checkPinState() {
   if (sessionStorage.getItem(SESSION_KEY) === 'yes') {
     unlock(false); return;
   }
+  // No PIN set on this schedule — auto-unlock
   if (!schedulePinHash) {
-    // No PIN set on this schedule yet — auto-unlock and prompt to set one
     unlock(false);
-    setTimeout(()=>toast('💡 No PIN set — click 🔒 Locked to protect this schedule'), 1500);
-  } else {
-    lock();
+    setTimeout(()=>toast('💡 No PIN set — click 🔒 Locked to set one'), 2000);
+    return;
   }
+  // PIN exists — show lock
+  lock();
 }
 
 function toggleLock() {
@@ -1012,18 +1013,44 @@ async function submitPin() {
   }
 }
 
-async function setPinFlow() {
-  const pin1 = prompt('Set officer PIN — anyone with the schedule link will need this to edit:');
-  if (!pin1 || pin1.trim().length < 4) { toast('PIN must be at least 4 characters.'); return; }
-  const pin2 = prompt('Confirm PIN:');
-  if (pin1 !== pin2) { toast('PINs do not match. Try again.'); return; }
-  const hash = await hashPin(pin1);
+function setPinFlow() {
+  // Open the Set PIN modal instead of using prompt()
+  document.getElementById('set-pin-1').value = '';
+  document.getElementById('set-pin-2').value = '';
+  document.getElementById('set-pin-error').style.display = 'none';
+  document.getElementById('set-pin-btn').disabled = true;
+  document.getElementById('set-pin-btn').style.opacity = '.4';
+  document.getElementById('set-pin-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('set-pin-1').focus(), 100);
+}
+function closeSetPinModal() {
+  document.getElementById('set-pin-modal').classList.remove('open');
+}
+function checkSetPin() {
+  const p1 = document.getElementById('set-pin-1').value;
+  const p2 = document.getElementById('set-pin-2').value;
+  const btn = document.getElementById('set-pin-btn');
+  const errEl = document.getElementById('set-pin-error');
+  errEl.style.display = 'none';
+  const ok = p1.length >= 4 && p1 === p2;
+  btn.disabled = !ok;
+  btn.style.opacity = ok ? '1' : '.4';
+}
+async function confirmSetPin() {
+  const p1 = document.getElementById('set-pin-1').value;
+  const p2 = document.getElementById('set-pin-2').value;
+  const errEl = document.getElementById('set-pin-error');
+  if (p1.length < 4) { errEl.textContent='PIN must be at least 4 characters.'; errEl.style.display='block'; return; }
+  if (p1 !== p2) { errEl.textContent='PINs do not match.'; errEl.style.display='block'; return; }
+  const hash = await hashPin(p1);
   schedulePinHash = hash;
   if (sb && scheduleId) {
-    await sb.from(TABLE).update({ pin_hash: hash }).eq('id', scheduleId);
+    const {error} = await sb.from(TABLE).update({ pin_hash: hash }).eq('id', scheduleId);
+    if (error) { errEl.textContent='Failed to save PIN. Try again.'; errEl.style.display='block'; return; }
   }
+  closeSetPinModal();
   unlock();
-  toast('✅ PIN saved — all users on this link must enter it to make changes.');
+  toast('✅ PIN saved — all users must enter it to edit.');
 }
 
 // Intercept all destructive actions when locked
@@ -2639,8 +2666,7 @@ function undoDelete() {
 document.addEventListener('DOMContentLoaded', async () => {
   const navToggle=document.getElementById('navToggle'),navMenu=document.getElementById('navMenu');
   if(navToggle)navToggle.addEventListener('click',()=>{navToggle.classList.toggle('active');navMenu.classList.toggle('active');});
-  lock(); // start locked until schedule + PIN loads
-  await initSession();
+  await initSession(); // auth state set by checkPinState() inside applyRow
 });
 </script>
 
@@ -2660,6 +2686,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     <div class="modal-footer" style="margin-top:14px;">
       <button class="btn" onclick="closePinModal()">Cancel</button>
       <button class="btn primary" onclick="submitPin()">Unlock →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Set PIN modal -->
+<div class="modal-bg" id="set-pin-modal" style="z-index:600;">
+  <div class="modal" style="width:360px;max-width:calc(100vw - 32px);">
+    <div class="modal-title">
+      <span>🔐 Set Officer PIN</span>
+      <button class="btn ghost" onclick="closeSetPinModal()">✕</button>
+    </div>
+    <p style="font-size:13px;color:#6b4423;line-height:1.6;margin-bottom:12px;">
+      Set a PIN that all officers will need to edit this schedule. Anyone with just the link will be read-only.
+    </p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div>
+        <label style="font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px;">New PIN (min 4 characters)</label>
+        <input id="set-pin-1" type="password" placeholder="Enter PIN"
+          style="width:100%;padding:10px 12px;font-size:16px;font-family:'Courier New',monospace;font-weight:700;letter-spacing:3px;background:#fff8f0;border:2px solid rgba(139,111,71,.25);border-radius:8px;outline:none;text-align:center;"
+          oninput="checkSetPin()" onkeydown="if(event.key==='Enter')document.getElementById('set-pin-2').focus()">
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px;">Confirm PIN</label>
+        <input id="set-pin-2" type="password" placeholder="Confirm PIN"
+          style="width:100%;padding:10px 12px;font-size:16px;font-family:'Courier New',monospace;font-weight:700;letter-spacing:3px;background:#fff8f0;border:2px solid rgba(139,111,71,.25);border-radius:8px;outline:none;text-align:center;"
+          oninput="checkSetPin()" onkeydown="if(event.key==='Enter')confirmSetPin()">
+      </div>
+      <div id="set-pin-error" style="display:none;font-size:12px;color:#c0392b;text-align:center;padding:6px;background:rgba(192,57,43,.08);border-radius:6px;"></div>
+    </div>
+    <div class="modal-footer" style="margin-top:14px;">
+      <button class="btn" onclick="closeSetPinModal()">Cancel</button>
+      <button class="btn primary" id="set-pin-btn" onclick="confirmSetPin()" disabled style="opacity:.4;">Set PIN →</button>
     </div>
   </div>
 </div>
