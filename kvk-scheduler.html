@@ -920,7 +920,6 @@ const TABLE = 'kvk_schedules';
 //  Set your PIN below (this runs at load time)
 //  Default PIN: change it from the lock button
 // ══════════════════════════════════════════════
-const PIN_STORAGE_KEY = 'kvk_officer_pin_hash';
 const SESSION_KEY     = 'kvk_officer_unlocked';
 
 // Simple hash — not cryptographic but sufficient for this use case
@@ -938,8 +937,7 @@ async function initAuth() {
     unlock(false); return;
   }
   // Check if a PIN has been set
-  const storedHash = localStorage.getItem(PIN_STORAGE_KEY);
-  if (!storedHash) {
+    if (!storedHash) {
     // No PIN set yet — first run, unlock and prompt to set one
     unlock(false);
     toast('💡 No PIN set — go to 🔒 button to set an officer PIN');
@@ -968,9 +966,22 @@ function unlock(showToast=true) {
   if (showToast) toast('🔓 Access granted');
 }
 
+function checkPinState() {
+  // Already unlocked this session?
+  if (sessionStorage.getItem(SESSION_KEY) === 'yes') {
+    unlock(false); return;
+  }
+  if (!schedulePinHash) {
+    // No PIN set on this schedule yet — auto-unlock and prompt to set one
+    unlock(false);
+    setTimeout(()=>toast('💡 No PIN set — click 🔒 Locked to protect this schedule'), 1500);
+  } else {
+    lock();
+  }
+}
+
 function toggleLock() {
-  const storedHash = localStorage.getItem(PIN_STORAGE_KEY);
-  if (isUnlocked) {
+    if (isUnlocked) {
     // Lock — or offer to change PIN
     const choice = confirm('Lock the scheduler?
 
@@ -978,8 +989,7 @@ OK = Lock now
 Cancel = Stay unlocked');
     if (choice) lock();
   } else {
-    if (!storedHash) {
-      // No PIN set — set one now
+    if (!schedulePinHash) {
       setPinFlow();
     } else {
       openPinModal();
@@ -1001,8 +1011,7 @@ async function submitPin() {
   const pin = document.getElementById('pin-input').value;
   if (!pin) return;
   const entered = await hashPin(pin);
-  const stored  = localStorage.getItem(PIN_STORAGE_KEY);
-  if (entered === stored) {
+  if (entered === schedulePinHash) {
     closePinModal();
     unlock();
   } else {
@@ -1013,14 +1022,17 @@ async function submitPin() {
 }
 
 async function setPinFlow() {
-  const pin1 = prompt('Set officer PIN (you will need this to make changes):');
-  if (!pin1 || pin1.trim().length < 4) { alert('PIN must be at least 4 characters.'); return; }
+  const pin1 = prompt('Set officer PIN — anyone with the schedule link will need this to edit:');
+  if (!pin1 || pin1.trim().length < 4) { toast('PIN must be at least 4 characters.'); return; }
   const pin2 = prompt('Confirm PIN:');
-  if (pin1 !== pin2) { alert('PINs do not match. Try again.'); return; }
+  if (pin1 !== pin2) { toast('PINs do not match. Try again.'); return; }
   const hash = await hashPin(pin1);
-  localStorage.setItem(PIN_STORAGE_KEY, hash);
+  schedulePinHash = hash;
+  if (sb && scheduleId) {
+    await sb.from(TABLE).update({ pin_hash: hash }).eq('id', scheduleId);
+  }
   unlock();
-  toast('✅ PIN set! Share it only with officers. Lock and unlock via the 🔒 button.');
+  toast('✅ PIN saved — all users on this link must enter it to make changes.');
 }
 
 // Intercept all destructive actions when locked
@@ -1138,7 +1150,7 @@ async function cloudSave() {
   setSyncStatus('saving');
   ignoreNext = true;
   const { data, error } = await sb.from(TABLE)
-    .update({ day1: state.day1, day2: state.day2, day4: state.day4, queue: state.queue, version: scheduleVer + 1 })
+    .update({ day1: state.day1, day2: state.day2, day4: state.day4, queue: state.queue, version: scheduleVer + 1, pin_hash: schedulePinHash||null })
     .eq('id', scheduleId)
     .select().single();
   if (error) {
@@ -2636,7 +2648,7 @@ function undoDelete() {
 document.addEventListener('DOMContentLoaded', async () => {
   const navToggle=document.getElementById('navToggle'),navMenu=document.getElementById('navMenu');
   if(navToggle)navToggle.addEventListener('click',()=>{navToggle.classList.toggle('active');navMenu.classList.toggle('active');});
-  lock(true); // start locked until schedule + PIN loads
+  lock(); // start locked until schedule + PIN loads
   await initSession();
 });
 </script>
