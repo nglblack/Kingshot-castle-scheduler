@@ -827,6 +827,16 @@ True Gold: __126__
     </div>
 
     <div style="border-top:1px solid rgba(139,111,71,.15);margin-top:4px;padding-top:12px;">
+      <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Recover queue backup</div>
+      <div id="queue-backup-info" style="font-size:12px;color:#6b4423;margin-bottom:8px;display:none;"></div>
+      <button class="btn full" onclick="restoreQueueBackup()" id="restore-queue-btn" style="justify-content:flex-start;gap:10px;padding:10px 14px;white-space:normal;text-align:left;min-width:0;display:none;">
+        <span style="font-size:18px;flex-shrink:0;">🔄</span>
+        <div style="min-width:0;">
+          <div style="font-weight:700;color:#4a3428;">Restore queue from local backup</div>
+          <div id="queue-backup-desc" style="font-size:11px;color:#8b7a5a;white-space:normal;line-height:1.4;"></div>
+        </div>
+      </button>
+      <div style="border-top:1px solid rgba(139,111,71,.1);margin-top:10px;padding-top:10px;">
       <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Import backup</div>
       <label style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;cursor:pointer;transition:border .15s;" onmouseover="this.style.borderColor='#8b6914'" onmouseout="this.style.borderColor='rgba(139,111,71,.2)'">
         <span style="font-size:20px;flex-shrink:0;">📂</span>
@@ -837,6 +847,7 @@ True Gold: __126__
         <input type="file" accept=".json" style="display:none;" onchange="importJSON(this)">
       </label>
       <div id="import-error" style="display:none;font-size:12px;color:#c0392b;margin-top:6px;padding:6px 10px;background:rgba(192,57,43,.08);border-radius:6px;border:1px solid rgba(192,57,43,.25);"></div>
+      </div><!-- end import section -->
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeExportModal()">Close</button></div>
   </div>
@@ -851,7 +862,9 @@ True Gold: __126__
     </div>
     <div style="background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.2);border-radius:8px;padding:12px 14px;font-size:13px;color:#c0392b;line-height:1.6;">
       <strong>This will permanently erase ALL data</strong> — every player on Day 1, Day 2, Day 4, and the entire queue.<br><br>
-      This action will auto-confirm in <strong id="reset-countdown">10</strong> seconds unless you cancel.
+      This will erase all <strong>scheduled slots</strong> on Day 1, Day 2 and Day 4.<br>
+      <span style="color:#3d7a45;font-weight:700;">✓ All scheduled players will be moved back to queue — no data lost.</span><br><br>
+      This action will auto-cancel in <strong id="reset-countdown">10</strong> seconds unless you confirm.
     </div>
     <!-- countdown bar -->
     <div style="margin-top:10px;height:5px;background:rgba(192,57,43,.15);border-radius:3px;overflow:hidden;">
@@ -1005,6 +1018,14 @@ async function cloudSave() {
 // Debounce — only write to Supabase 800ms after the last change
 function debouncedSave() {
   clearTimeout(saveTimer);
+  // Always back up queue to localStorage immediately
+  if (state.queue && state.queue.length) {
+    try { localStorage.setItem('kvk_queue_backup', JSON.stringify({
+      savedAt: new Date().toISOString(),
+      scheduleId,
+      queue: state.queue
+    })); } catch(e) {}
+  }
   saveTimer = setTimeout(cloudSave, 800);
 }
 
@@ -2197,16 +2218,89 @@ function checkResetInput(el){
 }
 function doReset(){
   clearInterval(resetCountdownTimer);
-  state={queue:[],day1:new Array(48).fill(null),day2:new Array(48).fill(null),day4:new Array(48).fill(null)};
-  startMinutes=0;
-  const si=document.getElementById('slot-start-input');if(si)si.value='';
-  debouncedSave();hideReset();renderQueue();renderGrid();renderStats();
-  toast('Schedule cleared.');
+
+  // Collect every scheduled player from all grids back into the queue
+  const alreadyInQueue = (p) => state.queue.find(q =>
+    q.name === p.name && (p.pid && q.pid ? q.pid === p.pid : !p.pid && !q.pid)
+  );
+
+  let recovered = 0;
+  [[1, state.day1],[2, state.day2],[4, state.day4]].forEach(([day, grid]) => {
+    grid.forEach(slot => {
+      if (!slot) return;
+      if (!alreadyInQueue(slot)) {
+        // Return to queue with the day they were on pre-selected
+        state.queue.push({...slot, id: Date.now() + Math.random(), forDay: null, _qDay: day, _scheduledDays: []});
+        recovered++;
+      }
+    });
+  });
+
+  // Now clear the grids
+  state.day1 = new Array(48).fill(null);
+  state.day2 = new Array(48).fill(null);
+  state.day4 = new Array(48).fill(null);
+
+  startMinutes = 0;
+  const si = document.getElementById('slot-start-input');
+  if (si) si.value = '';
+
+  debouncedSave(); hideReset(); renderQueue(); renderGrid(); renderStats();
+
+  const msg = recovered > 0
+    ? 'Slots cleared — ' + recovered + ' scheduled player' + (recovered>1?'s':'') + ' returned to queue.'
+    : 'Slots cleared — queue unchanged.';
+  toast(msg);
 }
 // ══════════════════════════════════════════════
 //  EXPORT
 // ══════════════════════════════════════════════
-function showExportModal(){ document.getElementById('export-modal').classList.add('open'); }
+function showExportModal(){
+  // Check for localStorage queue backup
+  try {
+    const raw = localStorage.getItem('kvk_queue_backup');
+    const infoEl = document.getElementById('queue-backup-info');
+    const btnEl  = document.getElementById('restore-queue-btn');
+    const descEl = document.getElementById('queue-backup-desc');
+    if (raw) {
+      const bk = JSON.parse(raw);
+      const d  = new Date(bk.savedAt);
+      const when = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      const count = bk.queue ? bk.queue.length : 0;
+      if (count > 0) {
+        if(infoEl) { infoEl.textContent = 'Found a local backup from ' + when; infoEl.style.display='block'; }
+        if(descEl)   descEl.textContent  = count + ' players saved at ' + when;
+        if(btnEl)    btnEl.style.display = 'flex';
+      } else {
+        if(infoEl) infoEl.style.display='none';
+        if(btnEl)  btnEl.style.display='none';
+      }
+    } else {
+      if(infoEl) infoEl.style.display='none';
+      if(btnEl)  btnEl.style.display='none';
+    }
+  } catch(e) {}
+  document.getElementById('export-modal').classList.add('open');
+}
+function restoreQueueBackup() {
+  try {
+    const raw = localStorage.getItem('kvk_queue_backup');
+    if (!raw) { toast('No local backup found.'); return; }
+    const bk = JSON.parse(raw);
+    if (!bk.queue || !bk.queue.length) { toast('Backup is empty.'); return; }
+    // Merge — add players not already in queue
+    let added = 0;
+    bk.queue.forEach(p => {
+      const exists = state.queue.find(q => q.name===p.name && (p.pid&&q.pid ? q.pid===p.pid : !p.pid&&!q.pid));
+      if (!exists) { state.queue.push(p); added++; }
+    });
+    debouncedSave(); renderQueue(); renderStats();
+    closeExportModal();
+    toast('✅ Restored ' + added + ' players from local backup' + (bk.queue.length-added>0?' ('+( bk.queue.length-added)+' already in queue)':'') + '.');
+  } catch(e) {
+    toast('Could not restore backup: ' + e.message);
+  }
+}
 function closeExportModal(){ document.getElementById('export-modal').classList.remove('open'); }
 
 function downloadFile(filename, content, mime) {
