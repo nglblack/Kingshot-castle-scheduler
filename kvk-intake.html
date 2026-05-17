@@ -569,10 +569,15 @@ function autoColon(el) {
 }
 
 function extractTime(s) {
-  const m=(s||'').match(/(\d{1,2})\s*:\s*(\d{2})/);
+  if(!s) return null;
+  s = s.trim().replace(/2400/, '00:00');
+  // Match HH:MM, HH:, or bare HH
+  const m = s.match(/^(\d{1,2})\s*:?\s*(\d{0,2})/);
   if(!m) return null;
-  let h=parseInt(m[1]),mn=parseInt(m[2]);
-  if(h===24)h=0; if(h>23||mn>59) return null;
+  let h = parseInt(m[1]);
+  let mn = m[2] ? parseInt(m[2]) : 0; // missing minutes → :00
+  if(h===24) h=0;
+  if(h>23||mn>59) return null;
   return String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0');
 }
 function parseTG(s){
