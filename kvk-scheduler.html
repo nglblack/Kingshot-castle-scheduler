@@ -1466,8 +1466,10 @@ function applySlotStart() {
 //  PARSE — robust, handles messy player input
 // ══════════════════════════════════════════════
 
-// Format name: keep [TAG] as prefix, strip trailing junk
+// Format name: keep [TAG] as prefix, strip trailing junk, decode superscripts
 function formatName(raw) {
+  // First decode superscript chars
+  raw = stripSuperscripts(raw);
   // Grab [TAG] if present at start
   const tagMatch = raw.match(/^(\[[^\]]*\])/);
   const tag = tagMatch ? tagMatch[1] : '';
@@ -1498,10 +1500,28 @@ function extractTime(s) {
   return String(h).padStart(2,'0') + ':' + String(min).padStart(2,'0');
 }
 
-// Strip non-printable / special unicode (emoji, □, etc.) from a line
+// Strip non-printable / special unicode (emoji, □, superscripts, etc.) from a line
 function cleanLine(line) {
-  // Keep ASCII printable + common punctuation + digits + spaces
   return line.replace(/[^\x20-\x7E]/g, ' ').replace(/\s+/g,' ').trim();
+}
+
+// Strip superscript/subscript unicode — replace with ASCII equivalents
+function stripSuperscripts(str) {
+  // Use codepoint ranges for safety — no literal non-ASCII chars in source
+  const pairs = [
+    [0x1D43,'a'],[0x1D47,'b'],[0x1D9C,'c'],[0x1D48,'d'],[0x1D49,'e'],
+    [0x1DA0,'f'],[0x1D4D,'g'],[0x2B0,'h'],[0x2071,'i'],[0x2B2,'j'],
+    [0x1D4F,'k'],[0x2E1,'l'],[0x1D50,'m'],[0x207F,'n'],[0x1D52,'o'],
+    [0x1D56,'p'],[0x2B3,'r'],[0x2E2,'s'],[0x1D57,'t'],[0x1D58,'u'],
+    [0x1D5B,'v'],[0x2B7,'w'],[0x2E3,'x'],[0x2B8,'y'],[0x1DBB,'z'],
+    [0x1D2C,'A'],[0x1D2E,'B'],[0x1D30,'D'],[0x1D31,'E'],[0x1D33,'G'],
+    [0x1D34,'H'],[0x1D35,'I'],[0x1D36,'J'],[0x1D37,'K'],[0x1D38,'L'],
+    [0x1D39,'M'],[0x1D3A,'N'],[0x1D3C,'O'],[0x1D3E,'P'],[0x1D3F,'R'],
+    [0x1D40,'T'],[0x1D41,'U'],[0x1D42,'W']
+  ];
+  const map = {};
+  pairs.forEach(([cp,ch])=>{ map[String.fromCodePoint(cp)]=ch; });
+  return str.split('').map(c=>map[c]||c).join('');
 }
 
 // Strip numbered list prefix and category label, return just the value
@@ -1585,14 +1605,14 @@ function parseMsg(){
 
   lines.forEach(l=>{
     const cl2=cleanLine(l);
-    // TG Dust — check FIRST so "True Gold Dust" line doesn't match "True Gold"
+    // TG Dust — check FIRST (also matches tgd, Tgd)
     if(!tgDust){
-      const tdm=cl2.match(/(?:true\s*gold\s*dust|tg\s*dust)[:\s_*]*([0-9][0-9,\.]*k?)/i);
+      const tdm=cl2.match(/(?:true\s*gold\s*dust|tg\s*dust|\btgd\b)[:\s_*]*([0-9][0-9,\.]*k?)/i);
       if(tdm) tgDust=parseTG(tdm[1]);
     }
-    // TG — only match lines that don't also contain "dust"
+    // TG — only match lines that don't also contain "dust" or "tgd"
     if(!tg){
-      if(!/dust/i.test(cl2)){
+      if(!/dust|\btgd\b/i.test(cl2)){
         const tgm=cl2.match(/(?:true\s*gold|\btg\b)[:\s_*]*([0-9][0-9,\.]*k?)/i);
         if(tgm) tg=parseTG(tgm[1]);
       }
@@ -1605,15 +1625,30 @@ function parseMsg(){
     if(!construction && /con(str(uction)?)?\s*[:\-]/i.test(cl)) construction = extractDuration(l);
     if(!research     && /res(earch)?\s*[:\-]/i.test(cl))        research     = extractDuration(l);
     if(!total        && /total\s*[:\-]/i.test(cl))              total        = extractDuration(l);
+    // Numbered list with NO label — "1. 24 days", "2. 18 days" etc.
+    // Match "N. <anything starting with a digit>" and no keyword label on the line
+    const hasLabel = /gen|train|construct|research|total|tg|gold/i.test(cl);
+    if(!hasLabel){
+      const numOnly = cl.match(/^\s*(\d+)\s*[\.):]\s*(\d.{1,30})$/i);
+      if(numOnly){
+        const n=parseInt(numOnly[1]), dur=numOnly[2].trim();
+        if(n===1 && !general)      general      = dur;
+        if(n===2 && !construction) construction = dur;
+        if(n===3 && !research)     research     = dur;
+        if(n===4 && !training)     training     = dur;
+      }
+    }
 
     // Pref time — strip underscores, normalise bare 4-digit times (0000→00:00)
     const lStripped = l.replace(/_/g,' ');
+    // Strip trailing decoration: ~~~, emoji, etc. (use codepoint ranges safely)
+    const lClean = lStripped.replace(/[~*!?]+\s*$/, '').replace(/[\uD800-\uDFFF]{2}/g,'').replace(/[\u2600-\u27FF\uFE00-\uFEFF]+\s*$/,'').trim();
     // Normalise 4-digit times: 0000→00:00, 1700→17:00, 2400→00:00
-    const lNorm = lStripped
+    const lNorm = lClean
       .replace(/\b2400\b/g, '00:00')  // 2400 = midnight
       .replace(/\b([01]\d|2[0-3])([0-5]\d)\b(?!\s*:)/g, '$1:$2');
     const cl3 = cleanLine(l);
-    const isPrefLine = /pref|preferred|⏰|anytime|between/i.test(cl3) ||
+    const isPrefLine = /pref|preferred|anytime|between|utc/i.test(cl3) ||
                        /^\s*\d{1,2}\s*:\s*\d{2}/.test(lNorm);
 
     // Split line on "or" to handle multiple ranges like "00:00-03:00 or 17:00-24:00"
