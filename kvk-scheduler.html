@@ -44,9 +44,8 @@ h1.page-title{text-align:center;margin-bottom:14px;font-size:2.6em;color:#ffd966
 .lock-btn.unlocked{border-color:rgba(61,122,69,.4);background:rgba(61,122,69,.1);color:#3d7a45;}
 .readonly-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:2000;background:#c0392b;color:#fff;text-align:center;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:.5px;}
 .readonly-banner.show{display:block;}
-/* Dim interactive elements when locked — exempt modals */
+/* Dim interactive elements when locked — exempt modals and queue UI */
 body.locked .btn.primary:not(.lock-exempt),
-body.locked button[onclick*="assign"],
 body.locked button[onclick*="delete"],
 body.locked button[onclick*="remove"],
 body.locked button[onclick*="Reset"],
@@ -54,6 +53,8 @@ body.locked button[onclick*="doReset"],
 body.locked button[onclick*="showReset"],
 body.locked .gear-btn,
 body.locked .btn.warn{pointer-events:none;opacity:.4;}
+/* Specific lock — block saving actions */
+body.locked .btn-submit-queue{pointer-events:none;opacity:.4;}
 /* Modal buttons always active regardless of lock state */
 .modal-bg .btn,
 .modal-bg .btn.primary,
@@ -122,9 +123,9 @@ select:focus{border-color:#8b6914;}
 .pv-row b{color:#4a3428;font-weight:700;}
 .pref-pill{display:inline-block;background:rgba(139,111,71,.12);color:#6b4423;border:1px solid rgba(139,111,71,.3);font-size:11px;padding:3px 9px;border-radius:20px;margin-bottom:10px;}
 /* Compact day picker in preview card */
-.pv-day-block{display:flex;align-items:center;gap:6px;min-height:24px;}
+.pv-day-block{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:24px;}
 .pv-day-chk{display:flex;align-items:center;gap:4px;cursor:pointer;flex-shrink:0;width:72px;}
-.pv-day-times{display:flex;align-items:center;gap:4px;flex:1;}
+.pv-day-times{display:flex;align-items:center;gap:4px;flex:1;min-width:0;flex-wrap:nowrap;}
 .pv-time-in{width:52px;padding:3px 5px;font-size:11px;font-family:'Courier New',monospace;font-weight:700;text-align:center;background:#f5ebe0;border:1.5px solid rgba(139,111,71,.2);border-radius:5px;color:#4a3428;outline:none;}
 .pv-time-in:focus{border-color:#8b6914;}
 .pv-time-in::placeholder{color:#c8b8a8;font-weight:400;}
@@ -440,17 +441,15 @@ True Gold: __126__
             <div class="pv-pid"  id="pv-pid"></div>
             <div class="pv-grid" id="pv-stats"></div>
             <div id="pv-pref"></div>
-            <!-- Day selection + per-day pref times — compact 2-line per day -->
+            <!-- Day selection + per-day pref times -->
             <div style="margin-top:8px;border-top:1px solid rgba(139,111,71,.15);padding-top:8px;">
               <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;">Schedule &amp; Pref time (UTC)</div>
+              <!-- Parsed ranges summary (shown when multiple ranges) -->
+              <div id="pv-ranges-summary" style="display:none;font-size:10px;color:#6b4423;font-family:'Courier New',monospace;font-weight:600;background:rgba(139,111,71,.08);border-radius:6px;padding:4px 8px;margin-bottom:6px;"></div>
               <div style="display:flex;flex-direction:column;gap:5px;">
-
                 <!-- Day 1 -->
                 <div class="pv-day-block">
-                  <label class="pv-day-chk">
-                    <input type="checkbox" id="pv-d1" style="accent-color:#8b6914;width:13px;height:13px;" checked onchange="togglePvDayTime(1)">
-                    <span class="man-day-label d1" style="font-size:11px;">🏗️ Day 1</span>
-                  </label>
+                  <label class="pv-day-chk"><input type="checkbox" id="pv-d1" style="accent-color:#8b6914;width:13px;height:13px;" checked onchange="togglePvDayTime(1)"><span class="man-day-label d1" style="font-size:11px;">🏗️ Day 1</span></label>
                   <div id="pv-d1-time" class="pv-day-times">
                     <input id="pv-ps1" type="text" class="pv-time-in" placeholder="from" maxlength="5" oninput="autoColonManual(this)">
                     <span style="color:#8b7a5a;font-size:11px;">–</span>
@@ -458,13 +457,9 @@ True Gold: __126__
                     <span style="font-size:9px;color:#8b7a5a;">UTC</span>
                   </div>
                 </div>
-
                 <!-- Day 2 -->
                 <div class="pv-day-block">
-                  <label class="pv-day-chk">
-                    <input type="checkbox" id="pv-d2" style="accent-color:#3d7a61;width:13px;height:13px;" checked onchange="togglePvDayTime(2)">
-                    <span class="man-day-label d2" style="font-size:11px;">🔬 Day 2</span>
-                  </label>
+                  <label class="pv-day-chk"><input type="checkbox" id="pv-d2" style="accent-color:#3d7a61;width:13px;height:13px;" checked onchange="togglePvDayTime(2)"><span class="man-day-label d2" style="font-size:11px;">🔬 Day 2</span></label>
                   <div id="pv-d2-time" class="pv-day-times">
                     <input id="pv-ps2" type="text" class="pv-time-in" placeholder="from" maxlength="5" oninput="autoColonManual(this)">
                     <span style="color:#8b7a5a;font-size:11px;">–</span>
@@ -472,13 +467,9 @@ True Gold: __126__
                     <span style="font-size:9px;color:#8b7a5a;">UTC</span>
                   </div>
                 </div>
-
                 <!-- Day 4 -->
                 <div class="pv-day-block">
-                  <label class="pv-day-chk">
-                    <input type="checkbox" id="pv-d4" style="accent-color:#3d617a;width:13px;height:13px;" checked onchange="togglePvDayTime(4)">
-                    <span class="man-day-label d4" style="font-size:11px;">⚔️ Day 4</span>
-                  </label>
+                  <label class="pv-day-chk"><input type="checkbox" id="pv-d4" style="accent-color:#3d617a;width:13px;height:13px;" checked onchange="togglePvDayTime(4)"><span class="man-day-label d4" style="font-size:11px;">⚔️ Day 4</span></label>
                   <div id="pv-d4-time" class="pv-day-times">
                     <input id="pv-ps4" type="text" class="pv-time-in" placeholder="from" maxlength="5" oninput="autoColonManual(this)">
                     <span style="color:#8b7a5a;font-size:11px;">–</span>
@@ -486,8 +477,8 @@ True Gold: __126__
                     <span style="font-size:9px;color:#8b7a5a;">UTC</span>
                   </div>
                 </div>
-
               </div>
+              <div id="pv-ranges-note" style="display:none;font-size:10px;color:#8b7a5a;margin-top:4px;font-style:italic;"></div>
             </div>
             <div style="display:flex;gap:6px;margin-top:8px;">
               <button class="btn primary" style="flex:1" onclick="addToQueue()">+ Add to queue</button>
@@ -1572,24 +1563,28 @@ function parseMsg(){
     if(!research     && /res(earch)?\s*[:\-]/i.test(cl))        research     = extractDuration(l);
     if(!total        && /total\s*[:\-]/i.test(cl))              total        = extractDuration(l);
 
-    // Pref time — strip underscores, normalise bare 4-digit times to HH:MM
+    // Pref time — strip underscores, normalise bare 4-digit times (0000→00:00)
     const lStripped = l.replace(/_/g,' ');
-    // Convert bare 4-digit times: 1400 → 14:00, 0200 → 02:00
-    // Only replace when surrounded by non-digit or start/end/UTC/dash context
-    const lNorm = lStripped.replace(/\b([01]\d|2[0-3])([0-5]\d)\b(?!\s*:)/g, '$1:$2');
+    // Normalise 4-digit times: 0000→00:00, 1700→17:00, 2400→00:00
+    const lNorm = lStripped
+      .replace(/\b2400\b/g, '00:00')  // 2400 = midnight
+      .replace(/\b([01]\d|2[0-3])([0-5]\d)\b(?!\s*:)/g, '$1:$2');
     const cl3 = cleanLine(l);
     const isPrefLine = /pref|preferred|⏰|anytime|between/i.test(cl3) ||
                        /^\s*\d{1,2}\s*:\s*\d{2}/.test(lNorm);
 
-    // Try full range: HH:MM – HH:MM (both sides must have real digits)
-    const trRe=/(\d{1,2}\s*:\s*\d{2})\s*(?:UTC)?\s*[-–—]\s*(\d{1,2}\s*:\s*\d{2})\s*(?:UTC)?/g;
-    let rm, foundOnLine=false;
-    while((rm=trRe.exec(lNorm))!==null){
-      const s=extractTime(rm[1]), e=extractTime(rm[2]);
-      if(s){ prefTimes.push({s, e:e||s}); foundOnLine=true; }
+    // Split line on "or" to handle multiple ranges like "00:00-03:00 or 17:00-24:00"
+    const segments = lNorm.split(/\bor\b/i);
+    let foundOnLine = false;
+    for (const seg of segments) {
+      const trRe=/(\d{1,2}\s*:\s*\d{2})\s*(?:UTC)?\s*[-–—]\s*(\d{1,2}\s*:\s*\d{2})\s*(?:UTC)?/g;
+      let rm;
+      while((rm=trRe.exec(seg))!==null){
+        const s=extractTime(rm[1]), e=extractTime(rm[2]);
+        if(s){ prefTimes.push({s, e:e||s}); foundOnLine=true; }
+      }
     }
-    // If no full range found but line looks like a pref line,
-    // grab any single valid time (handles "__:__" blank end)
+    // Single time fallback
     if(!foundOnLine && isPrefLine){
       const singleRe=/(\d{1,2}\s*:\s*\d{2})/g;
       let sm;
@@ -1630,14 +1625,26 @@ function parseMsg(){
     if(document.getElementById('pv-ps'+d)) document.getElementById('pv-ps'+d).value='';
     if(document.getElementById('pv-pe'+d)) document.getElementById('pv-pe'+d).value='';
   });
-  // Pre-fill pref times from parsed data into all checked days
+  // Pre-fill pref times — first range in inputs, show all ranges in summary
   if(prefTimes.length){
+    const t0 = prefTimes[0];
     [1,2,4].forEach(d=>{
       const psEl=document.getElementById('pv-ps'+d);
       const peEl=document.getElementById('pv-pe'+d);
-      if(psEl) psEl.value=prefTimes[0].s||'';
-      if(peEl) peEl.value=(prefTimes[0].e&&prefTimes[0].e!==prefTimes[0].s)?prefTimes[0].e:'';
+      if(psEl) psEl.value=t0.s||'';
+      if(peEl) peEl.value=(t0.e&&t0.e!==t0.s)?t0.e:'';
     });
+    // Show summary of all ranges if more than one
+    const summaryEl = document.getElementById('pv-ranges-summary');
+    const noteEl    = document.getElementById('pv-ranges-note');
+    if(prefTimes.length > 1 && summaryEl){
+      summaryEl.textContent = '⏰ All windows: ' + prefTimes.map(t=>t.s+(t.e&&t.e!==t.s?' – '+t.e:'')).join('  |  ') + ' UTC';
+      summaryEl.style.display = 'block';
+      if(noteEl){ noteEl.textContent = 'All windows apply to every checked day. Inputs show the first window — all are saved.'; noteEl.style.display='block'; }
+    } else {
+      if(summaryEl) summaryEl.style.display='none';
+      if(noteEl)    noteEl.style.display='none';
+    }
   }
   document.getElementById('pv-card').classList.add('show');
 }
@@ -1651,6 +1658,8 @@ function clearPv(){
     const pe=document.getElementById('pv-pe'+d);
     if(ps)ps.value='';if(pe)pe.value='';
   });
+  const se=document.getElementById('pv-ranges-summary');if(se)se.style.display='none';
+  const ne=document.getElementById('pv-ranges-note');if(ne)ne.style.display='none';
 }
 
 function addToQueue(){
@@ -1664,15 +1673,19 @@ function addToQueue(){
   const d4=document.getElementById('pv-d4').checked;
   if(!d1&&!d2&&!d4){toast('Select at least one day.');return;}
 
-  // Read per-day pref times from preview card
+  // Read per-day pref times — combine input field + all parsed ranges
   function readPvPref(day){
     const s=document.getElementById('pv-ps'+day).value.trim();
     const e=document.getElementById('pv-pe'+day).value.trim();
     const st=extractTime(s),et=extractTime(e||'');
-    return st?[{s:st,e:et||''}]:[];
+    const fromInput = st?[{s:st,e:et||''}]:[];
+    // Also include any additional parsed ranges beyond the first
+    const extra = (parsed && parsed.prefTimes && parsed.prefTimes.length > 1)
+      ? parsed.prefTimes.slice(1) : [];
+    return [...fromInput, ...extra];
   }
   const dayPrefTimes={1:d1?readPvPref(1):[],2:d2?readPvPref(2):[],4:d4?readPvPref(4):[]};
-  const allTimes=[1,2,4].flatMap(d=>dayPrefTimes[d]);
+  const allTimes=parsed&&parsed.prefTimes&&parsed.prefTimes.length?parsed.prefTimes:[1,2,4].flatMap(d=>dayPrefTimes[d]);
   const prefStart=allTimes.length?allTimes[0].s:parsed.prefStart||'';
   const prefEnd=allTimes.length?allTimes[allTimes.length-1].e||'':parsed.prefEnd||'';
   const days=[];if(d1)days.push('Day 1');if(d2)days.push('Day 2');if(d4)days.push('Day 4');
@@ -1820,7 +1833,7 @@ function renderQueue(){
           +'<option value="">Pick a slot…</option>'
           +dayOpts
         +'</select>'
-        +'<button class="btn sm primary" onclick="assignSlot('+p.id+')">Assign →</button>'
+        +'<button class="btn sm primary btn-submit-queue" onclick="assignSlot('+p.id+')">Assign →</button>'
       +'</div>'
     +'</div>';
   }).join('');
@@ -2312,7 +2325,19 @@ function deleteSlot(day,idx){
 // ══════════════════════════════════════════════
 //  OPEN RANGES / COPY MODAL
 // ══════════════════════════════════════════════
-function getOpenRanges(grid){const runs=[];grid.forEach((_,i)=>{if(!grid[i]){if(!runs.length||runs[runs.length-1].end!==i-1)runs.push({start:i,end:i});else runs[runs.length-1].end=i;}});return runs.map(r=>slotShort(r.start)+'–'+slotShort(r.end===47?0:r.end+1));}
+function getOpenRanges(grid){
+  const runs=[];
+  grid.forEach((_,i)=>{
+    if(!grid[i]){
+      if(!runs.length||runs[runs.length-1].end!==i-1) runs.push({start:i,end:i});
+      else runs[runs.length-1].end=i;
+    }
+  });
+  return runs.map(r=>{
+    if(r.start===r.end) return slotShort(r.start); // single slot
+    return slotShort(r.start)+' – '+slotShort(r.end); // range: first to last slot
+  });
+}
 function renderOpenBar(grid){const ranges=getOpenRanges(grid);const n=grid.filter(s=>!s).length;document.getElementById('open-ranges').textContent=ranges.length?ranges.join(', '):'No open slots';document.getElementById('open-count').textContent='('+n+' slots open)';}
 function buildCompactMsg(dk){const grid=dk==='d1'?state.day1:dk==='d2'?state.day2:state.day4;const label=dk==='d1'?'Day 1 (Build)':dk==='d2'?'Day 2 (Research)':'Day 4 (Train)';const ranges=getOpenRanges(grid);const n=grid.filter(s=>!s).length;if(!ranges.length)return label+' — No open slots.';return label+' open ('+n+' avail, UTC):\n'+ranges.join(', ');}
 function buildFullSummary(dk){const grid=dk==='d1'?state.day1:dk==='d2'?state.day2:state.day4;const label=dk==='d1'?'Day 1 — Building':dk==='d2'?'Day 2 — Research':'Day 4 — Training';let out='=== '+label+' ===\n';grid.forEach((s,i)=>{if(s)out+=slotShort(i)+'  '+s.name+'  TG:'+s.tg.toLocaleString()+'\n';});const open=grid.filter(s=>!s).length;out+='\n'+(48-open)+' filled · '+open+' open';return out;}
