@@ -36,16 +36,18 @@ body{
 .field input::placeholder{color:#c8b8a8;font-weight:400;}
 .hint{font-size:10px;color:#b8a898;margin-top:3px;}
 .speed-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.day-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:#fff8f0;border:1.5px solid rgba(139,111,71,.15);border-radius:8px;margin-bottom:6px;}
-.day-chk-wrap{display:flex;align-items:center;gap:5px;flex-shrink:0;width:70px;}
-.day-chk-wrap input[type="checkbox"]{width:15px;height:15px;cursor:pointer;flex-shrink:0;}
-.day-chk-wrap span{font-size:12px;font-weight:700;}
+.day-block{background:#fff8f0;border:1.5px solid rgba(139,111,71,.15);border-radius:8px;padding:8px 10px;margin-bottom:6px;}
+.day-chk-label{display:flex;align-items:center;gap:6px;cursor:pointer;margin-bottom:6px;}
+.day-chk-label input[type="checkbox"]{width:15px;height:15px;cursor:pointer;flex-shrink:0;}
+.day-chk-label span{font-size:13px;font-weight:700;}
 .d1-lbl{color:#8b6914;}.d2-lbl{color:#3d7a61;}.d4-lbl{color:#3d617a;}
-.time-wrap{display:flex;align-items:center;gap:5px;flex:1;opacity:.4;transition:opacity .2s;}
-.time-wrap.active{opacity:1;}
-.time-in{width:58px;padding:5px 6px;font-size:12px;font-family:'Courier New',monospace;font-weight:700;text-align:center;background:#f5ebe0;border:1.5px solid rgba(139,111,71,.2);border-radius:6px;color:#4a3428;outline:none;}
+.time-rows{display:none;flex-direction:column;gap:5px;padding-left:21px;}
+.time-rows.active{display:flex;}
+.time-row-item{display:flex;align-items:center;gap:5px;}
+.time-row-lbl{font-size:10px;color:#8b7a5a;font-weight:600;width:60px;flex-shrink:0;}
+.time-in{width:60px;padding:5px 6px;font-size:12px;font-family:'Courier New',monospace;font-weight:700;text-align:center;background:#f5ebe0;border:1.5px solid rgba(139,111,71,.2);border-radius:6px;color:#4a3428;outline:none;}
 .time-in:focus{border-color:#8b6914;}
-.time-in::placeholder{color:#c8b8a8;font-weight:400;}
+.time-in::placeholder{color:#c8b8a8;font-weight:400;font-size:10px;}
 .time-dash{color:#8b7a5a;font-size:12px;font-weight:700;}
 .time-utc{font-size:10px;color:#8b7a5a;font-weight:600;white-space:nowrap;}
 .btn-submit{width:100%;margin-top:18px;padding:14px;background:linear-gradient(135deg,#8b6914,#6b5010);border:none;border-radius:10px;color:#ffd966;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;text-shadow:1px 1px 0 rgba(0,0,0,0.3);box-shadow:0 4px 12px rgba(0,0,0,0.2);transition:opacity .2s;}
@@ -105,31 +107,66 @@ body{
     <div class="sec-label" id="t-sec-avail">Availability (UTC) *</div>
     <div class="hint" id="t-hint-avail" style="margin-bottom:8px;margin-top:-4px;">Check the days you can participate and enter your preferred time window</div>
 
-    <div class="day-row">
-      <div class="day-chk-wrap"><input type="checkbox" id="f-d1" onchange="toggleDay(1)"><span class="d1-lbl">🏗️ Day 1</span></div>
-      <div class="time-wrap" id="tw-d1">
-        <input id="f-ps1" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
-        <span class="time-dash">–</span>
-        <input id="f-pe1" class="time-in" type="text" placeholder="05:00" maxlength="5" oninput="autoColon(this)">
-        <span class="time-utc">UTC</span>
+    <!-- Day 1 -->
+    <div class="day-block">
+      <label class="day-chk-label"><input type="checkbox" id="f-d1" onchange="toggleDay(1)"><span class="d1-lbl">🏗️ Day 1</span></label>
+      <div class="time-rows" id="tw-d1">
+        <div class="time-row-item">
+          <span class="time-row-lbl" id="t-win1">Window 1:</span>
+          <input id="f-ps1" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
+          <span class="time-dash">–</span>
+          <input id="f-pe1" class="time-in" type="text" placeholder="05:00" maxlength="5" oninput="autoColon(this)">
+          <span class="time-utc">UTC</span>
+        </div>
+        <div class="time-row-item">
+          <span class="time-row-lbl" id="t-win2">Window 2:</span>
+          <input id="f-ps1b" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
+          <span class="time-dash">–</span>
+          <input id="f-pe1b" class="time-in" type="text" placeholder="optional" maxlength="5" oninput="autoColon(this)">
+          <span class="time-utc">UTC</span>
+        </div>
       </div>
     </div>
-    <div class="day-row">
-      <div class="day-chk-wrap"><input type="checkbox" id="f-d2" onchange="toggleDay(2)"><span class="d2-lbl">🔬 Day 2</span></div>
-      <div class="time-wrap" id="tw-d2">
-        <input id="f-ps2" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
-        <span class="time-dash">–</span>
-        <input id="f-pe2" class="time-in" type="text" placeholder="05:00" maxlength="5" oninput="autoColon(this)">
-        <span class="time-utc">UTC</span>
+
+    <!-- Day 2 -->
+    <div class="day-block">
+      <label class="day-chk-label"><input type="checkbox" id="f-d2" onchange="toggleDay(2)"><span class="d2-lbl">🔬 Day 2</span></label>
+      <div class="time-rows" id="tw-d2">
+        <div class="time-row-item">
+          <span class="time-row-lbl">Window 1:</span>
+          <input id="f-ps2" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
+          <span class="time-dash">–</span>
+          <input id="f-pe2" class="time-in" type="text" placeholder="05:00" maxlength="5" oninput="autoColon(this)">
+          <span class="time-utc">UTC</span>
+        </div>
+        <div class="time-row-item">
+          <span class="time-row-lbl">Window 2:</span>
+          <input id="f-ps2b" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
+          <span class="time-dash">–</span>
+          <input id="f-pe2b" class="time-in" type="text" placeholder="optional" maxlength="5" oninput="autoColon(this)">
+          <span class="time-utc">UTC</span>
+        </div>
       </div>
     </div>
-    <div class="day-row">
-      <div class="day-chk-wrap"><input type="checkbox" id="f-d4" onchange="toggleDay(4)"><span class="d4-lbl">⚔️ Day 4</span></div>
-      <div class="time-wrap" id="tw-d4">
-        <input id="f-ps4" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
-        <span class="time-dash">–</span>
-        <input id="f-pe4" class="time-in" type="text" placeholder="05:00" maxlength="5" oninput="autoColon(this)">
-        <span class="time-utc">UTC</span>
+
+    <!-- Day 4 -->
+    <div class="day-block">
+      <label class="day-chk-label"><input type="checkbox" id="f-d4" onchange="toggleDay(4)"><span class="d4-lbl">⚔️ Day 4</span></label>
+      <div class="time-rows" id="tw-d4">
+        <div class="time-row-item">
+          <span class="time-row-lbl">Window 1:</span>
+          <input id="f-ps4" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
+          <span class="time-dash">–</span>
+          <input id="f-pe4" class="time-in" type="text" placeholder="05:00" maxlength="5" oninput="autoColon(this)">
+          <span class="time-utc">UTC</span>
+        </div>
+        <div class="time-row-item">
+          <span class="time-row-lbl">Window 2:</span>
+          <input id="f-ps4b" class="time-in" type="text" placeholder="00:00" maxlength="5" oninput="autoColon(this)">
+          <span class="time-dash">–</span>
+          <input id="f-pe4b" class="time-in" type="text" placeholder="optional" maxlength="5" oninput="autoColon(this)">
+          <span class="time-utc">UTC</span>
+        </div>
       </div>
     </div>
 
@@ -382,6 +419,8 @@ function applyLang(code) {
   set('t-lbl-res',     t.lblRes);
   set('t-lbl-tra',     t.lblTra);
   set('t-hint-avail',  t.hintAvail);
+  set('t-win1', t.win1||'Window 1:');
+  set('t-win2', t.win2||'Window 2:');
   set('btn-submit',    t.btnSubmit);
   set('t-success-title', t.successTitle);
   set('t-success-msg',   t.successMsg);
@@ -445,8 +484,11 @@ function toggleDay(day) {
   const tw = document.getElementById('tw-d'+day);
   const active = cb.checked;
   tw.classList.toggle('active', active);
-  tw.querySelectorAll('.time-in').forEach(el => el.disabled = !active);
-  if (!active) { document.getElementById('f-ps'+day).value=''; document.getElementById('f-pe'+day).value=''; }
+  if (!active) {
+    ['f-ps'+day,'f-pe'+day,'f-ps'+day+'b','f-pe'+day+'b'].forEach(id=>{
+      const el=document.getElementById(id); if(el)el.value='';
+    });
+  }
 }
 
 function autoColon(el) {
@@ -489,9 +531,18 @@ async function submitForm() {
   if (!d1&&!d2&&!d4)  { showError(t.errDay);  return; }
 
   function readPref(day){
-    const s=extractTime(document.getElementById('f-ps'+day).value.trim());
-    const e=extractTime(document.getElementById('f-pe'+day).value.trim()||'');
-    return s?[{s,e:e||''}]:[];
+    const ranges=[];
+    const s1=extractTime(document.getElementById('f-ps'+day).value.trim());
+    const e1=extractTime(document.getElementById('f-pe'+day).value.trim()||'');
+    if(s1) ranges.push({s:s1,e:e1||''});
+    const s2el=document.getElementById('f-ps'+day+'b');
+    const e2el=document.getElementById('f-pe'+day+'b');
+    if(s2el){
+      const s2=extractTime(s2el.value.trim());
+      const e2=extractTime((e2el?e2el.value.trim():'')||'');
+      if(s2) ranges.push({s:s2,e:e2||''});
+    }
+    return ranges;
   }
   const dayPrefTimes={1:d1?readPref(1):[],2:d2?readPref(2):[],4:d4?readPref(4):[]};
   const allTimes=[1,2,4].flatMap(d=>dayPrefTimes[d]);
@@ -528,7 +579,7 @@ async function submitForm() {
 
 function resetForm(){
   ['f-name','f-pid','f-tg','f-tgdust','f-general','f-construction','f-research','f-training'].forEach(id=>document.getElementById(id).value='');
-  [1,2,4].forEach(d=>{ document.getElementById('f-d'+d).checked=false; document.getElementById('f-ps'+d).value=''; document.getElementById('f-pe'+d).value=''; toggleDay(d); });
+  [1,2,4].forEach(d=>{ document.getElementById('f-d'+d).checked=false; ['f-ps'+d,'f-pe'+d,'f-ps'+d+'b','f-pe'+d+'b'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}); toggleDay(d); });
   clearError();
   document.getElementById('success-screen').style.display='none';
   document.getElementById('form-body').style.display='block';
