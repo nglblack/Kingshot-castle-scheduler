@@ -350,6 +350,13 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 .man-input-sm{max-width:100px;}
 .man-time-input{width:68px;flex:none;font-family:'Courier New',monospace;font-weight:700;text-align:center;}
 .man-divider{height:1px;background:rgba(139,111,71,.12);margin:6px 0;}
+.man-day-block{display:flex;flex-direction:column;padding:6px 0;border-bottom:1px solid rgba(139,111,71,.08);}
+.man-day-block:last-of-type{border-bottom:none;}
+.man-time-row{display:flex;align-items:center;gap:4px;margin-bottom:2px;}
+.man-time-lbl{font-size:10px;color:#8b7a5a;font-weight:600;width:58px;flex-shrink:0;}
+.man-time-in-sm{width:52px;padding:4px 5px;font-size:12px;font-family:'Courier New',monospace;font-weight:700;text-align:center;background:#f5ebe0;border:1.5px solid rgba(139,111,71,.2);border-radius:5px;color:#4a3428;outline:none;}
+.man-time-in-sm:focus{border-color:#8b6914;}
+.man-time-in-sm::placeholder{color:#c8b8a8;font-weight:400;font-size:10px;}
 .man-check{display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:#4a3428;font-weight:600;}
 .man-check input{width:13px;height:13px;cursor:pointer;}
 .man-day-row{display:flex;align-items:center;gap:8px;padding:4px 0;flex-wrap:wrap;}
@@ -536,45 +543,75 @@ True Gold: __126__
 
               <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">⏰ Schedule &amp; Preferred Time (UTC)</div>
 
-              <!-- Day 1 row -->
-              <div class="man-day-row">
-                <label class="man-check man-day-check">
-                  <input type="checkbox" id="man-d1" style="accent-color:#8b6914;" onchange="toggleDayTime(1)">
+              <!-- Day 1 -->
+              <div class="man-day-block">
+                <label class="man-check" style="margin-bottom:4px;">
+                  <input type="checkbox" id="man-d1" style="accent-color:#8b6914;width:13px;height:13px;" onchange="toggleDayTime(1)">
                   <span class="man-day-label d1">🏗️ Day 1</span>
                 </label>
-                <div id="man-d1-time" class="man-day-time" style="display:none;">
-                  <input id="man-pref-s1" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
-                  <span class="man-dash">–</span>
-                  <input id="man-pref-e1" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
-                  <span class="man-utc">UTC</span>
+                <div id="man-d1-time" style="display:none;flex-direction:column;gap:3px;padding-left:18px;">
+                  <div class="man-time-row">
+                    <span class="man-time-lbl">Window 1:</span>
+                    <input id="man-pref-s1" type="text" class="man-time-in-sm" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-dash">–</span>
+                    <input id="man-pref-e1" type="text" class="man-time-in-sm" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-utc">UTC</span>
+                  </div>
+                  <div class="man-time-row">
+                    <span class="man-time-lbl">Window 2:</span>
+                    <input id="man-pref-s1b" type="text" class="man-time-in-sm" placeholder="optional" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-dash">–</span>
+                    <input id="man-pref-e1b" type="text" class="man-time-in-sm" placeholder="optional" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-utc">UTC</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Day 2 row -->
-              <div class="man-day-row">
-                <label class="man-check man-day-check">
-                  <input type="checkbox" id="man-d2" style="accent-color:#3d7a61;" onchange="toggleDayTime(2)">
+              <!-- Day 2 -->
+              <div class="man-day-block">
+                <label class="man-check" style="margin-bottom:4px;">
+                  <input type="checkbox" id="man-d2" style="accent-color:#3d7a61;width:13px;height:13px;" onchange="toggleDayTime(2)">
                   <span class="man-day-label d2">🔬 Day 2</span>
                 </label>
-                <div id="man-d2-time" class="man-day-time" style="display:none;">
-                  <input id="man-pref-s2" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
-                  <span class="man-dash">–</span>
-                  <input id="man-pref-e2" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
-                  <span class="man-utc">UTC</span>
+                <div id="man-d2-time" style="display:none;flex-direction:column;gap:3px;padding-left:18px;">
+                  <div class="man-time-row">
+                    <span class="man-time-lbl">Window 1:</span>
+                    <input id="man-pref-s2" type="text" class="man-time-in-sm" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-dash">–</span>
+                    <input id="man-pref-e2" type="text" class="man-time-in-sm" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-utc">UTC</span>
+                  </div>
+                  <div class="man-time-row">
+                    <span class="man-time-lbl">Window 2:</span>
+                    <input id="man-pref-s2b" type="text" class="man-time-in-sm" placeholder="optional" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-dash">–</span>
+                    <input id="man-pref-e2b" type="text" class="man-time-in-sm" placeholder="optional" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-utc">UTC</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Day 4 row -->
-              <div class="man-day-row">
-                <label class="man-check man-day-check">
-                  <input type="checkbox" id="man-d4" style="accent-color:#3d617a;" onchange="toggleDayTime(4)">
+              <!-- Day 4 -->
+              <div class="man-day-block">
+                <label class="man-check" style="margin-bottom:4px;">
+                  <input type="checkbox" id="man-d4" style="accent-color:#3d617a;width:13px;height:13px;" onchange="toggleDayTime(4)">
                   <span class="man-day-label d4">⚔️ Day 4</span>
                 </label>
-                <div id="man-d4-time" class="man-day-time" style="display:none;">
-                  <input id="man-pref-s4" type="text" class="man-input man-time-input" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
-                  <span class="man-dash">–</span>
-                  <input id="man-pref-e4" type="text" class="man-input man-time-input" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
-                  <span class="man-utc">UTC</span>
+                <div id="man-d4-time" style="display:none;flex-direction:column;gap:3px;padding-left:18px;">
+                  <div class="man-time-row">
+                    <span class="man-time-lbl">Window 1:</span>
+                    <input id="man-pref-s4" type="text" class="man-time-in-sm" placeholder="00:00" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-dash">–</span>
+                    <input id="man-pref-e4" type="text" class="man-time-in-sm" placeholder="05:00" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-utc">UTC</span>
+                  </div>
+                  <div class="man-time-row">
+                    <span class="man-time-lbl">Window 2:</span>
+                    <input id="man-pref-s4b" type="text" class="man-time-in-sm" placeholder="optional" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-dash">–</span>
+                    <input id="man-pref-e4b" type="text" class="man-time-in-sm" placeholder="optional" maxlength="5" oninput="autoColonManual(this)">
+                    <span class="man-utc">UTC</span>
+                  </div>
                 </div>
               </div>
 
@@ -1355,6 +1392,12 @@ function toggleDayTime(day) {
   const cb = document.getElementById('man-d'+day);
   const row = document.getElementById('man-d'+day+'-time');
   if (row) row.style.display = cb.checked ? 'flex' : 'none';
+  if (!cb.checked) {
+    ['s','e','sb','eb'].forEach(s=>{
+      const el=document.getElementById('man-pref-'+s+day);
+      if(el) el.value='';
+    });
+  }
 }
 function togglePvDayTime(day) {
   const cb = document.getElementById('pv-d'+day);
@@ -2366,11 +2409,18 @@ function submitManual(){
   if(!d1&&!d2&&!d4){errEl.textContent='Select at least one day.';errEl.style.display='block';return;}
   // Read per-day preferred times
   function readDayPref(dayNum) {
-    const ps = (document.getElementById('man-pref-s'+dayNum)||{value:''}).value.trim();
-    const pe = (document.getElementById('man-pref-e'+dayNum)||{value:''}).value.trim();
-    if (!ps) return [];
-    const s = extractTime(ps), e = extractTime(pe||'');
-    return s ? [{s, e: e||''}] : [];
+    const ranges = [];
+    // Window 1
+    const ps1 = (document.getElementById('man-pref-s'+dayNum)||{value:''}).value.trim();
+    const pe1 = (document.getElementById('man-pref-e'+dayNum)||{value:''}).value.trim();
+    const s1 = extractTime(ps1), e1 = extractTime(pe1||'');
+    if (s1) ranges.push({s:s1, e:e1||''});
+    // Window 2
+    const ps2 = (document.getElementById('man-pref-s'+dayNum+'b')||{value:''}).value.trim();
+    const pe2 = (document.getElementById('man-pref-e'+dayNum+'b')||{value:''}).value.trim();
+    const s2 = extractTime(ps2), e2 = extractTime(pe2||'');
+    if (s2) ranges.push({s:s2, e:e2||''});
+    return ranges;
   }
   const dayPrefTimes = {1: readDayPref(1), 2: readDayPref(2), 4: readDayPref(4)};
   // Use day 1 pref as the default prefTimes (for display/backward compat)
@@ -2386,7 +2436,7 @@ function submitManual(){
   }
   state.queue.push({...player, id:Date.now(), forDay:null});
   debouncedSave();renderQueue();renderStats();toast(name+' added to queue.');
-  ['man-name','man-pid','man-tg','man-tgdust','man-general','man-construction','man-research','man-training','man-pref-s1','man-pref-e1','man-pref-s2','man-pref-e2','man-pref-s4','man-pref-e4'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['man-name','man-pid','man-tg','man-tgdust','man-general','man-construction','man-research','man-training','man-pref-s1','man-pref-e1','man-pref-s1b','man-pref-e1b','man-pref-s2','man-pref-e2','man-pref-s2b','man-pref-e2b','man-pref-s4','man-pref-e4','man-pref-s4b','man-pref-e4b'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   [1,2,4].forEach(d=>{const cb=document.getElementById('man-d'+d);if(cb)cb.checked=false;toggleDayTime(d);});
   switchSTab('queue');
 }
