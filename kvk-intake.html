@@ -54,6 +54,28 @@ body{
 .btn-submit:hover{opacity:.88;}
 .btn-submit:disabled{opacity:.5;cursor:not-allowed;}
 .error-msg{display:none;font-size:12px;color:#c0392b;padding:8px 12px;background:rgba(192,57,43,.08);border-radius:8px;border:1px solid rgba(192,57,43,.25);margin-top:10px;}
+/* Review screen */
+.review-screen{display:none;padding:20px 22px;flex-direction:column;gap:0;}
+.review-title{font-size:14px;font-weight:800;color:#4a3428;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.review-section{margin-bottom:12px;}
+.review-sec-lbl{font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.review-sec-lbl::after{content:'';flex:1;height:1px;background:rgba(139,111,71,.15);}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;}
+.review-item{background:#fff8f0;border:1.5px solid rgba(139,111,71,.15);border-radius:8px;padding:7px 10px;}
+.review-item-lbl{font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
+.review-item-val{font-size:13px;font-weight:700;color:#4a3428;}
+.review-item-val.empty{color:#c8b8a8;font-weight:400;font-style:italic;font-size:12px;}
+.review-day-block{background:#fff8f0;border:1.5px solid rgba(139,111,71,.15);border-radius:8px;padding:8px 10px;margin-bottom:6px;}
+.review-day-lbl{font-size:12px;font-weight:700;margin-bottom:4px;}
+.review-time{font-size:11px;font-family:'Courier New',monospace;color:#6b4423;font-weight:600;}
+.review-no-time{font-size:11px;color:#c8b8a8;font-style:italic;}
+.review-warning{background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.2);border-radius:8px;padding:8px 12px;font-size:12px;color:#c0392b;margin-bottom:12px;display:none;}
+.btn-row{display:flex;gap:8px;margin-top:4px;}
+.btn-back{flex:1;padding:12px;background:#fff8f0;border:2px solid rgba(139,111,71,.3);border-radius:10px;color:#6b4423;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;}
+.btn-back:hover{background:#ede0cc;}
+.btn-confirm{flex:2;padding:12px;background:linear-gradient(135deg,#3d7a45,#2d5a35);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;text-shadow:1px 1px 0 rgba(0,0,0,.2);transition:opacity .2s;}
+.btn-confirm:hover{opacity:.88;}
+.btn-confirm:disabled{opacity:.5;cursor:not-allowed;}
 .success-screen{display:none;flex-direction:column;align-items:center;text-align:center;padding:30px 24px;gap:12px;}
 .success-icon{font-size:56px;line-height:1;}
 .success-title{font-size:1.4em;font-weight:800;color:#3d7a45;}
@@ -171,7 +193,55 @@ body{
     </div>
 
     <div class="error-msg" id="error-msg"></div>
-    <button class="btn-submit" id="btn-submit" onclick="submitForm()">⚔️ Join the Schedule</button>
+    <button class="btn-submit" id="btn-submit" onclick="showReview()">👁️ Review &amp; Submit →</button>
+  </div>
+
+  <!-- Review screen -->
+  <div class="review-screen" id="review-screen">
+    <div class="review-title">👁️ <span>Review your submission</span></div>
+    <div class="review-warning" id="review-warning"></div>
+
+    <div class="review-section">
+      <div class="review-sec-lbl">Player info</div>
+      <div class="review-grid">
+        <div class="review-item" style="grid-column:1/-1;">
+          <div class="review-item-lbl">Name</div>
+          <div class="review-item-val" id="r-name"></div>
+        </div>
+        <div class="review-item">
+          <div class="review-item-lbl">Player ID</div>
+          <div class="review-item-val" id="r-pid"></div>
+        </div>
+        <div class="review-item">
+          <div class="review-item-lbl">True Gold</div>
+          <div class="review-item-val" id="r-tg"></div>
+        </div>
+        <div class="review-item">
+          <div class="review-item-lbl">TG Dust</div>
+          <div class="review-item-val" id="r-dust"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-section">
+      <div class="review-sec-lbl">Speed boosts</div>
+      <div class="review-grid">
+        <div class="review-item"><div class="review-item-lbl">General</div><div class="review-item-val" id="r-gen"></div></div>
+        <div class="review-item"><div class="review-item-lbl">Construction</div><div class="review-item-val" id="r-con"></div></div>
+        <div class="review-item"><div class="review-item-lbl">Research</div><div class="review-item-val" id="r-res"></div></div>
+        <div class="review-item"><div class="review-item-lbl">Training</div><div class="review-item-val" id="r-tra"></div></div>
+      </div>
+    </div>
+
+    <div class="review-section">
+      <div class="review-sec-lbl">Availability &amp; Preferred times</div>
+      <div id="r-days"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="backToForm()">← Edit</button>
+      <button class="btn-confirm" id="btn-confirm" onclick="submitForm()">✓ Confirm &amp; Submit</button>
+    </div>
   </div>
 
   <div class="success-screen" id="success-screen">
@@ -514,6 +584,81 @@ function parseTG(s){
 function showError(msg){const el=document.getElementById('error-msg');el.textContent=msg;el.style.display='block';}
 function clearError(){document.getElementById('error-msg').style.display='none';}
 
+function val(id){ return (document.getElementById(id)||{value:''}).value.trim(); }
+
+function showReview() {
+  clearError();
+  const t = LANGS[currentLang];
+  const name = val('f-name');
+  const pid  = val('f-pid').replace(/^#\s*/,'');
+  const d1=document.getElementById('f-d1').checked;
+  const d2=document.getElementById('f-d2').checked;
+  const d4=document.getElementById('f-d4').checked;
+
+  // Validate before showing review
+  if (!name)          { showError(t.errName); return; }
+  if (!d1&&!d2&&!d4) { showError(t.errDay);  return; }
+
+  // Fill review fields
+  const setR = (id, v, fallback) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (v) { el.textContent = v; el.className = 'review-item-val'; }
+    else   { el.textContent = fallback||'—'; el.className = 'review-item-val empty'; }
+  };
+  setR('r-name', name);
+  setR('r-pid',  pid,  'Not provided');
+  setR('r-tg',   val('f-tg')     || '', 'Not entered');
+  setR('r-dust', val('f-tgdust') || '', 'Not entered');
+  setR('r-gen',  val('f-general')      || '', 'Not entered');
+  setR('r-con',  val('f-construction') || '', 'Not entered');
+  setR('r-res',  val('f-research')     || '', 'Not entered');
+  setR('r-tra',  val('f-training')     || '', 'Not entered');
+
+  // Day + time summary
+  const dayColors = {1:'#8b6914', 2:'#3d7a61', 4:'#3d617a'};
+  const dayLabels = {1:'🏗️ Day 1', 2:'🔬 Day 2', 4:'⚔️ Day 4'};
+  const checked = [d1&&1, d2&&2, d4&&4].filter(Boolean);
+  let daysHtml = '';
+  let missingTime = false;
+
+  checked.forEach(day => {
+    const s1 = extractTime(val('f-ps'+day));
+    const e1 = extractTime(val('f-pe'+day));
+    const s2 = extractTime(val('f-ps'+day+'b'));
+    const e2 = extractTime(val('f-pe'+day+'b'));
+    const windows = [];
+    if (s1) windows.push(s1 + (e1 && e1!==s1 ? ' – '+e1 : '') + ' UTC');
+    if (s2) windows.push(s2 + (e2 && e2!==s2 ? ' – '+e2 : '') + ' UTC');
+    if (!windows.length) missingTime = true;
+    daysHtml += '<div class="review-day-block">'
+      + '<div class="review-day-lbl" style="color:'+dayColors[day]+'">'+dayLabels[day]+'</div>'
+      + (windows.length
+          ? windows.map(w=>'<div class="review-time">⏰ '+w+'</div>').join('')
+          : '<div class="review-no-time">No preferred time entered</div>')
+      + '</div>';
+  });
+  document.getElementById('r-days').innerHTML = daysHtml;
+
+  // Warning if no times entered
+  const warnEl = document.getElementById('review-warning');
+  if (missingTime) {
+    warnEl.textContent = '⚠️ Some days have no preferred time — is that correct?';
+    warnEl.style.display = 'block';
+  } else {
+    warnEl.style.display = 'none';
+  }
+
+  // Switch screens
+  document.getElementById('form-body').style.display = 'none';
+  document.getElementById('review-screen').style.display = 'flex';
+}
+
+function backToForm() {
+  document.getElementById('review-screen').style.display = 'none';
+  document.getElementById('form-body').style.display = 'block';
+}
+
 async function submitForm() {
   clearError();
   const t = LANGS[currentLang];
@@ -555,8 +700,10 @@ async function submitForm() {
     manual:false,submittedViaForm:true,id:Date.now(),
   };
 
-  const btn=document.getElementById('btn-submit');
-  btn.disabled=true; btn.textContent=t.submitting;
+  const btn=document.getElementById('btn-confirm');
+  if(btn){btn.disabled=true; btn.textContent=t.submitting||'Submitting…';}
+  const btnSub=document.getElementById('btn-submit');
+  if(btnSub)btnSub.disabled=true;
 
   try {
     const {data,error}=await sb.from(TABLE).select('queue,version').eq('id',scheduleId).single();
@@ -567,13 +714,14 @@ async function submitForm() {
     queue.push(player);
     const {error:saveErr}=await sb.from(TABLE).update({queue,version:(data.version||1)+1}).eq('id',scheduleId);
     if(saveErr) throw new Error(t.errSave);
+    document.getElementById('review-screen').style.display='none';
     document.getElementById('form-body').style.display='none';
     document.getElementById('success-name').textContent=name;
     document.getElementById('t-success-msg').textContent=t.successMsg;
     document.getElementById('success-screen').style.display='flex';
   } catch(e) {
     showError(e.message||t.errSave);
-    btn.disabled=false; btn.textContent=t.btnSubmit;
+    if(btn){btn.disabled=false; btn.textContent=t.confirmSubmit||'✓ Confirm & Submit';}
   }
 }
 
@@ -583,8 +731,11 @@ function resetForm(){
   clearError();
   document.getElementById('success-screen').style.display='none';
   document.getElementById('form-body').style.display='block';
-  const btn=document.getElementById('btn-submit');
-  btn.disabled=false; btn.textContent=LANGS[currentLang].btnSubmit;
+  const sub=document.getElementById('btn-submit');
+  if(sub){sub.disabled=false;}
+  const conf=document.getElementById('btn-confirm');
+  if(conf){conf.disabled=false; conf.textContent=LANGS[currentLang].confirmSubmit||'✓ Confirm & Submit';}
+  document.getElementById('review-screen').style.display='none';
 }
 </script>
 </body>
