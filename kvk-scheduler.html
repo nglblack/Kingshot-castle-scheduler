@@ -2265,6 +2265,21 @@ function buildMoveOpts(grid, idx, slot) {
   return opts.join('');
 }
 function buildPrefStr(slot) {
+  // If dayPrefTimes set, show each day that has times
+  if(slot.dayPrefTimes) {
+    const lines=[];
+    const dayLabels={1:'🏗️ Day 1',2:'🔬 Day 2',4:'⚔️ Day 4'};
+    [1,2,4].forEach(d=>{
+      const dt=slot.dayPrefTimes[d];
+      if(dt&&dt.length){
+        const times=dt.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?' – '+t.e:'')).join('  |  ');
+        lines.push(dayLabels[d]+':  '+times+' UTC');
+      }
+    });
+    if(lines.length) return lines.join('
+');
+  }
+  // Fall back to global prefTimes
   if(slot.prefTimes&&slot.prefTimes.length) return '⏰ '+slot.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?' – '+t.e:'')).join('  |  ')+' UTC';
   if(slot.prefStart) return '⏰ '+slot.prefStart+(slot.prefEnd&&slot.prefEnd!==slot.prefStart?' – '+slot.prefEnd:'')+' UTC';
   return '';
@@ -2491,7 +2506,14 @@ function openActionSheet(day, idx, triggerEl) {
       : '<span class="gk" style="grid-column:1/-1;color:#b8a898;">No details recorded</span>';
     const pref=buildPrefStr(slot);
     const prefEl=document.getElementById('gp-pref');
-    prefEl.textContent=pref; prefEl.style.display=pref?'block':'none';
+    if(pref){
+      // Use innerHTML to render line breaks between days
+      prefEl.innerHTML=pref.replace(/
+/g,'<br>');
+      prefEl.style.display='block';
+    } else {
+      prefEl.textContent='';prefEl.style.display='none';
+    }
     document.getElementById('gp-move-sel').innerHTML=buildMoveOpts(grid,idx,slot);
     const fillerChk=document.getElementById('gp-filler-chk');
     if(fillerChk) fillerChk.checked=!!slot.isFiller;
@@ -2563,14 +2585,13 @@ function openActionSheet(day, idx, triggerEl) {
   // Pref time
   const prefWrap = document.getElementById('as-pref-wrap');
   const prefEl   = document.getElementById('as-pref');
-  if (slot.prefTimes && slot.prefTimes.length) {
-    prefEl.textContent = slot.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s?' – '+t.e:'')).join('  |  ') + ' UTC';
-    prefWrap.style.display = 'block';
-  } else if (slot.prefStart) {
-    prefEl.textContent = slot.prefStart + (slot.prefEnd && slot.prefEnd!==slot.prefStart?' – '+slot.prefEnd:'') + ' UTC';
-    prefWrap.style.display = 'block';
+  const asPrefStr = buildPrefStr(slot);
+  if(asPrefStr){
+    prefEl.innerHTML = asPrefStr.replace(/
+/g,'<br>');
+    prefWrap.style.display='block';
   } else {
-    prefWrap.style.display = 'none';
+    prefWrap.style.display='none';
   }
 
   // All open slots — no pref filtering
