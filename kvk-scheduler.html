@@ -177,6 +177,11 @@ tbody td{padding:7px 12px;border-bottom:1px solid rgba(139,111,71,.1);vertical-a
 tbody td.t-name{overflow:visible;text-overflow:unset;white-space:normal;}
 .row-filled td{background:rgba(61,122,69,.05);}
 .row-filled:hover td{background:rgba(61,122,69,.1);}
+/* Filler rows — muted amber style */
+.row-filler td{background:rgba(180,140,60,.07);}
+.row-filler:hover td{background:rgba(180,140,60,.14);}
+.row-filler .t-name{color:#8b7a4a;font-style:italic;}
+.filler-badge{display:inline-block;font-size:9px;font-weight:800;padding:1px 5px;border-radius:8px;background:rgba(180,140,60,.2);color:#8b6914;border:1px solid rgba(180,140,60,.4);margin-left:5px;letter-spacing:.05em;vertical-align:middle;}
 tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 .drag-over td{background:rgba(139,105,20,.12) !important;outline:2px dashed #8b6914;outline-offset:-2px;}
 .dragging{opacity:.25;pointer-events:none;}
@@ -186,6 +191,18 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 .t-tg{color:#8b6914;font-size:12px;font-weight:700;}
 .t-speed{font-size:11px;color:#8b7a5a;}
 .t-pref{font-size:11px;color:#6b4423;}
+.col-pref-inline{font-size:10px;color:#6b4423;font-family:'Courier New',monospace;font-weight:600;}
+.col-bulk-chk{width:28px;text-align:center;padding:2px;}
+/* Bulk action bar */
+.bulk-bar{display:none;position:sticky;top:0;z-index:20;background:#4a3428;color:#f5ebe0;padding:7px 14px;align-items:center;gap:10px;flex-wrap:wrap;}
+.bulk-bar.show{display:flex;}
+.bulk-bar-count{font-size:12px;font-weight:700;flex:1;}
+.bulk-bar-btn{padding:5px 12px;font-size:11px;font-weight:700;border-radius:6px;border:1.5px solid rgba(245,235,224,.3);background:rgba(245,235,224,.1);color:#f5ebe0;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;}
+.bulk-bar-btn:hover{background:rgba(245,235,224,.2);}
+.bulk-bar-btn.warn{border-color:rgba(192,57,43,.5);color:#f08080;}
+.bulk-bar-btn.warn:hover{background:rgba(192,57,43,.2);}
+.bulk-bar-btn.amber{border-color:rgba(180,140,60,.5);color:#ffd966;}
+.bulk-bar-btn.amber:hover{background:rgba(180,140,60,.2);}
 .t-tgdust{font-size:12px;color:#8b3a8b;font-weight:700;}
 .col-pref{opacity:.6;}
 @media(max-width:900px){.col-pref{display:none;}}
@@ -665,21 +682,35 @@ True Gold: __126__
             <button class="btn sm" id="open-copy-btn" onclick="openCopyModal('d1')">📋 Copy</button>
           </div>
         </div>
+        <div class="bulk-bar" id="bulk-bar">
+          <span class="bulk-bar-count" id="bulk-count">0 selected</span>
+          <button class="bulk-bar-btn amber" onclick="bulkFiller()">🏷️ Mark as filler</button>
+          <button class="bulk-bar-btn amber" onclick="bulkUnfiller()">↩ Unmark filler</button>
+          <button class="bulk-bar-btn" onclick="bulkToQueue()">↩ Return to queue</button>
+          <button class="bulk-bar-btn warn" onclick="bulkDelete()">✕ Remove</button>
+          <button class="bulk-bar-btn" onclick="bulkClear()" style="margin-left:auto;">✕ Cancel</button>
+        </div>
         <div class="sched-wrap">
           <table id="sched-table">
             <colgroup>
-              <col class="th-handle" style="width:28px">
-              <col style="width:80px">
-              <col style="min-width:160px;width:25%">
-              <col id="col-a-col" style="min-width:90px;width:13%">
-              <col id="col-b-col" style="min-width:100px;width:15%">
-              <col id="col-c-col" style="min-width:120px;width:20%">
-              <col style="width:44px">
+              <col class="col-bulk-chk" style="width:28px">
+              <col class="th-handle" style="width:24px">
+              <col style="width:75px">
+              <col style="width:160px">
+              <col class="col-pref-inline" style="width:130px">
+              <col id="col-a-col" style="width:auto">
+              <col id="col-b-col" style="width:auto">
+              <col id="col-c-col" style="width:auto">
+              <col style="width:40px">
             </colgroup>
             <thead><tr>
+              <th class="col-bulk-chk" style="padding:4px;text-align:center;">
+                <input type="checkbox" id="bulk-select-all" title="Select all" style="cursor:pointer;accent-color:#8b6914;" onchange="bulkSelectAll(this.checked)">
+              </th>
               <th class="th-handle"></th>
               <th>Start</th>
               <th>Player</th>
+              <th class="col-pref-inline">⏰ Pref</th>
               <th id="col-a-hdr">TG</th>
               <th id="col-b-hdr">TG Dust</th>
               <th id="col-c-hdr">Construction</th>
@@ -718,6 +749,13 @@ True Gold: __126__
         <option value="">Pick a slot…</option>
       </select>
       <button class="gp-act-btn move-btn" onclick="gpMove()">Move →</button>
+    </div>
+    <div style="margin-bottom:10px;">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:7px 10px;background:rgba(180,140,60,.08);border:1.5px solid rgba(180,140,60,.25);border-radius:8px;">
+        <input type="checkbox" id="gp-filler-chk" style="width:14px;height:14px;accent-color:#8b6914;cursor:pointer;" onchange="gpToggleFiller()">
+        <span style="font-size:12px;font-weight:700;color:#8b6914;">Mark as filler slot</span>
+        <span style="font-size:10px;color:#8b7a5a;margin-left:auto;">Shows italic + amber</span>
+      </label>
     </div>
     <div class="gp-act-row">
       <button class="gp-act-btn" onclick="gpQueue()">↩ Return to queue</button>
@@ -2084,7 +2122,7 @@ function renderGrid(){
   grid.forEach((slot,i)=>{
     const tr=document.createElement('tr');tr.dataset.idx=i;
     if(slot){
-      tr.className='row-filled';
+      tr.className = slot.isFiller ? 'row-filled row-filler' : 'row-filled';
       // Per-day col A and col B values
       let colA='—', colB='—';
       if(currentDay===1){
@@ -2099,13 +2137,32 @@ function renderGrid(){
       }
       // col C: construction for all days
       const colC = slot.construction || '—';
+      // bulk checkbox
+      const tdChk=document.createElement('td');tdChk.className='col-bulk-chk';tdChk.style.textAlign='center';tdChk.style.padding='2px';
+      const chk=document.createElement('input');chk.type='checkbox';chk.style.cursor='pointer';chk.style.accentColor='#8b6914';
+      chk.dataset.day=currentDay;chk.dataset.idx=i;
+      chk.addEventListener('change',()=>updateBulkBar());
+      tdChk.appendChild(chk);tr.appendChild(tdChk);
       // drag handle
       const tdH=document.createElement('td');tdH.className='td-handle';
       const h=document.createElement('span');h.className='handle';h.textContent='⠿';h.title='Drag to move';tdH.appendChild(h);tr.appendChild(tdH);
       // start time
       const tdT=document.createElement('td');tdT.className='t-time';tdT.textContent=slotTime(i);tr.appendChild(tdT);
-      // name
-      const tdN=document.createElement('td');tdN.className='t-name';tdN.textContent=slot.name;tr.appendChild(tdN);
+      // name + filler badge
+      const tdN=document.createElement('td');tdN.className='t-name';
+      tdN.textContent=slot.name;
+      if(slot.isFiller){const fb=document.createElement('span');fb.className='filler-badge';fb.textContent='F';tdN.appendChild(fb);}
+      tr.appendChild(tdN);
+      // pref time — right after name
+      const tdPrefInline=document.createElement('td');tdPrefInline.className='col-pref-inline';
+      if(slot.prefTimes&&slot.prefTimes.length){
+        tdPrefInline.textContent=slot.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?'–'+t.e:'')).join(' | ');
+      } else if(slot.prefStart){
+        tdPrefInline.textContent=slot.prefStart+(slot.prefEnd&&slot.prefEnd!==slot.prefStart?'–'+slot.prefEnd:'');
+      } else {
+        tdPrefInline.textContent='—';tdPrefInline.style.color='#c8b8a8';
+      }
+      tr.appendChild(tdPrefInline);
       // col A
       const tdA=document.createElement('td');tdA.className=currentDay===1?'t-tg':'t-speed';tdA.style.fontWeight='700';tdA.textContent=colA;tr.appendChild(tdA);
       // col B
@@ -2131,11 +2188,15 @@ function renderGrid(){
       });
 
     }else{
-      tr.innerHTML='<td class="td-handle"></td><td class="t-time">'+slotTime(i)+'</td><td class="t-empty" colspan="4">— open —</td><td class="td-tap-btn"></td>';
+      tr.innerHTML='<td class="col-bulk-chk"></td><td class="td-handle"></td><td class="t-time">'+slotTime(i)+'</td><td class="t-empty" colspan="5">— open —</td><td class="td-tap-btn"></td>';
     }
     tr.addEventListener('dragover',e=>{if(dragIdx===null)return;e.preventDefault();e.dataTransfer.dropEffect='move';if(dragOverIdx!==i){clearDragOver();dragOverIdx=i;tr.classList.add('drag-over');}});
     tr.addEventListener('dragleave',e=>{if(!tr.contains(e.relatedTarget)){tr.classList.remove('drag-over');if(dragOverIdx===i)dragOverIdx=null;}});
-    tr.addEventListener('drop',e=>{e.preventDefault();tr.classList.remove('drag-over');const src=dragIdx;dragIdx=null;dragOverIdx=null;if(src===null||src===i)return;const g=currentDay===1?state.day1:currentDay===2?state.day2:state.day4;const tmp=g[i];g[i]=g[src];g[src]=tmp;debouncedSave();renderGrid();renderQueue();renderStats();toast('Slot moved.');});
+    tr.addEventListener('drop',e=>{e.preventDefault();tr.classList.remove('drag-over');const src=dragIdx;dragIdx=null;dragOverIdx=null;if(src===null||src===i)return;const g=currentDay===1?state.day1:currentDay===2?state.day2:state.day4;
+      // Always swap — works for filled→empty, empty→filled, filled→filled
+      const tmp=g[i];g[i]=g[src];g[src]=tmp;
+      debouncedSave();renderGrid();renderQueue();renderStats();
+      toast(g[i]&&g[src]?'↔ Swapped slots.':'Slot moved.');});
     tbody.appendChild(tr);
   });
   renderOpenBar(grid);
@@ -2174,6 +2235,70 @@ function buildPrefStr(slot) {
 
 let gpDay=null,gpIdx=null;
 function closeGearPopover(){document.getElementById('gear-popover').classList.remove('open');gpDay=null;gpIdx=null;}
+// ── Bulk selection ──
+function getCheckedSlots() {
+  return [...document.querySelectorAll('#sched-body input[type=checkbox]:checked')]
+    .map(c=>({day:parseInt(c.dataset.day), idx:parseInt(c.dataset.idx)}));
+}
+function updateBulkBar() {
+  const checked = getCheckedSlots();
+  const bar = document.getElementById('bulk-bar');
+  const ct  = document.getElementById('bulk-count');
+  if(checked.length>0){
+    bar.classList.add('show');
+    ct.textContent = checked.length + ' slot' + (checked.length>1?'s':'') + ' selected';
+    document.getElementById('bulk-select-all').indeterminate = true;
+  } else {
+    bar.classList.remove('show');
+    document.getElementById('bulk-select-all').checked = false;
+    document.getElementById('bulk-select-all').indeterminate = false;
+  }
+}
+function bulkSelectAll(checked) {
+  document.querySelectorAll('#sched-body input[type=checkbox]').forEach(c=>c.checked=checked);
+  updateBulkBar();
+}
+function bulkClear() {
+  document.querySelectorAll('#sched-body input[type=checkbox]').forEach(c=>c.checked=false);
+  document.getElementById('bulk-select-all').checked=false;
+  document.getElementById('bulk-select-all').indeterminate=false;
+  document.getElementById('bulk-bar').classList.remove('show');
+}
+function bulkFiller(){
+  getCheckedSlots().forEach(({day,idx})=>{
+    const g=day===1?state.day1:day===2?state.day2:state.day4;
+    if(g[idx]) g[idx].isFiller=true;
+  });
+  debouncedSave();renderGrid();renderStats();bulkClear();
+  toast('Marked as filler.');
+}
+function bulkUnfiller(){
+  getCheckedSlots().forEach(({day,idx})=>{
+    const g=day===1?state.day1:day===2?state.day2:state.day4;
+    if(g[idx]) g[idx].isFiller=false;
+  });
+  debouncedSave();renderGrid();renderStats();bulkClear();
+  toast('Filler mark removed.');
+}
+function bulkToQueue(){
+  getCheckedSlots().forEach(({day,idx})=>{ returnToQueue(day,idx); });
+  bulkClear(); toast('Returned to queue.');
+}
+function bulkDelete(){
+  getCheckedSlots().forEach(({day,idx})=>{
+    const g=day===1?state.day1:day===2?state.day2:state.day4;
+    g[idx]=null;
+  });
+  debouncedSave();renderGrid();renderQueue();renderStats();bulkClear();
+  toast('Removed from schedule.');
+}
+
+function gpToggleFiller(){
+  const grid=gpDay===1?state.day1:gpDay===2?state.day2:state.day4;
+  if(!grid[gpIdx]) return;
+  grid[gpIdx].isFiller=document.getElementById('gp-filler-chk').checked;
+  debouncedSave(); renderGrid();
+}
 function gpMove(){
   const v=parseInt(document.getElementById('gp-move-sel').value);if(isNaN(v)){toast('Pick a slot.');return;}
   const g=gpDay===1?state.day1:gpDay===2?state.day2:state.day4;
@@ -2210,6 +2335,8 @@ function openActionSheet(day, idx, triggerEl) {
     const prefEl=document.getElementById('gp-pref');
     prefEl.textContent=pref; prefEl.style.display=pref?'block':'none';
     document.getElementById('gp-move-sel').innerHTML=buildMoveOpts(grid,idx,slot);
+    const fillerChk=document.getElementById('gp-filler-chk');
+    if(fillerChk) fillerChk.checked=!!slot.isFiller;
     // Position near button — flip left if too close to right edge
     const rect=triggerEl.getBoundingClientRect();
     const popW=308, popH=360; // estimated max popover height
