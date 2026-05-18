@@ -2276,8 +2276,7 @@ function buildPrefStr(slot) {
         lines.push(dayLabels[d]+':  '+times+' UTC');
       }
     });
-    if(lines.length) return lines.join('
-');
+    if(lines.length) return lines.join('\n');
   }
   // Fall back to global prefTimes
   if(slot.prefTimes&&slot.prefTimes.length) return '⏰ '+slot.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?' – '+t.e:'')).join('  |  ')+' UTC';
@@ -2508,8 +2507,7 @@ function openActionSheet(day, idx, triggerEl) {
     const prefEl=document.getElementById('gp-pref');
     if(pref){
       // Use innerHTML to render line breaks between days
-      prefEl.innerHTML=pref.replace(/
-/g,'<br>');
+      prefEl.innerHTML=pref.replace(/\n/g,'<br>');
       prefEl.style.display='block';
     } else {
       prefEl.textContent='';prefEl.style.display='none';
@@ -2587,8 +2585,7 @@ function openActionSheet(day, idx, triggerEl) {
   const prefEl   = document.getElementById('as-pref');
   const asPrefStr = buildPrefStr(slot);
   if(asPrefStr){
-    prefEl.innerHTML = asPrefStr.replace(/
-/g,'<br>');
+    prefEl.innerHTML = asPrefStr.replace(/\n/g,'<br>');
     prefWrap.style.display='block';
   } else {
     prefWrap.style.display='none';
