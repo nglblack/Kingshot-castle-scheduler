@@ -2178,26 +2178,24 @@ function renderGrid(){
       tdN.textContent=slot.name;
       if(slot.isFiller){const fb=document.createElement('span');fb.className='filler-badge';fb.textContent='F';tdN.appendChild(fb);}
       tr.appendChild(tdN);
-      // pref time — show all windows stacked
+      // pref time — single line with tooltip for full detail
       const tdPrefInline=document.createElement('td');tdPrefInline.className='col-pref-inline';
-      tdPrefInline.style.whiteSpace='normal';tdPrefInline.style.lineHeight='1.4';tdPrefInline.style.verticalAlign='middle';
+      tdPrefInline.style.overflow='hidden';tdPrefInline.style.textOverflow='ellipsis';tdPrefInline.style.whiteSpace='nowrap';tdPrefInline.style.maxWidth='130px';
       const dayKey=currentDay;
       const dayPrefT = slot.dayPrefTimes&&slot.dayPrefTimes[dayKey]&&slot.dayPrefTimes[dayKey].length
         ? slot.dayPrefTimes[dayKey] : null;
       const allPrefT = slot.prefTimes&&slot.prefTimes.length ? slot.prefTimes : null;
       const prefSrc = dayPrefT || allPrefT;
       if(prefSrc&&prefSrc.length){
-        const label = dayPrefT ? 'D'+dayKey+':' : '';
-        const lines = prefSrc.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?'–'+t.e:''));
-        if(lines.length===1){
-          tdPrefInline.textContent=(label?label+' ':'')+lines[0];
-        } else {
-          // Multiple windows — stack as separate divs
-          tdPrefInline.innerHTML=(label?'<span style="font-weight:700;color:#4a3428;">'+label+'</span><br>':'')+
-            lines.map(l=>'<span>'+l+'</span>').join('<br>');
-        }
+        const label = dayPrefT ? 'D'+dayKey+': ' : '';
+        const parts = prefSrc.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?'–'+t.e:''));
+        const display = label + parts.join(' | ');
+        tdPrefInline.textContent = display;
+        tdPrefInline.title = display; // full text on hover
       } else if(slot.prefStart){
-        tdPrefInline.textContent=slot.prefStart+(slot.prefEnd&&slot.prefEnd!==slot.prefStart?'–'+slot.prefEnd:'');
+        const display = slot.prefStart+(slot.prefEnd&&slot.prefEnd!==slot.prefStart?'–'+slot.prefEnd:'');
+        tdPrefInline.textContent = display;
+        tdPrefInline.title = display;
       } else {
         tdPrefInline.textContent='—';tdPrefInline.style.color='#c8b8a8';
       }
