@@ -943,7 +943,10 @@ True Gold: __126__
     </div>
 
     <div style="border-top:1px solid rgba(139,111,71,.15);margin-top:4px;padding-top:12px;">
-      <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Recover queue backup</div>
+      <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">🕐 Restore from local snapshot</div>
+      <div id="snapshot-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+      <div style="border-top:1px solid rgba(139,111,71,.1);margin-top:10px;padding-top:10px;">
+      <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Recover queue only</div>
       <div id="queue-backup-info" style="font-size:12px;color:#6b4423;margin-bottom:8px;display:none;"></div>
       <button class="btn full" onclick="restoreQueueBackup()" id="restore-queue-btn" style="justify-content:flex-start;gap:10px;padding:10px 14px;white-space:normal;text-align:left;min-width:0;display:none;">
         <span style="font-size:18px;flex-shrink:0;">🔄</span>
@@ -953,7 +956,7 @@ True Gold: __126__
         </div>
       </button>
       <div style="border-top:1px solid rgba(139,111,71,.1);margin-top:10px;padding-top:10px;">
-      <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Import backup</div>
+      <div style="font-size:10px;font-weight:700;color:#8b7a5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Import backup file</div>
       <label style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff8f0;border:2px solid rgba(139,111,71,.2);border-radius:8px;cursor:pointer;transition:border .15s;" onmouseover="this.style.borderColor='#8b6914'" onmouseout="this.style.borderColor='rgba(139,111,71,.2)'">
         <span style="font-size:20px;flex-shrink:0;">📂</span>
         <div style="min-width:0;">
@@ -964,6 +967,7 @@ True Gold: __126__
       </label>
       <div id="import-error" style="display:none;font-size:12px;color:#c0392b;margin-top:6px;padding:6px 10px;background:rgba(192,57,43,.08);border-radius:6px;border:1px solid rgba(192,57,43,.25);"></div>
       </div><!-- end import section -->
+      </div><!-- end queue only section -->
     </div>
     <div class="modal-footer"><button class="btn" onclick="changePin()" style="color:#8b6914;">🔑 Change PIN</button><button class="btn" onclick="closeExportModal()">Close</button></div>
   </div>
@@ -1200,7 +1204,7 @@ let parsed      = null;
 let modalDay    = 'd1';
 let scheduleId  = null;
 let scheduleVer = 1;
-let ignoreNext  = false;
+let ignoreNext  = 0; // counter: ignore next N realtime events from our own saves
 let saveTimer   = null;
 let dragIdx = null, dragOverIdx = null;
 let queueSort = 'manual'; // manual | name | tg | dust | gen | res | train | build
@@ -1264,36 +1268,93 @@ async function cloudCreate() {
 async function cloudSave() {
   if (!sb || !scheduleId) return;
   setSyncStatus('saving');
-  ignoreNext = true;
+
+  // Snapshot before attempting save so we can recover if needed
+  saveSnapshot('pre-save');
+
+  // Attempt atomic write — .eq('version', scheduleVer) means Supabase
+  // only applies the update if the row's version still matches ours.
+  // If someone else saved in the meantime, this returns 0 rows and we know there's a conflict.
+  ignoreNext++;
   const { data, error } = await sb.from(TABLE)
-    .update({ day1: state.day1, day2: state.day2, day4: state.day4, queue: state.queue, version: scheduleVer + 1, pin_hash: schedulePinHash||null })
+    .update({
+      day1: state.day1, day2: state.day2, day4: state.day4,
+      queue: state.queue, version: scheduleVer + 1,
+      pin_hash: schedulePinHash || null
+    })
     .eq('id', scheduleId)
+    .eq('version', scheduleVer)   // atomic guard: only write if version matches
     .select().single();
-  if (error) {
-    console.error('Save failed', error);
+
+  if (error || !data) {
+    // Conflict — someone else saved since we last loaded. Don't overwrite.
+    ignoreNext = Math.max(0, ignoreNext - 1);
     setSyncStatus('error');
-    setSaveInfo('⚠️ Save failed');
-    ignoreNext = false;
+    console.warn('Save conflict: DB version ahead of ours (v'+scheduleVer+'). Reloading.');
+
+    // Reload DB version as authoritative — DO NOT merge, just take what's there
+    const { data: fresh } = await sb.from(TABLE).select('*').eq('id', scheduleId).single();
+    if (fresh) {
+      applyRow(fresh);
+      renderQueue(); renderGrid(); renderStats();
+      setSyncStatus('live');
+      setSaveInfo('⚠️ Conflict — schedule reloaded from cloud (v'+fresh.version+')');
+      toast('⚠️ Another user saved while you were editing. Schedule reloaded — your local snapshot is preserved in 💾 Export.');
+    }
     return;
   }
+
   scheduleVer = data.version;
   setSaveInfo('Saved ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
   setSyncStatus('live');
 }
 
 // Debounce — only write to Supabase 800ms after the last change
+// ── Snapshot system: keep last 5 full state snapshots in localStorage ──
+const MAX_SNAPSHOTS = 5;
+const SNAPSHOT_KEY  = 'kvk_snapshots';
+
+function saveSnapshot(reason) {
+  if (!scheduleId) return;
+  try {
+    const snaps = JSON.parse(localStorage.getItem(SNAPSHOT_KEY) || '[]');
+    snaps.unshift({
+      savedAt: new Date().toISOString(),
+      reason: reason || 'auto',
+      scheduleId,
+      version: scheduleVer,
+      day1: state.day1,
+      day2: state.day2,
+      day4: state.day4,
+      queue: state.queue,
+    });
+    // Keep only last 5
+    if (snaps.length > MAX_SNAPSHOTS) snaps.length = MAX_SNAPSHOTS;
+    localStorage.setItem(SNAPSHOT_KEY, JSON.stringify(snaps));
+    // Also keep dedicated queue backup
+    if (state.queue && state.queue.length) {
+      localStorage.setItem('kvk_queue_backup', JSON.stringify({
+        savedAt: new Date().toISOString(), scheduleId, queue: state.queue
+      }));
+    }
+  } catch(e) { console.warn('Snapshot failed:', e); }
+}
+
+// Auto-snapshot every 60 seconds when unlocked
+let autoSnapTimer = null;
+function startAutoSnapshot() {
+  if (autoSnapTimer) clearInterval(autoSnapTimer);
+  autoSnapTimer = setInterval(()=>{
+    if (isUnlocked && scheduleId) saveSnapshot('auto-60s');
+  }, 60000);
+}
+
 function debouncedSave() {
   if (!isUnlocked) { toast('🔒 Locked — changes not saved'); return; }
   clearTimeout(saveTimer);
-  // Always back up queue to localStorage immediately
-  if (state.queue && state.queue.length) {
-    try { localStorage.setItem('kvk_queue_backup', JSON.stringify({
-      savedAt: new Date().toISOString(),
-      scheduleId,
-      queue: state.queue
-    })); } catch(e) {}
-  }
-  saveTimer = setTimeout(cloudSave, 800);
+  // Snapshot to localStorage immediately on every change
+  saveSnapshot('change');
+  saveTimer = setTimeout(cloudSave, 1200);
 }
 
 // ══════════════════════════════════════════════
@@ -1306,8 +1367,15 @@ function subscribeRealtime(id) {
     .on('postgres_changes', {
       event: 'UPDATE', schema: 'public', table: TABLE, filter: `id=eq.${id}`
     }, payload => {
-      if (ignoreNext) { ignoreNext = false; return; }   // our own write — skip
+      if (ignoreNext > 0) { ignoreNext--; return; }   // our own write — skip
       const row = payload.new;
+      // Only apply if incoming version is newer than what we have
+      if (row.version <= scheduleVer) {
+        console.log('Ignoring stale realtime update v'+row.version+' (have v'+scheduleVer+')');
+        return;
+      }
+      // Snapshot current state before overwriting with incoming update
+      saveSnapshot('before-remote-update');
       state.day1  = (Array.isArray(row.day1)&&row.day1.length===48) ? row.day1 : new Array(48).fill(null);
       state.day2  = (Array.isArray(row.day2)&&row.day2.length===48) ? row.day2 : new Array(48).fill(null);
       state.day4  = (Array.isArray(row.day4)&&row.day4.length===48) ? row.day4 : new Array(48).fill(null);
@@ -1315,7 +1383,7 @@ function subscribeRealtime(id) {
       scheduleVer = row.version;
       renderQueue(); renderGrid(); renderStats();
       setSaveInfo('Updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) + ' by another user');
-      toast('📡 Schedule updated by another user');
+      toast('📡 Schedule updated by another user — previous state saved in 💾 Export');
     })
     .subscribe(status => {
       if (status === 'SUBSCRIBED') setSyncStatus('live');
@@ -1373,6 +1441,7 @@ function applyRow(row) {
   setSessionDisplay(scheduleId);
   checkPinState();
   renderQueue(); renderGrid(); renderStats();
+  startAutoSnapshot();
 }
 
 async function createNewSchedule() {
@@ -2897,6 +2966,30 @@ function doReset(){
 //  EXPORT
 // ══════════════════════════════════════════════
 function showExportModal(){
+  // Populate snapshot list
+  try {
+    const snaps = JSON.parse(localStorage.getItem(SNAPSHOT_KEY)||'[]');
+    const listEl = document.getElementById('snapshot-list');
+    if(listEl){
+      if(snaps.length===0){
+        listEl.innerHTML='<div style="font-size:12px;color:#b8a898;font-style:italic;">No local snapshots yet — they save automatically as you work.</div>';
+      } else {
+        listEl.innerHTML=snaps.map((s,i)=>{
+          const d=new Date(s.savedAt);
+          const when=d.toLocaleDateString()+' '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+          const filled=[s.day1,s.day2,s.day4].reduce((t,g)=>t+(Array.isArray(g)?g.filter(Boolean).length:0),0);
+          const qCount=Array.isArray(s.queue)?s.queue.length:0;
+          return '<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#fff8f0;border:1.5px solid rgba(139,111,71,.15);border-radius:8px;">'
+            +'<div style="flex:1;min-width:0;">'
+              +'<div style="font-size:12px;font-weight:700;color:#4a3428;">'+when+' <span style="font-size:10px;color:#8b7a5a;font-weight:400;">('+s.reason+')</span></div>'
+              +'<div style="font-size:11px;color:#8b7a5a;">'+filled+' scheduled · '+qCount+' in queue · v'+s.version+'</div>'
+            +'</div>'
+            +'<button onclick="restoreSnapshot('+i+')" style="padding:4px 10px;font-size:11px;font-weight:700;border-radius:6px;border:1.5px solid rgba(139,111,71,.3);background:#fff8f0;color:#6b4423;cursor:pointer;font-family:inherit;white-space:nowrap;">Restore</button>'
+          +'</div>';
+        }).join('');
+      }
+    }
+  } catch(e){}
   // Check for localStorage queue backup
   try {
     const raw = localStorage.getItem('kvk_queue_backup');
@@ -2923,6 +3016,23 @@ function showExportModal(){
   } catch(e) {}
   document.getElementById('export-modal').classList.add('open');
 }
+function restoreSnapshot(idx) {
+  try {
+    const snaps = JSON.parse(localStorage.getItem(SNAPSHOT_KEY)||'[]');
+    const s = snaps[idx];
+    if(!s) { toast('Snapshot not found.'); return; }
+    if(!confirm('Restore this snapshot?\n'+new Date(s.savedAt).toLocaleString()+'\nThis will overwrite the current schedule.')) return;
+    state.day1  = (Array.isArray(s.day1)&&s.day1.length===48)  ? s.day1  : new Array(48).fill(null);
+    state.day2  = (Array.isArray(s.day2)&&s.day2.length===48)  ? s.day2  : new Array(48).fill(null);
+    state.day4  = (Array.isArray(s.day4)&&s.day4.length===48)  ? s.day4  : new Array(48).fill(null);
+    state.queue = Array.isArray(s.queue) ? s.queue : [];
+    debouncedSave();
+    renderQueue(); renderGrid(); renderStats();
+    closeExportModal();
+    toast('✅ Restored snapshot from '+new Date(s.savedAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+  } catch(e) { toast('Restore failed: '+e.message); }
+}
+
 function restoreQueueBackup() {
   try {
     const raw = localStorage.getItem('kvk_queue_backup');

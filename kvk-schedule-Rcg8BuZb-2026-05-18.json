@@ -1,0 +1,8629 @@
+{
+  "scheduleId": "Rcg8BuZb",
+  "exportedAt": "2026-05-18T18:26:10.053Z",
+  "slotStartTime": "23:45",
+  "day1": [
+    {
+      "id": 1778610550947,
+      "tg": 0,
+      "pid": "",
+      "name": "Deck",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "00:00"
+          }
+        ],
+        "2": [],
+        "4": [
+          {
+            "e": "",
+            "s": "03:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        4,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "id": 1778762071994,
+      "tg": 809,
+      "pid": "120795301",
+      "name": "LuhpastyWEB",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1192,
+      "general": "24.2 days",
+      "prefEnd": "00:00",
+      "research": "15.6 days",
+      "training": "15.6 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "00:00"
+        },
+        {
+          "e": "00:00",
+          "s": "15:00"
+        }
+      ],
+      "construction": "15.6 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "15:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1
+      ]
+    },
+    {
+      "id": 1778792596562,
+      "tg": 275,
+      "pid": "103785873",
+      "name": "[WTF] Yue",
+      "total": "",
+      "forDay": null,
+      "tgDust": 628,
+      "general": "19 days",
+      "prefEnd": "02:00",
+      "research": "8 days",
+      "training": "10 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "00:00"
+        },
+        {
+          "e": "02:00",
+          "s": "00:00"
+        },
+        {
+          "e": "02:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "6 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "02:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "02:00",
+            "s": "00:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "02:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779029805226,
+      "tg": 2600,
+      "pid": "101606362",
+      "name": "[686] WarDoctor",
+      "total": "",
+      "forDay": null,
+      "tgDust": 2400,
+      "general": "62 days",
+      "prefEnd": "00:00",
+      "research": "10 days",
+      "training": "36 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "00:00"
+        },
+        {
+          "e": "00:00",
+          "s": "17:00"
+        }
+      ],
+      "construction": "20 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          },
+          {
+            "e": "00:00",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          },
+          {
+            "e": "00:00",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          },
+          {
+            "e": "00:00",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778761827483,
+      "tg": 200,
+      "pid": "117665398",
+      "name": "Asur",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1000,
+      "general": "24 day",
+      "prefEnd": "",
+      "research": "11days",
+      "training": "25 days",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "11 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "id": 1778863794124,
+      "tg": 2153,
+      "pid": "102097809",
+      "name": "Silver Knight",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 468,
+      "general": "51days 15hrs 4 minutes",
+      "prefEnd": "23:30",
+      "research": "34days 7hrs 53minutes",
+      "training": "37days 20hrs",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "23:30",
+          "s": "00:00"
+        },
+        {
+          "e": "23:30",
+          "s": "00:00"
+        }
+      ],
+      "construction": "41days 21hrs 4 minutes",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "23:30",
+            "s": "00:00"
+          }
+        ],
+        "2": [],
+        "4": [
+          {
+            "e": "23:30",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779050042532,
+      "tg": 957,
+      "pid": "112927028",
+      "name": "SmokeyBear",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1472,
+      "general": "72",
+      "prefEnd": "04:00",
+      "research": "64",
+      "training": "22",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "00:00"
+        },
+        {
+          "e": "04:00",
+          "s": "00:00"
+        },
+        {
+          "e": "04:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "17",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "04:00",
+            "s": "00:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "04:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779034869221,
+      "tg": 2712,
+      "pid": "",
+      "name": "[IAM] °io°",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1081,
+      "general": "32 day",
+      "prefEnd": "",
+      "research": "21 days",
+      "training": "34 days",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "13 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779044331714,
+      "tg": 1425,
+      "pid": "103084431",
+      "name": "[WTF] La Lolo",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 3004,
+      "general": "87",
+      "prefEnd": "06:00",
+      "research": "13.5",
+      "training": "20",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "16:00"
+        },
+        {
+          "e": "06:00",
+          "s": "01:00"
+        },
+        {
+          "e": "22:00",
+          "s": "16:00"
+        },
+        {
+          "e": "06:00",
+          "s": "01:00"
+        },
+        {
+          "e": "22:00",
+          "s": "16:00"
+        },
+        {
+          "e": "06:00",
+          "s": "01:00"
+        }
+      ],
+      "construction": "30",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "16:00"
+          },
+          {
+            "e": "06:00",
+            "s": "01:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "16:00"
+          },
+          {
+            "e": "06:00",
+            "s": "01:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "16:00"
+          },
+          {
+            "e": "06:00",
+            "s": "01:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779020433398,
+      "tg": 1200,
+      "pid": "103834324",
+      "name": "[MYS] DrSharc",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1300,
+      "general": "27",
+      "prefEnd": "20:00",
+      "research": "17",
+      "training": "19",
+      "prefStart": "04:30",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "04:30"
+        },
+        {
+          "e": "20:00",
+          "s": "04:30"
+        },
+        {
+          "e": "20:00",
+          "s": "04:33"
+        }
+      ],
+      "construction": "21",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "04:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "04:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "04:33"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779049567991,
+      "tg": 0,
+      "pid": "",
+      "name": "some100god",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "05:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "05:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "05:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ]
+    },
+    {
+      "id": 1779075432997,
+      "tg": 0,
+      "pid": "",
+      "name": "Major",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "15:00",
+      "research": "",
+      "training": "",
+      "prefStart": "15:00",
+      "prefTimes": [
+        {
+          "e": "15:00",
+          "s": "15:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "15:00",
+            "s": "15:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ]
+    },
+    {
+      "id": 1779065991496,
+      "tg": 0,
+      "pid": "",
+      "name": "Hunter 214",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "isFiller": true,
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ]
+    },
+    {
+      "id": 1779066159860,
+      "tg": 0,
+      "pid": "",
+      "name": "1King A7med",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "isFiller": true,
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1778635118707,
+      "tg": 3409,
+      "pid": "101770149",
+      "name": "[WTF] LordHK",
+      "total": "",
+      "forDay": null,
+      "tgDust": 2878,
+      "general": "62 days",
+      "prefEnd": "22:00",
+      "research": "38 days",
+      "training": "65 days",
+      "prefStart": "06:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "06:00"
+        },
+        {
+          "e": "22:00",
+          "s": "06:00"
+        },
+        {
+          "e": "22:00",
+          "s": "06:00"
+        }
+      ],
+      "construction": "31 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "06:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "06:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "06:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        2,
+        1
+      ]
+    },
+    {
+      "id": 1778622932938,
+      "tg": 1675,
+      "pid": "103326530",
+      "name": "Dani",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1600,
+      "general": "43 days",
+      "prefEnd": "08:00",
+      "research": "13 days",
+      "training": "18 days",
+      "prefStart": "06:30",
+      "prefTimes": [
+        {
+          "e": "08:00",
+          "s": "06:30"
+        },
+        {
+          "e": "08:00",
+          "s": "06:30"
+        },
+        {
+          "e": "08:00",
+          "s": "06:30"
+        }
+      ],
+      "construction": "14 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "08:00",
+            "s": "06:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "08:00",
+            "s": "06:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "08:00",
+            "s": "06:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4,
+        1,
+        2
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778761751725,
+      "tg": 10000,
+      "pid": "102048332",
+      "name": "Lautrefou",
+      "total": "",
+      "forDay": null,
+      "tgDust": 4000,
+      "general": "100 days",
+      "prefEnd": "08:00",
+      "research": "100 days",
+      "training": "100 days",
+      "prefStart": "07:30",
+      "prefTimes": [
+        {
+          "e": "08:00",
+          "s": "07:30"
+        },
+        {
+          "e": "08:00",
+          "s": "07:30"
+        },
+        {
+          "e": "08:00",
+          "s": "07:30"
+        }
+      ],
+      "construction": "150 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "08:00",
+            "s": "07:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "08:00",
+            "s": "07:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "08:00",
+            "s": "07:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778911399309,
+      "tg": 1133,
+      "pid": "133260768",
+      "name": "BAD_SoKris90",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1056,
+      "general": "88 days",
+      "prefEnd": "13:00",
+      "research": "10 days",
+      "training": "30 days",
+      "prefStart": "07:00",
+      "prefTimes": [
+        {
+          "e": "13:00",
+          "s": "07:00"
+        },
+        {
+          "e": "13:00",
+          "s": "07:00"
+        },
+        {
+          "e": "13:00",
+          "s": "07:00"
+        }
+      ],
+      "construction": "40 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "13:00",
+            "s": "07:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "13:00",
+            "s": "07:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "13:00",
+            "s": "07:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778677666333,
+      "tg": 1500,
+      "pid": "123456",
+      "name": "[WTF] Anomuumi",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1300,
+      "general": "94 days",
+      "prefEnd": "19:00",
+      "research": "21 days",
+      "training": "7 days",
+      "prefStart": "08:00",
+      "prefTimes": [
+        {
+          "e": "19:00",
+          "s": "08:00"
+        },
+        {
+          "e": "19:00",
+          "s": "08:00"
+        },
+        {
+          "e": "19:00",
+          "s": "08:00"
+        }
+      ],
+      "construction": "15 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "19:00",
+            "s": "08:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "19:00",
+            "s": "08:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "19:00",
+            "s": "08:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1779073012045,
+      "tg": 0,
+      "pid": "",
+      "name": "Jimbonz Filler",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "isFiller": true,
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779073033149,
+      "tg": 0,
+      "pid": "",
+      "name": "Melli licious filler",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "isFiller": true,
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779073150162,
+      "tg": 0,
+      "pid": "",
+      "name": "Rayed",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "isFiller": true,
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779073193215,
+      "tg": 0,
+      "pid": "",
+      "name": "Zen Lou",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "isFiller": true,
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779073234971,
+      "tg": 0,
+      "pid": "",
+      "name": "Friend",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "isFiller": true,
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779073315560,
+      "tg": 0,
+      "pid": "",
+      "name": "Salah",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "isFiller": true,
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778966279206,
+      "tg": 1046,
+      "pid": "104408302",
+      "name": "[WTF] Nira_ienuj",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1012,
+      "general": "29",
+      "prefEnd": "13:00",
+      "research": "13",
+      "training": "18.5",
+      "prefStart": "12:00",
+      "prefTimes": [
+        {
+          "e": "13:00",
+          "s": "12:00"
+        },
+        {
+          "e": "13:00",
+          "s": "12:00"
+        },
+        {
+          "e": "13:00",
+          "s": "12:00"
+        }
+      ],
+      "construction": "24",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779055409197,
+      "tg": 0,
+      "pid": "",
+      "name": "686 Didi",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "12:30",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "12:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "12:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "12:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "12:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778955907032,
+      "tg": 1820,
+      "pid": "105063630",
+      "name": "Biereux",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1820,
+      "general": "26 days",
+      "prefEnd": "",
+      "research": "20 days",
+      "training": "20 days",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "13:00"
+        },
+        {
+          "e": "",
+          "s": "13:00"
+        },
+        {
+          "e": "",
+          "s": "13:00"
+        }
+      ],
+      "construction": "24days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "13:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "13:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778955865979,
+      "tg": 1650,
+      "pid": "137124502",
+      "name": "Incognito",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1800,
+      "general": "22 days",
+      "prefEnd": "02:00",
+      "research": "11 days",
+      "training": "19 days",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "13:00"
+        },
+        {
+          "e": "02:00",
+          "s": "13:00"
+        },
+        {
+          "e": "02:00",
+          "s": "13:00"
+        }
+      ],
+      "construction": "10 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "02:00",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "02:00",
+            "s": "13:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "02:00",
+            "s": "13:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778616601251,
+      "tg": 1540,
+      "pid": "103687429",
+      "name": "LadySandney",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1075,
+      "general": "22 day",
+      "prefEnd": "02:00",
+      "research": "16days",
+      "training": "12days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "15 days",
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778761942345,
+      "tg": 600,
+      "pid": "100672422",
+      "name": "[MYS] Amaterasu",
+      "total": "",
+      "forDay": null,
+      "tgDust": 617,
+      "general": "80 days",
+      "prefEnd": "04:00",
+      "research": "40days",
+      "training": "14 days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "14:00"
+        },
+        {
+          "e": "04:00",
+          "s": "14:00"
+        },
+        {
+          "e": "04:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "40 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "14:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "04:00",
+            "s": "14:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "04:00",
+            "s": "14:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1779117221042,
+      "tg": 0,
+      "pid": "",
+      "name": "Marcos",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "15:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "15:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "15:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "15:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "15:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778948907445,
+      "tg": 0,
+      "pid": "",
+      "name": "OldLady",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "15:30",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "15:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "15:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "15:30"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        2,
+        1
+      ]
+    },
+    {
+      "id": 1778860208851,
+      "tg": 1350,
+      "pid": "102081933",
+      "name": "Queen Mandy",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2000,
+      "general": "8",
+      "prefEnd": "20:00",
+      "research": "4",
+      "training": "17",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "13:00"
+        },
+        {
+          "e": "20:00",
+          "s": "13:00"
+        },
+        {
+          "e": "20:00",
+          "s": "13:00"
+        }
+      ],
+      "construction": "12",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "13:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "13:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778950619971,
+      "tg": 1509,
+      "pid": "102900744",
+      "name": "[MYS] Agathors",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1594,
+      "general": "28 days",
+      "prefEnd": "00:00",
+      "research": "12 days",
+      "training": "66 days",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "00:00",
+          "s": "16:00"
+        },
+        {
+          "e": "00:00",
+          "s": "16:00"
+        }
+      ],
+      "construction": "17 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "00:00",
+            "s": "16:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "16:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1779031092894,
+      "tg": 750,
+      "pid": "121253567",
+      "name": "BlackCoffeeWeb",
+      "total": "",
+      "forDay": null,
+      "tgDust": 868,
+      "general": "24 days",
+      "prefEnd": "",
+      "research": "15 days",
+      "training": "13 days",
+      "prefStart": "17:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "17:00"
+        }
+      ],
+      "construction": "18 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779052319260,
+      "tg": 0,
+      "pid": "",
+      "name": "DancesWithWolves",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "17:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "17:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ]
+    },
+    {
+      "id": 1778629469691,
+      "tg": 1000,
+      "pid": "101917247",
+      "name": "Queen999",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1200,
+      "general": "56 days",
+      "prefEnd": "20:00",
+      "research": "54days",
+      "training": "63 days",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        }
+      ],
+      "construction": "33 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779111559720,
+      "tg": 0,
+      "pid": "",
+      "name": "Queso",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778942891496,
+      "tg": 1300,
+      "pid": "102343949",
+      "name": "[MYS] CactusKat",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1382,
+      "general": "41 day",
+      "prefEnd": "22:00",
+      "research": "15 days",
+      "training": "23 days",
+      "prefStart": "17:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "17:00"
+        },
+        {
+          "e": "22:00",
+          "s": "17:00"
+        },
+        {
+          "e": "22:00",
+          "s": "17:00"
+        }
+      ],
+      "construction": "27 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1779046674253,
+      "tg": 1600,
+      "pid": "109593960",
+      "name": "IAM flyLadyLilo",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 0,
+      "general": "79",
+      "prefEnd": "19:30",
+      "research": "",
+      "training": "",
+      "prefStart": "19:00",
+      "prefTimes": [
+        {
+          "e": "19:30",
+          "s": "19:00"
+        }
+      ],
+      "construction": "19",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "19:30",
+            "s": "19:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778627539345,
+      "tg": 3800,
+      "pid": "102867564",
+      "name": "BombaSIUUUUUUUUU",
+      "total": "",
+      "forDay": null,
+      "tgDust": 4600,
+      "general": "54d (for Tech)",
+      "prefEnd": "00:00",
+      "research": "30d",
+      "training": "124d",
+      "prefStart": "20:00",
+      "prefTimes": [
+        {
+          "e": "00:00",
+          "s": "20:00"
+        },
+        {
+          "e": "00:00",
+          "s": "20:00"
+        },
+        {
+          "e": "00:00",
+          "s": "20:00"
+        }
+      ],
+      "construction": "56d",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "00:00",
+            "s": "20:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "20:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "00:00",
+            "s": "20:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779006958213,
+      "tg": 379,
+      "pid": "108569668",
+      "name": "[IAM] WARSHULZ",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1,
+      "general": "1 day",
+      "prefEnd": "23:30",
+      "research": "3 days",
+      "training": "4 days",
+      "prefStart": "20:00",
+      "prefTimes": [
+        {
+          "e": "23:30",
+          "s": "20:00"
+        },
+        {
+          "e": "23:30",
+          "s": "20:00"
+        },
+        {
+          "e": "23:30",
+          "s": "20:00"
+        }
+      ],
+      "construction": "2 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "23:30",
+            "s": "20:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "23:30",
+            "s": "20:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "23:30",
+            "s": "20:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778955490845,
+      "tg": 0,
+      "pid": "",
+      "name": "686 Aleks",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "21:00",
+      "research": "",
+      "training": "",
+      "prefStart": "20:30",
+      "prefTimes": [
+        {
+          "e": "21:00",
+          "s": "20:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "21:00",
+            "s": "20:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "21:00",
+            "s": "20:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779048309185,
+      "tg": 0,
+      "pid": "",
+      "name": "IAM hellpeq web",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "20:00",
+      "research": "",
+      "training": "",
+      "prefStart": "15:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "15:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "15:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "15:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "15:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778808163461,
+      "tg": 4139,
+      "pid": "102867557",
+      "name": "Chris Barbarossa",
+      "total": "",
+      "forDay": null,
+      "tgDust": 0,
+      "general": "159 days",
+      "prefEnd": "",
+      "research": "102 days",
+      "training": "147 days",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "89 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779042809776,
+      "tg": 4218,
+      "pid": "148041436",
+      "name": "JLTThomas",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2093,
+      "general": "16",
+      "prefEnd": "10:00",
+      "isFiller": true,
+      "research": "8",
+      "training": "14",
+      "prefStart": "04:00",
+      "prefTimes": [
+        {
+          "e": "10:00",
+          "s": "04:00"
+        },
+        {
+          "e": "10:00",
+          "s": "04:00"
+        }
+      ],
+      "construction": "10",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4,
+        2,
+        4,
+        1
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779031595980,
+      "tg": 984,
+      "pid": "120942569",
+      "name": "[IAM] Rainbowtacoo",
+      "total": "",
+      "forDay": null,
+      "tgDust": 898,
+      "general": "17day",
+      "prefEnd": "03:00",
+      "research": "14days",
+      "training": "25days",
+      "prefStart": "23:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "23:00"
+        }
+      ],
+      "construction": "13days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "03:00",
+            "s": "23:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "03:00",
+            "s": "23:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "03:00",
+            "s": "23:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    }
+  ],
+  "day2": [
+    {
+      "id": 1779029805226,
+      "tg": 2600,
+      "pid": "101606362",
+      "name": "[686] WarDoctor",
+      "total": "",
+      "forDay": null,
+      "tgDust": 2400,
+      "general": "62 days",
+      "prefEnd": "00:00",
+      "research": "10 days",
+      "training": "36 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "00:00"
+        },
+        {
+          "e": "00:00",
+          "s": "17:00"
+        }
+      ],
+      "construction": "20 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          },
+          {
+            "e": "00:00",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          },
+          {
+            "e": "00:00",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          },
+          {
+            "e": "00:00",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779030328044,
+      "tg": 0,
+      "pid": "",
+      "name": "Finn",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "03:00",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778792596562,
+      "tg": 275,
+      "pid": "103785873",
+      "name": "[WTF] Yue",
+      "total": "",
+      "forDay": null,
+      "tgDust": 628,
+      "general": "19 days",
+      "prefEnd": "02:00",
+      "research": "8 days",
+      "training": "10 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "00:00"
+        },
+        {
+          "e": "02:00",
+          "s": "00:00"
+        },
+        {
+          "e": "02:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "6 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "02:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "02:00",
+            "s": "00:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "02:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778969577560,
+      "tg": 865,
+      "pid": "107684964",
+      "name": "THE Lopen",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 4519,
+      "general": "16 days",
+      "prefEnd": "04:00",
+      "research": "16 days",
+      "training": "18 days",
+      "prefStart": "02:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "02:00"
+        },
+        {
+          "e": "04:00",
+          "s": "02:00"
+        },
+        {
+          "e": "04:00",
+          "s": "02:00"
+        }
+      ],
+      "construction": "26 dats",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "02:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "04:00",
+            "s": "02:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "04:00",
+            "s": "02:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778610550947,
+      "tg": 0,
+      "pid": "",
+      "name": "Deck",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "00:00"
+          }
+        ],
+        "2": [],
+        "4": [
+          {
+            "e": "",
+            "s": "03:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        4,
+        1,
+        1,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1779109735063,
+      "tg": 0,
+      "pid": "",
+      "name": "King",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "02:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "02:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "02:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "02:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779115580525,
+      "tg": 0,
+      "pid": "",
+      "name": "Satoshi",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "02:45",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "02:45"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "02:45"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2"
+      ]
+    },
+    {
+      "id": 1778810826742,
+      "tg": 0,
+      "pid": "",
+      "name": "TheReaper",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 2500,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "60 days",
+      "prefStart": "03:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "03:00"
+        },
+        {
+          "e": "",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "03:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        4,
+        2
+      ]
+    },
+    {
+      "id": 1778761942345,
+      "tg": 600,
+      "pid": "100672422",
+      "name": "[MYS] Amaterasu",
+      "total": "",
+      "forDay": null,
+      "tgDust": 617,
+      "general": "80 days",
+      "prefEnd": "04:00",
+      "research": "40days",
+      "training": "14 days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "14:00"
+        },
+        {
+          "e": "04:00",
+          "s": "14:00"
+        },
+        {
+          "e": "04:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "40 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "14:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "04:00",
+            "s": "14:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "04:00",
+            "s": "14:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778814355564,
+      "tg": 10699,
+      "pid": "180165273",
+      "name": "修罗神 chen",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 6900,
+      "general": "177 days",
+      "prefEnd": "06:00",
+      "research": "35 days",
+      "training": "70 days",
+      "prefStart": "03:00",
+      "prefTimes": [
+        {
+          "e": "06:00",
+          "s": "03:00"
+        }
+      ],
+      "construction": "45 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "06:00",
+            "s": "03:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        2,
+        1,
+        2
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779044331714,
+      "tg": 1425,
+      "pid": "103084431",
+      "name": "[WTF] La Lolo",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 3004,
+      "general": "87",
+      "prefEnd": "06:00",
+      "research": "13.5",
+      "training": "20",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "16:00"
+        },
+        {
+          "e": "06:00",
+          "s": "01:00"
+        },
+        {
+          "e": "22:00",
+          "s": "16:00"
+        },
+        {
+          "e": "06:00",
+          "s": "01:00"
+        },
+        {
+          "e": "22:00",
+          "s": "16:00"
+        },
+        {
+          "e": "06:00",
+          "s": "01:00"
+        }
+      ],
+      "construction": "30",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "16:00"
+          },
+          {
+            "e": "06:00",
+            "s": "01:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "16:00"
+          },
+          {
+            "e": "06:00",
+            "s": "01:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "16:00"
+          },
+          {
+            "e": "06:00",
+            "s": "01:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779041809460,
+      "tg": 4218,
+      "pid": "104768436",
+      "name": "Thomas",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2093,
+      "general": "86",
+      "prefEnd": "10:00",
+      "research": "52",
+      "training": "40",
+      "prefStart": "04:00",
+      "prefTimes": [
+        {
+          "e": "10:00",
+          "s": "04:00"
+        },
+        {
+          "e": "10:00",
+          "s": "04:00"
+        }
+      ],
+      "construction": "99",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778761827483,
+      "tg": 200,
+      "pid": "117665398",
+      "name": "Asur",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1000,
+      "general": "24 day",
+      "prefEnd": "",
+      "research": "11days",
+      "training": "25 days",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "11 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1779044152719,
+      "tg": 0,
+      "pid": "104670249",
+      "name": "[WTF]SUN",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "15:00",
+      "research": "30",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "15:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "15:00",
+            "s": "00:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779020433398,
+      "tg": 1200,
+      "pid": "103834324",
+      "name": "[MYS] DrSharc",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1300,
+      "general": "27",
+      "prefEnd": "20:00",
+      "research": "17",
+      "training": "19",
+      "prefStart": "04:30",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "04:30"
+        },
+        {
+          "e": "20:00",
+          "s": "04:30"
+        },
+        {
+          "e": "20:00",
+          "s": "04:33"
+        }
+      ],
+      "construction": "21",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "04:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "04:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "04:33"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778622932938,
+      "tg": 1675,
+      "pid": "103326530",
+      "name": "Dani",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1600,
+      "general": "43 days",
+      "prefEnd": "08:00",
+      "research": "13 days",
+      "training": "18 days",
+      "prefStart": "06:30",
+      "prefTimes": [
+        {
+          "e": "08:00",
+          "s": "06:30"
+        },
+        {
+          "e": "08:00",
+          "s": "06:30"
+        },
+        {
+          "e": "08:00",
+          "s": "06:30"
+        }
+      ],
+      "construction": "14 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "08:00",
+            "s": "06:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "08:00",
+            "s": "06:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "08:00",
+            "s": "06:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4,
+        1,
+        2
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778761751725,
+      "tg": 10000,
+      "pid": "102048332",
+      "name": "Lautrefou",
+      "total": "",
+      "forDay": null,
+      "tgDust": 4000,
+      "general": "100 days",
+      "prefEnd": "08:00",
+      "research": "100 days",
+      "training": "100 days",
+      "prefStart": "07:30",
+      "prefTimes": [
+        {
+          "e": "08:00",
+          "s": "07:30"
+        },
+        {
+          "e": "08:00",
+          "s": "07:30"
+        },
+        {
+          "e": "08:00",
+          "s": "07:30"
+        }
+      ],
+      "construction": "150 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "08:00",
+            "s": "07:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "08:00",
+            "s": "07:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "08:00",
+            "s": "07:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778911399309,
+      "tg": 1133,
+      "pid": "133260768",
+      "name": "BAD_SoKris90",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1056,
+      "general": "88 days",
+      "prefEnd": "13:00",
+      "research": "10 days",
+      "training": "30 days",
+      "prefStart": "07:00",
+      "prefTimes": [
+        {
+          "e": "13:00",
+          "s": "07:00"
+        },
+        {
+          "e": "13:00",
+          "s": "07:00"
+        },
+        {
+          "e": "13:00",
+          "s": "07:00"
+        }
+      ],
+      "construction": "40 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "13:00",
+            "s": "07:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "13:00",
+            "s": "07:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "13:00",
+            "s": "07:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778948791815,
+      "tg": 0,
+      "pid": "",
+      "name": "Dumah",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "08:30",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "08:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "08:30"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        2,
+        2
+      ]
+    },
+    {
+      "id": 1779042809776,
+      "tg": 4218,
+      "pid": "148041436",
+      "name": "JLTThomas",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2093,
+      "general": "16",
+      "prefEnd": "10:00",
+      "research": "8",
+      "training": "14",
+      "prefStart": "04:00",
+      "prefTimes": [
+        {
+          "e": "10:00",
+          "s": "04:00"
+        },
+        {
+          "e": "10:00",
+          "s": "04:00"
+        }
+      ],
+      "construction": "10",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778677666333,
+      "tg": 1500,
+      "pid": "123456",
+      "name": "[WTF] Anomuumi",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1300,
+      "general": "94 days",
+      "prefEnd": "19:00",
+      "research": "21 days",
+      "training": "7 days",
+      "prefStart": "08:00",
+      "prefTimes": [
+        {
+          "e": "19:00",
+          "s": "08:00"
+        },
+        {
+          "e": "19:00",
+          "s": "08:00"
+        },
+        {
+          "e": "19:00",
+          "s": "08:00"
+        }
+      ],
+      "construction": "15 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "19:00",
+            "s": "08:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "19:00",
+            "s": "08:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "19:00",
+            "s": "08:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        2
+      ]
+    },
+    null,
+    null,
+    {
+      "id": 1778635118707,
+      "tg": 3409,
+      "pid": "101770149",
+      "name": "[WTF] LordHK",
+      "total": "",
+      "forDay": null,
+      "tgDust": 2878,
+      "general": "62 days",
+      "prefEnd": "22:00",
+      "research": "38 days",
+      "training": "65 days",
+      "prefStart": "06:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "06:00"
+        },
+        {
+          "e": "22:00",
+          "s": "06:00"
+        },
+        {
+          "e": "22:00",
+          "s": "06:00"
+        }
+      ],
+      "construction": "31 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "06:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "06:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "06:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        2,
+        1
+      ]
+    },
+    {
+      "id": 1779046674253,
+      "tg": 1600,
+      "pid": "109593960",
+      "name": "IAM flyLadyLilo",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 0,
+      "general": "79",
+      "prefEnd": "19:30",
+      "research": "",
+      "training": "",
+      "prefStart": "19:00",
+      "prefTimes": [
+        {
+          "e": "19:30",
+          "s": "19:00"
+        }
+      ],
+      "construction": "19",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "19:30",
+            "s": "19:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ],
+      "_scheduledDays": [
+        1,
+        2
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778966279206,
+      "tg": 1046,
+      "pid": "104408302",
+      "name": "[WTF] Nira_ienuj",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1012,
+      "general": "29",
+      "prefEnd": "13:00",
+      "research": "13",
+      "training": "18.5",
+      "prefStart": "12:00",
+      "prefTimes": [
+        {
+          "e": "13:00",
+          "s": "12:00"
+        },
+        {
+          "e": "13:00",
+          "s": "12:00"
+        },
+        {
+          "e": "13:00",
+          "s": "12:00"
+        }
+      ],
+      "construction": "24",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779055409197,
+      "tg": 0,
+      "pid": "",
+      "name": "686 Didi",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "12:30",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "12:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "12:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "12:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "12:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778955907032,
+      "tg": 1820,
+      "pid": "105063630",
+      "name": "Biereux",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1820,
+      "general": "26 days",
+      "prefEnd": "",
+      "research": "20 days",
+      "training": "20 days",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "13:00"
+        },
+        {
+          "e": "",
+          "s": "13:00"
+        },
+        {
+          "e": "",
+          "s": "13:00"
+        }
+      ],
+      "construction": "24days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "13:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "13:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778955865979,
+      "tg": 1650,
+      "pid": "137124502",
+      "name": "Incognito",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1800,
+      "general": "22 days",
+      "prefEnd": "02:00",
+      "research": "11 days",
+      "training": "19 days",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "13:00"
+        },
+        {
+          "e": "02:00",
+          "s": "13:00"
+        },
+        {
+          "e": "02:00",
+          "s": "13:00"
+        }
+      ],
+      "construction": "10 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "02:00",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "02:00",
+            "s": "13:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "02:00",
+            "s": "13:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779027368120,
+      "tg": 0,
+      "pid": "",
+      "name": "Verd",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "14:00",
+      "research": "",
+      "training": "",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "14:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "14:00",
+            "s": "14:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2"
+      ]
+    },
+    {
+      "id": 1778616601251,
+      "tg": 1540,
+      "pid": "103687429",
+      "name": "LadySandney",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1075,
+      "general": "22 day",
+      "prefEnd": "02:00",
+      "research": "16days",
+      "training": "12days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "15 days",
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778762071994,
+      "tg": 809,
+      "pid": "120795301",
+      "name": "LuhpastyWEB",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1192,
+      "general": "24.2 days",
+      "prefEnd": "00:00",
+      "research": "15.6 days",
+      "training": "15.6 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "00:00"
+        },
+        {
+          "e": "00:00",
+          "s": "15:00"
+        }
+      ],
+      "construction": "15.6 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "15:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778948907445,
+      "tg": 0,
+      "pid": "",
+      "name": "OldLady",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "15:30",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "15:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "15:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "15:30"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4,
+        2
+      ]
+    },
+    {
+      "id": 1779117221042,
+      "tg": 0,
+      "pid": "",
+      "name": "Marcos",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "15:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "15:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "15:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "15:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "15:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778950619971,
+      "tg": 1509,
+      "pid": "102900744",
+      "name": "[MYS] Agathors",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1594,
+      "general": "28 days",
+      "prefEnd": "00:00",
+      "research": "12 days",
+      "training": "66 days",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "00:00",
+          "s": "16:00"
+        },
+        {
+          "e": "00:00",
+          "s": "16:00"
+        }
+      ],
+      "construction": "17 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "00:00",
+            "s": "16:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "16:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1779031092894,
+      "tg": 750,
+      "pid": "121253567",
+      "name": "BlackCoffeeWeb",
+      "total": "",
+      "forDay": null,
+      "tgDust": 868,
+      "general": "24 days",
+      "prefEnd": "",
+      "research": "15 days",
+      "training": "13 days",
+      "prefStart": "17:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "17:00"
+        }
+      ],
+      "construction": "18 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1779048309185,
+      "tg": 0,
+      "pid": "",
+      "name": "IAM hellpeq web",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "20:00",
+      "research": "",
+      "training": "",
+      "prefStart": "15:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "15:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "15:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "15:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "15:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778860208851,
+      "tg": 1350,
+      "pid": "102081933",
+      "name": "Queen Mandy",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2000,
+      "general": "8",
+      "prefEnd": "20:00",
+      "research": "4",
+      "training": "17",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "13:00"
+        },
+        {
+          "e": "20:00",
+          "s": "13:00"
+        },
+        {
+          "e": "20:00",
+          "s": "13:00"
+        }
+      ],
+      "construction": "12",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "13:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "13:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778629469691,
+      "tg": 1000,
+      "pid": "101917247",
+      "name": "Queen999",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1200,
+      "general": "56 days",
+      "prefEnd": "20:00",
+      "research": "54days",
+      "training": "63 days",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        }
+      ],
+      "construction": "33 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778942891496,
+      "tg": 1300,
+      "pid": "102343949",
+      "name": "[MYS] CactusKat",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1382,
+      "general": "41 day",
+      "prefEnd": "22:00",
+      "research": "15 days",
+      "training": "23 days",
+      "prefStart": "17:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "17:00"
+        },
+        {
+          "e": "22:00",
+          "s": "17:00"
+        },
+        {
+          "e": "22:00",
+          "s": "17:00"
+        }
+      ],
+      "construction": "27 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1779051564609,
+      "tg": 2000,
+      "pid": "103228165",
+      "name": "Marcelitto",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2000,
+      "general": "108",
+      "prefEnd": "22:00",
+      "research": "112",
+      "training": "73",
+      "prefStart": "19:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "19:00"
+        },
+        {
+          "e": "22:00",
+          "s": "19:00"
+        },
+        {
+          "e": "22:00",
+          "s": "19:00"
+        }
+      ],
+      "construction": "93",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "19:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "19:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "19:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778627539345,
+      "tg": 3800,
+      "pid": "102867564",
+      "name": "BombaSIUUUUUUUUU",
+      "total": "",
+      "forDay": null,
+      "tgDust": 4600,
+      "general": "54d (for Tech)",
+      "prefEnd": "00:00",
+      "research": "30d",
+      "training": "124d",
+      "prefStart": "20:00",
+      "prefTimes": [
+        {
+          "e": "00:00",
+          "s": "20:00"
+        },
+        {
+          "e": "00:00",
+          "s": "20:00"
+        },
+        {
+          "e": "00:00",
+          "s": "20:00"
+        }
+      ],
+      "construction": "56d",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "00:00",
+            "s": "20:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "20:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "00:00",
+            "s": "20:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778955490845,
+      "tg": 0,
+      "pid": "",
+      "name": "686 Aleks",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "21:00",
+      "research": "",
+      "training": "",
+      "prefStart": "20:30",
+      "prefTimes": [
+        {
+          "e": "21:00",
+          "s": "20:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "21:00",
+            "s": "20:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "21:00",
+            "s": "20:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        4,
+        2
+      ]
+    },
+    {
+      "id": 1779006958213,
+      "tg": 379,
+      "pid": "108569668",
+      "name": "[IAM] WARSHULZ",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1,
+      "general": "1 day",
+      "prefEnd": "23:30",
+      "research": "3 days",
+      "training": "4 days",
+      "prefStart": "20:00",
+      "prefTimes": [
+        {
+          "e": "23:30",
+          "s": "20:00"
+        },
+        {
+          "e": "23:30",
+          "s": "20:00"
+        },
+        {
+          "e": "23:30",
+          "s": "20:00"
+        }
+      ],
+      "construction": "2 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "23:30",
+            "s": "20:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "23:30",
+            "s": "20:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "23:30",
+            "s": "20:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779048923008,
+      "tg": 685,
+      "pid": "101262169",
+      "name": "Odin",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1177,
+      "general": "46 day",
+      "prefEnd": "23:30",
+      "research": "23 days",
+      "training": "16 days",
+      "prefStart": "21:30",
+      "prefTimes": [
+        {
+          "e": "23:30",
+          "s": "21:30"
+        }
+      ],
+      "construction": "23 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "23:30",
+            "s": "21:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "23:30",
+            "s": "21:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "23:30",
+            "s": "21:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778808163461,
+      "tg": 4139,
+      "pid": "102867557",
+      "name": "Chris Barbarossa",
+      "total": "",
+      "forDay": null,
+      "tgDust": 0,
+      "general": "159 days",
+      "prefEnd": "",
+      "research": "102 days",
+      "training": "147 days",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "89 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "name": "Moha",
+      "pid": "",
+      "tg": 0,
+      "tgDust": 0,
+      "general": "",
+      "training": "",
+      "construction": "",
+      "research": "",
+      "total": "",
+      "prefStart": "22:45",
+      "prefEnd": "",
+      "prefTimes": [
+        {
+          "s": "22:45",
+          "e": ""
+        }
+      ],
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "s": "22:45",
+            "e": ""
+          }
+        ],
+        "4": [
+          {
+            "s": "22:45",
+            "e": ""
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "manual": true,
+      "id": 1779127680649,
+      "forDay": null
+    },
+    {
+      "id": 1779031595980,
+      "tg": 984,
+      "pid": "120942569",
+      "name": "[IAM] Rainbowtacoo",
+      "total": "",
+      "forDay": null,
+      "tgDust": 898,
+      "general": "17day",
+      "prefEnd": "03:00",
+      "research": "14days",
+      "training": "25days",
+      "prefStart": "23:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "23:00"
+        }
+      ],
+      "construction": "13days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "03:00",
+            "s": "23:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "03:00",
+            "s": "23:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "03:00",
+            "s": "23:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    }
+  ],
+  "day4": [
+    {
+      "id": 1778810826742,
+      "tg": 0,
+      "pid": "",
+      "name": "TheReaper",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 2500,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "60 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "00:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778616438664,
+      "tg": 1466,
+      "pid": "100803175",
+      "name": "[WTF] FRED",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1176,
+      "general": "28 days",
+      "prefEnd": "12:00",
+      "research": "15 days",
+      "training": "22 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "12:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "31 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": [
+          {
+            "e": "12:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4
+      ]
+    },
+    {
+      "id": 1779029805226,
+      "tg": 2600,
+      "pid": "101606362",
+      "name": "[686] WarDoctor",
+      "total": "",
+      "forDay": null,
+      "tgDust": 2400,
+      "general": "62 days",
+      "prefEnd": "00:00",
+      "research": "10 days",
+      "training": "36 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "00:00"
+        },
+        {
+          "e": "00:00",
+          "s": "17:00"
+        }
+      ],
+      "construction": "20 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          },
+          {
+            "e": "00:00",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          },
+          {
+            "e": "00:00",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          },
+          {
+            "e": "00:00",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778792596562,
+      "tg": 275,
+      "pid": "103785873",
+      "name": "[WTF] Yue",
+      "total": "",
+      "forDay": null,
+      "tgDust": 628,
+      "general": "19 days",
+      "prefEnd": "02:00",
+      "research": "8 days",
+      "training": "10 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "00:00"
+        },
+        {
+          "e": "02:00",
+          "s": "00:00"
+        },
+        {
+          "e": "02:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "6 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "02:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "02:00",
+            "s": "00:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "02:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778947995574,
+      "tg": 0,
+      "pid": "",
+      "name": "MYS king",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "02:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "02:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "02:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "02:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "02:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779030328044,
+      "tg": 0,
+      "pid": "",
+      "name": "Finn",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "03:00",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778610550947,
+      "tg": 0,
+      "pid": "",
+      "name": "Deck",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "00:00"
+          }
+        ],
+        "2": [],
+        "4": [
+          {
+            "e": "",
+            "s": "03:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778969577560,
+      "tg": 865,
+      "pid": "107684964",
+      "name": "THE Lopen",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 4519,
+      "general": "16 days",
+      "prefEnd": "04:00",
+      "research": "16 days",
+      "training": "18 days",
+      "prefStart": "02:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "02:00"
+        },
+        {
+          "e": "04:00",
+          "s": "02:00"
+        },
+        {
+          "e": "04:00",
+          "s": "02:00"
+        }
+      ],
+      "construction": "26 dats",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "02:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "04:00",
+            "s": "02:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "04:00",
+            "s": "02:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779041809460,
+      "tg": 4218,
+      "pid": "104768436",
+      "name": "Thomas",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2093,
+      "general": "86",
+      "prefEnd": "10:00",
+      "research": "52",
+      "training": "40",
+      "prefStart": "04:00",
+      "prefTimes": [
+        {
+          "e": "10:00",
+          "s": "04:00"
+        },
+        {
+          "e": "10:00",
+          "s": "04:00"
+        }
+      ],
+      "construction": "99",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779020433398,
+      "tg": 1200,
+      "pid": "103834324",
+      "name": "[MYS] DrSharc",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1300,
+      "general": "27",
+      "prefEnd": "20:00",
+      "research": "17",
+      "training": "19",
+      "prefStart": "04:30",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "04:30"
+        },
+        {
+          "e": "20:00",
+          "s": "04:30"
+        },
+        {
+          "e": "20:00",
+          "s": "04:33"
+        }
+      ],
+      "construction": "21",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "04:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "04:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "04:33"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779042809776,
+      "tg": 4218,
+      "pid": "148041436",
+      "name": "JLTThomas",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2093,
+      "general": "16",
+      "prefEnd": "10:00",
+      "research": "8",
+      "training": "14",
+      "prefStart": "04:00",
+      "prefTimes": [
+        {
+          "e": "10:00",
+          "s": "04:00"
+        },
+        {
+          "e": "10:00",
+          "s": "04:00"
+        }
+      ],
+      "construction": "10",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779060916262,
+      "tg": 0,
+      "pid": "",
+      "name": "IAM Lady io",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "17:00",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "17:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": [
+          {
+            "e": "17:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778635118707,
+      "tg": 3409,
+      "pid": "101770149",
+      "name": "[WTF] LordHK",
+      "total": "",
+      "forDay": null,
+      "tgDust": 2878,
+      "general": "62 days",
+      "prefEnd": "22:00",
+      "research": "38 days",
+      "training": "65 days",
+      "prefStart": "06:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "06:00"
+        },
+        {
+          "e": "22:00",
+          "s": "06:00"
+        },
+        {
+          "e": "22:00",
+          "s": "06:00"
+        }
+      ],
+      "construction": "31 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "06:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "06:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "06:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        2,
+        1
+      ]
+    },
+    {
+      "id": 1778622932938,
+      "tg": 1675,
+      "pid": "103326530",
+      "name": "Dani",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1600,
+      "general": "43 days",
+      "prefEnd": "08:00",
+      "research": "13 days",
+      "training": "18 days",
+      "prefStart": "06:30",
+      "prefTimes": [
+        {
+          "e": "08:00",
+          "s": "06:30"
+        },
+        {
+          "e": "08:00",
+          "s": "06:30"
+        },
+        {
+          "e": "08:00",
+          "s": "06:30"
+        }
+      ],
+      "construction": "14 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "08:00",
+            "s": "06:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "08:00",
+            "s": "06:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "08:00",
+            "s": "06:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778911399309,
+      "tg": 1133,
+      "pid": "133260768",
+      "name": "BAD_SoKris90",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1056,
+      "general": "88 days",
+      "prefEnd": "13:00",
+      "research": "10 days",
+      "training": "30 days",
+      "prefStart": "07:00",
+      "prefTimes": [
+        {
+          "e": "13:00",
+          "s": "07:00"
+        },
+        {
+          "e": "13:00",
+          "s": "07:00"
+        },
+        {
+          "e": "13:00",
+          "s": "07:00"
+        }
+      ],
+      "construction": "40 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "13:00",
+            "s": "07:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "13:00",
+            "s": "07:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "13:00",
+            "s": "07:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778761751725,
+      "tg": 10000,
+      "pid": "102048332",
+      "name": "Lautrefou",
+      "total": "",
+      "forDay": null,
+      "tgDust": 4000,
+      "general": "100 days",
+      "prefEnd": "08:00",
+      "research": "100 days",
+      "training": "100 days",
+      "prefStart": "07:30",
+      "prefTimes": [
+        {
+          "e": "08:00",
+          "s": "07:30"
+        },
+        {
+          "e": "08:00",
+          "s": "07:30"
+        },
+        {
+          "e": "08:00",
+          "s": "07:30"
+        }
+      ],
+      "construction": "150 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "08:00",
+            "s": "07:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "08:00",
+            "s": "07:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "08:00",
+            "s": "07:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778677666333,
+      "tg": 1500,
+      "pid": "123456",
+      "name": "[WTF] Anomuumi",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1300,
+      "general": "94 days",
+      "prefEnd": "19:00",
+      "research": "21 days",
+      "training": "7 days",
+      "prefStart": "08:00",
+      "prefTimes": [
+        {
+          "e": "19:00",
+          "s": "08:00"
+        },
+        {
+          "e": "19:00",
+          "s": "08:00"
+        },
+        {
+          "e": "19:00",
+          "s": "08:00"
+        }
+      ],
+      "construction": "15 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "19:00",
+            "s": "08:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "19:00",
+            "s": "08:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "19:00",
+            "s": "08:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778863794124,
+      "tg": 2153,
+      "pid": "102097809",
+      "name": "Silver Knight",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 468,
+      "general": "51days 15hrs 4 minutes",
+      "prefEnd": "23:30",
+      "research": "34days 7hrs 53minutes",
+      "training": "37days 20hrs",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "23:30",
+          "s": "00:00"
+        },
+        {
+          "e": "23:30",
+          "s": "00:00"
+        }
+      ],
+      "construction": "41days 21hrs 4 minutes",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "23:30",
+            "s": "00:00"
+          }
+        ],
+        "2": [],
+        "4": [
+          {
+            "e": "23:30",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779034869221,
+      "tg": 2712,
+      "pid": "",
+      "name": "[IAM] °io°",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1081,
+      "general": "32 day",
+      "prefEnd": "17:00",
+      "research": "21 days",
+      "training": "34 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "17:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "13 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": [
+          {
+            "e": "17:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        4
+      ]
+    },
+    {
+      "id": 1779109735063,
+      "tg": 0,
+      "pid": "",
+      "name": "King",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "02:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "02:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "02:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "02:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4
+      ]
+    },
+    null,
+    null,
+    null,
+    null,
+    null,
+    {
+      "id": 1778966279206,
+      "tg": 1046,
+      "pid": "104408302",
+      "name": "[WTF] Nira_ienuj",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1012,
+      "general": "29",
+      "prefEnd": "13:00",
+      "research": "13",
+      "training": "18.5",
+      "prefStart": "12:00",
+      "prefTimes": [
+        {
+          "e": "13:00",
+          "s": "12:00"
+        },
+        {
+          "e": "13:00",
+          "s": "12:00"
+        },
+        {
+          "e": "13:00",
+          "s": "12:00"
+        }
+      ],
+      "construction": "24",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779055409197,
+      "tg": 0,
+      "pid": "",
+      "name": "686 Didi",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "12:30",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "12:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "12:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "12:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "12:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778955865979,
+      "tg": 1650,
+      "pid": "137124502",
+      "name": "Incognito",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1800,
+      "general": "22 days",
+      "prefEnd": "02:00",
+      "research": "11 days",
+      "training": "19 days",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "13:00"
+        },
+        {
+          "e": "02:00",
+          "s": "13:00"
+        },
+        {
+          "e": "02:00",
+          "s": "13:00"
+        }
+      ],
+      "construction": "10 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "02:00",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "02:00",
+            "s": "13:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "02:00",
+            "s": "13:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778955907032,
+      "tg": 1820,
+      "pid": "105063630",
+      "name": "Biereux",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1820,
+      "general": "26 days",
+      "prefEnd": "",
+      "research": "20 days",
+      "training": "20 days",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "13:00"
+        },
+        {
+          "e": "",
+          "s": "13:00"
+        },
+        {
+          "e": "",
+          "s": "13:00"
+        }
+      ],
+      "construction": "24days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "13:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "13:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778761942345,
+      "tg": 600,
+      "pid": "100672422",
+      "name": "[MYS] Amaterasu",
+      "total": "",
+      "forDay": null,
+      "tgDust": 617,
+      "general": "80 days",
+      "prefEnd": "04:00",
+      "research": "40days",
+      "training": "14 days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "14:00"
+        },
+        {
+          "e": "04:00",
+          "s": "14:00"
+        },
+        {
+          "e": "04:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "40 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "14:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "04:00",
+            "s": "14:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "04:00",
+            "s": "14:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778616601251,
+      "tg": 1540,
+      "pid": "103687429",
+      "name": "LadySandney",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1075,
+      "general": "22 day",
+      "prefEnd": "02:00",
+      "research": "16days",
+      "training": "12days",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "02:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "15 days",
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778860208851,
+      "tg": 1350,
+      "pid": "102081933",
+      "name": "Queen Mandy",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2000,
+      "general": "8",
+      "prefEnd": "20:00",
+      "research": "4",
+      "training": "17",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "13:00"
+        },
+        {
+          "e": "20:00",
+          "s": "13:00"
+        },
+        {
+          "e": "20:00",
+          "s": "13:00"
+        }
+      ],
+      "construction": "12",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "13:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "13:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778629469691,
+      "tg": 1000,
+      "pid": "101917247",
+      "name": "Queen999",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1200,
+      "general": "56 days",
+      "prefEnd": "20:00",
+      "research": "54days",
+      "training": "63 days",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        }
+      ],
+      "construction": "33 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778601918844,
+      "tg": 329,
+      "pid": "",
+      "name": "Marcos",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 4679,
+      "general": "13 days",
+      "prefEnd": "",
+      "research": "8 days",
+      "training": "12 days",
+      "prefStart": "15:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "15:00"
+        }
+      ],
+      "construction": "39 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "15:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4,
+        1
+      ]
+    },
+    {
+      "id": 1778858370241,
+      "tg": 995,
+      "pid": "103703800",
+      "name": "Salah",
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 914,
+      "general": "16",
+      "prefEnd": "15:00",
+      "research": "9",
+      "training": "13",
+      "prefStart": "13:00",
+      "prefTimes": [
+        {
+          "e": "11:00",
+          "s": "13:00"
+        },
+        {
+          "e": "15:00",
+          "s": "17:00"
+        },
+        {
+          "e": "15:00",
+          "s": "17:00"
+        }
+      ],
+      "construction": "14",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "11:00",
+            "s": "13:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "15:00",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "15:00",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779031092894,
+      "tg": 750,
+      "pid": "121253567",
+      "name": "BlackCoffeeWeb",
+      "total": "",
+      "forDay": null,
+      "tgDust": 868,
+      "general": "24 days",
+      "prefEnd": "",
+      "research": "15 days",
+      "training": "13 days",
+      "prefStart": "17:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "17:00"
+        }
+      ],
+      "construction": "18 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779048309185,
+      "tg": 0,
+      "pid": "",
+      "name": "IAM hellpeq web",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "20:00",
+      "research": "",
+      "training": "",
+      "prefStart": "15:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "15:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "15:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "15:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "15:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778942891496,
+      "tg": 1300,
+      "pid": "102343949",
+      "name": "[MYS] CactusKat",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1382,
+      "general": "41 day",
+      "prefEnd": "22:00",
+      "research": "15 days",
+      "training": "23 days",
+      "prefStart": "17:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "17:00"
+        },
+        {
+          "e": "22:00",
+          "s": "17:00"
+        },
+        {
+          "e": "22:00",
+          "s": "17:00"
+        }
+      ],
+      "construction": "27 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4,
+        1,
+        2
+      ]
+    },
+    null,
+    null,
+    null,
+    {
+      "id": 1778627539345,
+      "tg": 3800,
+      "pid": "102867564",
+      "name": "BombaSIUUUUUUUUU",
+      "total": "",
+      "forDay": null,
+      "tgDust": 4600,
+      "general": "54d (for Tech)",
+      "prefEnd": "00:00",
+      "research": "30d",
+      "training": "124d",
+      "prefStart": "20:00",
+      "prefTimes": [
+        {
+          "e": "00:00",
+          "s": "20:00"
+        },
+        {
+          "e": "00:00",
+          "s": "20:00"
+        },
+        {
+          "e": "00:00",
+          "s": "20:00"
+        }
+      ],
+      "construction": "56d",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "00:00",
+            "s": "20:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "20:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "00:00",
+            "s": "20:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778955490845,
+      "tg": 0,
+      "pid": "",
+      "name": "686 Aleks",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "21:00",
+      "research": "",
+      "training": "",
+      "prefStart": "20:30",
+      "prefTimes": [
+        {
+          "e": "21:00",
+          "s": "20:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "21:00",
+            "s": "20:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "21:00",
+            "s": "20:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        4
+      ]
+    },
+    {
+      "id": 1779006958213,
+      "tg": 379,
+      "pid": "108569668",
+      "name": "[IAM] WARSHULZ",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1,
+      "general": "1 day",
+      "prefEnd": "23:30",
+      "research": "3 days",
+      "training": "4 days",
+      "prefStart": "20:00",
+      "prefTimes": [
+        {
+          "e": "23:30",
+          "s": "20:00"
+        },
+        {
+          "e": "23:30",
+          "s": "20:00"
+        },
+        {
+          "e": "23:30",
+          "s": "20:00"
+        }
+      ],
+      "construction": "2 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "23:30",
+            "s": "20:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "23:30",
+            "s": "20:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "23:30",
+            "s": "20:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "name": "Moha",
+      "pid": "",
+      "tg": 0,
+      "tgDust": 0,
+      "general": "",
+      "training": "",
+      "construction": "",
+      "research": "",
+      "total": "",
+      "prefStart": "22:45",
+      "prefEnd": "",
+      "prefTimes": [
+        {
+          "s": "22:45",
+          "e": ""
+        }
+      ],
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "s": "22:45",
+            "e": ""
+          }
+        ],
+        "4": [
+          {
+            "s": "22:45",
+            "e": ""
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "manual": true,
+      "id": 1779127680649,
+      "forDay": null,
+      "_scheduledDays": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1778963217851,
+      "tg": 0,
+      "pid": "",
+      "name": "686 Mustafa",
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "22:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "22:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": [
+          {
+            "e": "",
+            "s": "22:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778808163461,
+      "tg": 4139,
+      "pid": "102867557",
+      "name": "Chris Barbarossa",
+      "total": "",
+      "forDay": null,
+      "tgDust": 0,
+      "general": "159 days",
+      "prefEnd": "",
+      "research": "102 days",
+      "training": "147 days",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "89 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779031595980,
+      "tg": 984,
+      "pid": "120942569",
+      "name": "[IAM] Rainbowtacoo",
+      "total": "",
+      "forDay": null,
+      "tgDust": 898,
+      "general": "17day",
+      "prefEnd": "03:00",
+      "research": "14days",
+      "training": "25days",
+      "prefStart": "23:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "23:00"
+        }
+      ],
+      "construction": "13days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "03:00",
+            "s": "23:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "03:00",
+            "s": "23:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "03:00",
+            "s": "23:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        4
+      ]
+    }
+  ],
+  "queue": [
+    {
+      "id": 1779065918917,
+      "tg": 865,
+      "pid": "107684964",
+      "name": "THE Lopen",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 4519,
+      "general": "16 days",
+      "prefEnd": "04:00",
+      "research": "16 days",
+      "training": "18 days",
+      "prefStart": "02:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "02:00"
+        },
+        {
+          "e": "04:00",
+          "s": "02:00"
+        },
+        {
+          "e": "04:00",
+          "s": "02:00"
+        }
+      ],
+      "construction": "26 dats",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "02:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "04:00",
+            "s": "02:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "04:00",
+            "s": "02:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778616438664,
+      "tg": 1466,
+      "pid": "100803175",
+      "name": "[WTF] FRED",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "tgDust": 1176,
+      "general": "28 days",
+      "prefEnd": "12:00",
+      "research": "15 days",
+      "training": "22 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "12:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "31 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": [
+          {
+            "e": "12:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4
+      ]
+    },
+    {
+      "id": 1778678484992,
+      "tg": 2887,
+      "pid": "101770162",
+      "name": "MsMysteria",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1600,
+      "general": "30 days",
+      "prefEnd": "00:00",
+      "research": "7 days",
+      "training": "22 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "00:00"
+        },
+        {
+          "e": "00:00",
+          "s": "15:00"
+        },
+        {
+          "e": "00:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "73 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "15:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "00:00",
+            "s": "14:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778761827483,
+      "tg": 200,
+      "pid": "117665398",
+      "name": "Asur",
+      "_qDay": 4,
+      "total": "",
+      "forDay": null,
+      "tgDust": 1000,
+      "general": "24 day",
+      "prefEnd": "",
+      "research": "11days",
+      "training": "25 days",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "11 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778762071994,
+      "tg": 809,
+      "pid": "120795301",
+      "name": "LuhpastyWEB",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "tgDust": 1192,
+      "general": "24.2 days",
+      "prefEnd": "00:00",
+      "research": "15.6 days",
+      "training": "15.6 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "00:00"
+        },
+        {
+          "e": "00:00",
+          "s": "15:00"
+        }
+      ],
+      "construction": "15.6 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "15:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778810826742,
+      "tg": 0,
+      "pid": "",
+      "name": "TheReaper",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 2500,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "60 days",
+      "prefStart": "03:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "03:00"
+        },
+        {
+          "e": "",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "03:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        4,
+        2
+      ]
+    },
+    {
+      "id": 1778814355564,
+      "tg": 10699,
+      "pid": "180165273",
+      "name": "修罗神 chen",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 6900,
+      "general": "177 days",
+      "prefEnd": "06:00",
+      "research": "35 days",
+      "training": "70 days",
+      "prefStart": "03:00",
+      "prefTimes": [
+        {
+          "e": "06:00",
+          "s": "03:00"
+        }
+      ],
+      "construction": "45 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "06:00",
+            "s": "03:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        2,
+        1,
+        2
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778863794124,
+      "tg": 2153,
+      "pid": "102097809",
+      "name": "Silver Knight",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 468,
+      "general": "51days 15hrs 4 minutes",
+      "prefEnd": "23:30",
+      "research": "34days 7hrs 53minutes",
+      "training": "37days 20hrs",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "23:30",
+          "s": "00:00"
+        },
+        {
+          "e": "23:30",
+          "s": "00:00"
+        }
+      ],
+      "construction": "41days 21hrs 4 minutes",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "23:30",
+            "s": "00:00"
+          }
+        ],
+        "2": [],
+        "4": [
+          {
+            "e": "23:30",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1778948791815,
+      "tg": 0,
+      "pid": "",
+      "name": "Dumah",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "08:30",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "08:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "08:30"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        2,
+        2
+      ]
+    },
+    {
+      "id": 1778948907445,
+      "tg": 0,
+      "pid": "",
+      "name": "OldLady",
+      "_qDay": 4,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "15:30",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "15:30"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "15:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "",
+            "s": "15:30"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        2,
+        1
+      ]
+    },
+    {
+      "id": 1778950619971,
+      "tg": 1509,
+      "pid": "102900744",
+      "name": "[MYS] Agathors",
+      "_qDay": 4,
+      "total": "",
+      "forDay": null,
+      "tgDust": 1594,
+      "general": "28 days",
+      "prefEnd": "00:00",
+      "research": "12 days",
+      "training": "66 days",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "00:00",
+          "s": "16:00"
+        },
+        {
+          "e": "00:00",
+          "s": "16:00"
+        }
+      ],
+      "construction": "17 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "00:00",
+            "s": "16:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "00:00",
+            "s": "16:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1778963001202,
+      "tg": 1300,
+      "pid": "102343949",
+      "name": "[MYS] CactusKat",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1382,
+      "general": "41 day",
+      "prefEnd": "22:00",
+      "research": "15 days",
+      "training": "23 days",
+      "prefStart": "17:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "17:00"
+        },
+        {
+          "e": "22:00",
+          "s": "17:00"
+        },
+        {
+          "e": "22:00",
+          "s": "17:00"
+        }
+      ],
+      "construction": "27 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "17:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1778963053556,
+      "tg": 1000,
+      "pid": "101917247",
+      "name": "Queen999",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "tgDust": 1200,
+      "general": "56 days",
+      "prefEnd": "20:00",
+      "research": "54days",
+      "training": "63 days",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        },
+        {
+          "e": "20:00",
+          "s": "16:00"
+        }
+      ],
+      "construction": "33 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "20:00",
+            "s": "16:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": []
+    },
+    {
+      "id": 1778963217851,
+      "tg": 0,
+      "pid": "",
+      "name": "686 Mustafa",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "22:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "22:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": [
+          {
+            "e": "",
+            "s": "22:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        4
+      ]
+    },
+    {
+      "id": 1779027368120,
+      "tg": 0,
+      "pid": "",
+      "name": "Verd",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "14:00",
+      "research": "",
+      "training": "",
+      "prefStart": "14:00",
+      "prefTimes": [
+        {
+          "e": "14:00",
+          "s": "14:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "14:00",
+            "s": "14:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        2
+      ]
+    },
+    {
+      "id": 1779030328044,
+      "tg": 0,
+      "pid": "",
+      "name": "Finn",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "03:00",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "03:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "03:00",
+            "s": "00:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779034869221,
+      "tg": 2712,
+      "pid": "",
+      "name": "[IAM] °io°",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "tgDust": 1081,
+      "general": "32 day",
+      "prefEnd": "17:00",
+      "research": "21 days",
+      "training": "34 days",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "17:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "13 days",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": [
+          {
+            "e": "17:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        4
+      ]
+    },
+    {
+      "id": 1779041809460,
+      "tg": 4218,
+      "pid": "104768436",
+      "name": "Thomas",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2093,
+      "general": "86",
+      "prefEnd": "10:00",
+      "research": "52",
+      "training": "40",
+      "prefStart": "04:00",
+      "prefTimes": [
+        {
+          "e": "10:00",
+          "s": "04:00"
+        },
+        {
+          "e": "10:00",
+          "s": "04:00"
+        }
+      ],
+      "construction": "99",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "10:00",
+            "s": "04:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779044152719,
+      "tg": 0,
+      "pid": "104670249",
+      "name": "[WTF]SUN",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "15:00",
+      "research": "30",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "15:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "15:00",
+            "s": "00:00"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2"
+      ],
+      "submittedViaForm": true,
+      "_scheduledDays": [
+        2
+      ]
+    },
+    {
+      "id": 1779044331714,
+      "tg": 1425,
+      "pid": "103084431",
+      "name": "[WTF] La Lolo",
+      "_qDay": 4,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 3004,
+      "general": "87",
+      "prefEnd": "06:00",
+      "research": "13.5",
+      "training": "20",
+      "prefStart": "16:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "16:00"
+        },
+        {
+          "e": "06:00",
+          "s": "01:00"
+        },
+        {
+          "e": "22:00",
+          "s": "16:00"
+        },
+        {
+          "e": "06:00",
+          "s": "01:00"
+        },
+        {
+          "e": "22:00",
+          "s": "16:00"
+        },
+        {
+          "e": "06:00",
+          "s": "01:00"
+        }
+      ],
+      "construction": "30",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "16:00"
+          },
+          {
+            "e": "06:00",
+            "s": "01:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "16:00"
+          },
+          {
+            "e": "06:00",
+            "s": "01:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "16:00"
+          },
+          {
+            "e": "06:00",
+            "s": "01:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1,
+        2
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779046674253,
+      "tg": 1600,
+      "pid": "109593960",
+      "name": "IAM flyLadyLilo",
+      "_qDay": 4,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 0,
+      "general": "79",
+      "prefEnd": "19:30",
+      "research": "",
+      "training": "",
+      "prefStart": "19:00",
+      "prefTimes": [
+        {
+          "e": "19:30",
+          "s": "19:00"
+        }
+      ],
+      "construction": "19",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "19:30",
+            "s": "19:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ],
+      "_scheduledDays": [
+        1,
+        2
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779048923008,
+      "tg": 685,
+      "pid": "101262169",
+      "name": "Odin",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1177,
+      "general": "46 day",
+      "prefEnd": "23:30",
+      "research": "23 days",
+      "training": "16 days",
+      "prefStart": "21:30",
+      "prefTimes": [
+        {
+          "e": "23:30",
+          "s": "21:30"
+        }
+      ],
+      "construction": "23 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "23:30",
+            "s": "21:30"
+          }
+        ],
+        "2": [
+          {
+            "e": "23:30",
+            "s": "21:30"
+          }
+        ],
+        "4": [
+          {
+            "e": "23:30",
+            "s": "21:30"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_qDay": 1,
+      "_scheduledDays": [
+        2
+      ]
+    },
+    {
+      "id": 1779049567991,
+      "tg": 0,
+      "pid": "",
+      "name": "some100god",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "05:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "05:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "05:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779050042532,
+      "tg": 957,
+      "pid": "112927028",
+      "name": "SmokeyBear",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 1472,
+      "general": "72",
+      "prefEnd": "04:00",
+      "research": "64",
+      "training": "22",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "04:00",
+          "s": "00:00"
+        },
+        {
+          "e": "04:00",
+          "s": "00:00"
+        },
+        {
+          "e": "04:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "17",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "04:00",
+            "s": "00:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "04:00",
+            "s": "00:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "04:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1
+      ],
+      "submittedViaForm": true
+    },
+    {
+      "id": 1779051564609,
+      "tg": 2000,
+      "pid": "103228165",
+      "name": "Marcelitto",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": false,
+      "tgDust": 2000,
+      "general": "108",
+      "prefEnd": "22:00",
+      "research": "112",
+      "training": "73",
+      "prefStart": "19:00",
+      "prefTimes": [
+        {
+          "e": "22:00",
+          "s": "19:00"
+        },
+        {
+          "e": "22:00",
+          "s": "19:00"
+        },
+        {
+          "e": "22:00",
+          "s": "19:00"
+        }
+      ],
+      "construction": "93",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "22:00",
+            "s": "19:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "22:00",
+            "s": "19:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "22:00",
+            "s": "19:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "submittedViaForm": true,
+      "_scheduledDays": [
+        2
+      ]
+    },
+    {
+      "id": 1779052319260,
+      "tg": 0,
+      "pid": "",
+      "name": "DancesWithWolves",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "17:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "17:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "",
+            "s": "17:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779052673482,
+      "tg": 1046,
+      "pid": "104408302",
+      "name": "[WTF] Nira_ienuj",
+      "total": "",
+      "forDay": null,
+      "tgDust": 1012,
+      "general": "29 days",
+      "prefEnd": "13:00",
+      "research": "13 days",
+      "training": "18.5 days",
+      "prefStart": "12:00",
+      "prefTimes": [
+        {
+          "e": "13:00",
+          "s": "12:00"
+        }
+      ],
+      "construction": "24 days",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ],
+        "2": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "13:00",
+            "s": "12:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ]
+    },
+    {
+      "id": 1779060916262,
+      "tg": 0,
+      "pid": "",
+      "name": "IAM Lady io",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "17:00",
+      "research": "",
+      "training": "",
+      "prefStart": "00:00",
+      "prefTimes": [
+        {
+          "e": "17:00",
+          "s": "00:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": [
+          {
+            "e": "17:00",
+            "s": "00:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        4
+      ]
+    },
+    {
+      "id": 1779065991496,
+      "tg": 0,
+      "pid": "",
+      "name": "Hunter 214",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779066159860,
+      "tg": 0,
+      "pid": "",
+      "name": "1King A7med",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779072981026,
+      "tg": 0,
+      "pid": "",
+      "name": "Filler MystiBot",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": []
+    },
+    {
+      "id": 1779073012045,
+      "tg": 0,
+      "pid": "",
+      "name": "Jimbonz Filler",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779073033149,
+      "tg": 0,
+      "pid": "",
+      "name": "Melli licious filler",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779073114142,
+      "tg": 0,
+      "pid": "",
+      "name": "Nap Pro in spurs",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": []
+    },
+    {
+      "id": 1779073150162,
+      "tg": 0,
+      "pid": "",
+      "name": "Rayed",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779073193215,
+      "tg": 0,
+      "pid": "",
+      "name": "Zen Lou",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779073234971,
+      "tg": 0,
+      "pid": "",
+      "name": "Friend",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779073315560,
+      "tg": 0,
+      "pid": "",
+      "name": "Salah",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779075432997,
+      "tg": 0,
+      "pid": "",
+      "name": "Major",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "15:00",
+      "research": "",
+      "training": "",
+      "prefStart": "15:00",
+      "prefTimes": [
+        {
+          "e": "15:00",
+          "s": "15:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [
+          {
+            "e": "15:00",
+            "s": "15:00"
+          }
+        ],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779109735063,
+      "tg": 0,
+      "pid": "",
+      "name": "King",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "02:00",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "02:00"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "02:00"
+          }
+        ],
+        "4": [
+          {
+            "e": "",
+            "s": "02:00"
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": 1779111559720,
+      "tg": 0,
+      "pid": "",
+      "name": "Queso",
+      "_qDay": 2,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "",
+      "prefTimes": [],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 1",
+        "Day 2",
+        "Day 4"
+      ],
+      "_scheduledDays": [
+        1
+      ]
+    },
+    {
+      "id": 1779115580525,
+      "tg": 0,
+      "pid": "",
+      "name": "Satoshi",
+      "_qDay": 1,
+      "total": "",
+      "forDay": null,
+      "manual": true,
+      "tgDust": 0,
+      "general": "",
+      "prefEnd": "",
+      "research": "",
+      "training": "",
+      "prefStart": "02:45",
+      "prefTimes": [
+        {
+          "e": "",
+          "s": "02:45"
+        }
+      ],
+      "construction": "",
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "e": "",
+            "s": "02:45"
+          }
+        ],
+        "4": []
+      },
+      "requestedDays": [
+        "Day 2"
+      ],
+      "_scheduledDays": [
+        2
+      ]
+    },
+    {
+      "name": "Moha",
+      "pid": "",
+      "tg": 0,
+      "tgDust": 0,
+      "general": "",
+      "training": "",
+      "construction": "",
+      "research": "",
+      "total": "",
+      "prefStart": "22:45",
+      "prefEnd": "",
+      "prefTimes": [
+        {
+          "s": "22:45",
+          "e": ""
+        }
+      ],
+      "dayPrefTimes": {
+        "1": [],
+        "2": [
+          {
+            "s": "22:45",
+            "e": ""
+          }
+        ],
+        "4": [
+          {
+            "s": "22:45",
+            "e": ""
+          }
+        ]
+      },
+      "requestedDays": [
+        "Day 2",
+        "Day 4"
+      ],
+      "manual": true,
+      "id": 1779127680649,
+      "forDay": null,
+      "_qDay": 1,
+      "_scheduledDays": [
+        2,
+        4
+      ]
+    }
+  ]
+}
