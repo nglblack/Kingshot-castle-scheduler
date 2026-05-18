@@ -177,6 +177,10 @@ tbody td{padding:7px 12px;border-bottom:1px solid rgba(139,111,71,.1);vertical-a
 tbody td.t-name{overflow:visible;text-overflow:unset;white-space:normal;}
 .row-filled td{background:rgba(61,122,69,.05);}
 .row-filled:hover td{background:rgba(61,122,69,.1);}
+/* Schedule search highlight */
+.row-match td{background:rgba(139,105,20,.12) !important;outline:2px solid rgba(139,105,20,.4);outline-offset:-2px;}
+.row-no-match{opacity:.25;}
+
 /* Filler rows — muted amber style */
 .row-filler td{background:rgba(180,140,60,.07);}
 .row-filler:hover td{background:rgba(180,140,60,.14);}
@@ -194,10 +198,12 @@ tr:not(.row-filled):hover td{background:rgba(139,111,71,.05);}
 .col-pref-inline{font-size:10px;color:#6b4423;font-family:'Courier New',monospace;font-weight:600;}
 .col-bulk-chk{width:28px;text-align:center;padding:2px;}
 /* Bulk action bar */
-.bulk-bar{display:none;position:sticky;top:0;z-index:20;background:#4a3428;color:#f5ebe0;padding:7px 14px;align-items:center;gap:10px;flex-wrap:wrap;}
+.bulk-bar{display:none;position:sticky;top:0;z-index:20;background:#4a3428;color:#f5ebe0;padding:6px 10px;align-items:center;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;white-space:nowrap;}
 .bulk-bar.show{display:flex;}
-.bulk-bar-count{font-size:12px;font-weight:700;flex:1;}
-.bulk-bar-btn{padding:5px 12px;font-size:11px;font-weight:700;border-radius:6px;border:1.5px solid rgba(245,235,224,.3);background:rgba(245,235,224,.1);color:#f5ebe0;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;}
+.bulk-bar::-webkit-scrollbar{height:2px;}
+.bulk-bar::-webkit-scrollbar-thumb{background:rgba(245,235,224,.2);}
+.bulk-bar-count{font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap;}
+.bulk-bar-btn{padding:5px 10px;font-size:11px;font-weight:700;border-radius:6px;border:1.5px solid rgba(245,235,224,.3);background:rgba(245,235,224,.1);color:#f5ebe0;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;flex-shrink:0;}
 .bulk-bar-btn:hover{background:rgba(245,235,224,.2);}
 .bulk-bar-btn.warn{border-color:rgba(192,57,43,.5);color:#f08080;}
 .bulk-bar-btn.warn:hover{background:rgba(192,57,43,.2);}
@@ -680,6 +686,17 @@ True Gold: __126__
             <span class="open-ranges" id="open-ranges">—</span>
             <span class="open-count"  id="open-count"></span>
             <button class="btn sm" id="open-copy-btn" onclick="openCopyModal('d1')">📋 Copy</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:4px 12px 4px 0;">
+            <div style="position:relative;">
+              <input id="sched-search" type="text" placeholder="🔍 Find player…"
+                style="width:160px;padding:4px 28px 4px 10px;font-size:12px;background:#fff8f0;border:1.5px solid rgba(139,111,71,.2);border-radius:20px;color:#4a3428;outline:none;font-family:inherit;transition:all .2s;"
+                oninput="searchSchedule(this.value)"
+                onfocus="this.style.width='200px';this.style.borderColor='#8b6914'"
+                onblur="if(!this.value)this.style.width='160px';this.style.borderColor='rgba(139,111,71,.2)'">
+              <span id="sched-search-clear" onclick="clearSchedSearch()" style="display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);cursor:pointer;color:#8b7a5a;font-size:12px;font-weight:700;">✕</span>
+            </div>
+            <span id="sched-search-count" style="font-size:11px;color:#8b7a5a;white-space:nowrap;display:none;"></span>
           </div>
         </div>
         <div class="bulk-bar" id="bulk-bar">
@@ -2114,6 +2131,7 @@ function switchDay(day){
   const cCol=document.getElementById('col-c-col');
   if(cHdr) cHdr.textContent = 'Construction';
   if(cCol) cCol.style.width = '120px';
+  clearSchedSearch();
   renderGrid();
 }
 function renderGrid(){
@@ -2142,6 +2160,10 @@ function renderGrid(){
       const chk=document.createElement('input');chk.type='checkbox';chk.style.cursor='pointer';chk.style.accentColor='#8b6914';
       chk.dataset.day=currentDay;chk.dataset.idx=i;
       chk.addEventListener('change',()=>updateBulkBar());
+      // Stop click/touch from bubbling to the row's mobile action sheet listener
+      chk.addEventListener('click',e=>e.stopPropagation());
+      tdChk.addEventListener('click',e=>e.stopPropagation());
+      tdChk.addEventListener('touchend',e=>e.stopPropagation());
       tdChk.appendChild(chk);tr.appendChild(tdChk);
       // drag handle
       const tdH=document.createElement('td');tdH.className='td-handle';
@@ -2258,6 +2280,91 @@ function bulkSelectAll(checked) {
   document.querySelectorAll('#sched-body input[type=checkbox]').forEach(c=>c.checked=checked);
   updateBulkBar();
 }
+// ── Schedule search ──
+let schedSearchTerm = '';
+function searchSchedule(term) {
+  schedSearchTerm = term.trim().toLowerCase();
+  const clearBtn = document.getElementById('sched-search-clear');
+  const countEl  = document.getElementById('sched-search-count');
+  if (clearBtn) clearBtn.style.display = schedSearchTerm ? 'block' : 'none';
+
+  const rows = document.querySelectorAll('#sched-body tr');
+  let matches = 0, total = 0;
+
+  rows.forEach(tr => {
+    if (tr.classList.contains('row-filled') || tr.classList.contains('row-filler')) {
+      total++;
+      if (!schedSearchTerm) {
+        tr.classList.remove('row-match','row-no-match');
+      } else {
+        // Search in name cell (4th td — after chk, handle, time, name)
+        const nameCell = tr.querySelectorAll('td')[3];
+        const name = nameCell ? nameCell.textContent.toLowerCase() : '';
+        const isMatch = name.includes(schedSearchTerm);
+        tr.classList.toggle('row-match', isMatch);
+        tr.classList.toggle('row-no-match', !isMatch);
+        if (isMatch) {
+          matches++;
+          tr.scrollIntoView && false; // don't auto-scroll, let user see all matches
+        }
+      }
+    } else {
+      // open rows — dim when searching
+      tr.style.opacity = schedSearchTerm ? '0.35' : '';
+    }
+  });
+
+  if (countEl) {
+    if (schedSearchTerm && total > 0) {
+      countEl.textContent = matches + ' match' + (matches!==1?'es':'') + ' across all days';
+      countEl.style.display = matches > 0 ? 'inline' : 'inline';
+      countEl.style.color = matches > 0 ? '#3d7a45' : '#c0392b';
+    } else {
+      countEl.style.display = 'none';
+    }
+  }
+
+  // Also highlight across ALL days — search entire state
+  if (schedSearchTerm) highlightAllDays();
+}
+
+function highlightAllDays() {
+  // Show a cross-day summary toast
+  const term = schedSearchTerm;
+  const found = [];
+  [[1,state.day1,'Day 1'],[2,state.day2,'Day 2'],[4,state.day4,'Day 4']].forEach(([d,g,label])=>{
+    g.forEach((s,i)=>{
+      if(s&&s.name.toLowerCase().includes(term)) found.push(label+' '+slotTime(i));
+    });
+  });
+  const countEl = document.getElementById('sched-search-count');
+  if(countEl && term){
+    const totalMatches = found.length;
+    countEl.textContent = totalMatches + ' match'+(totalMatches!==1?'es':'')+' — '+found.join(', ');
+    countEl.style.display = totalMatches>0?'inline':'inline';
+    countEl.style.color = totalMatches>0?'#3d7a45':'#c0392b';
+    countEl.style.maxWidth='400px';
+    countEl.style.overflow='hidden';
+    countEl.style.textOverflow='ellipsis';
+    countEl.style.whiteSpace='nowrap';
+    countEl.title = found.join(', ');
+  }
+}
+
+function clearSchedSearch() {
+  const inp = document.getElementById('sched-search');
+  if(inp){ inp.value=''; inp.style.width='160px'; }
+  schedSearchTerm = '';
+  document.querySelectorAll('#sched-body tr').forEach(tr=>{
+    tr.classList.remove('row-match','row-no-match');
+    tr.style.opacity='';
+  });
+  const clearBtn=document.getElementById('sched-search-clear');
+  const countEl=document.getElementById('sched-search-count');
+  if(clearBtn) clearBtn.style.display='none';
+  if(countEl)  countEl.style.display='none';
+}
+
 function bulkClear() {
   document.querySelectorAll('#sched-body input[type=checkbox]').forEach(c=>c.checked=false);
   document.getElementById('bulk-select-all').checked=false;
