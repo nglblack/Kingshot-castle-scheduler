@@ -2175,10 +2175,19 @@ function renderGrid(){
       tdN.textContent=slot.name;
       if(slot.isFiller){const fb=document.createElement('span');fb.className='filler-badge';fb.textContent='F';tdN.appendChild(fb);}
       tr.appendChild(tdN);
-      // pref time — right after name
+      // pref time — right after name, show per-day if available
       const tdPrefInline=document.createElement('td');tdPrefInline.className='col-pref-inline';
-      if(slot.prefTimes&&slot.prefTimes.length){
-        tdPrefInline.textContent=slot.prefTimes.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?'–'+t.e:'')).join(' | ');
+      const dayKey=currentDay;
+      const dayPrefT = slot.dayPrefTimes&&slot.dayPrefTimes[dayKey]&&slot.dayPrefTimes[dayKey].length
+        ? slot.dayPrefTimes[dayKey] : null;
+      const allPrefT = slot.prefTimes&&slot.prefTimes.length ? slot.prefTimes : null;
+      if(dayPrefT){
+        // Show day-specific pref with label
+        const label='D'+dayKey+': ';
+        tdPrefInline.textContent=label+dayPrefT.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?'–'+t.e:'')).join('|');
+      } else if(allPrefT){
+        // Show all ranges, prefix with each day they apply to
+        tdPrefInline.textContent=allPrefT.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?'–'+t.e:'')).join(' | ');
       } else if(slot.prefStart){
         tdPrefInline.textContent=slot.prefStart+(slot.prefEnd&&slot.prefEnd!==slot.prefStart?'–'+slot.prefEnd:'');
       } else {
