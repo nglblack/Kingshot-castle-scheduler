@@ -767,6 +767,9 @@ True Gold: __126__
       </select>
       <button class="gp-act-btn move-btn" onclick="gpMove()">Move →</button>
     </div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;">
+      <button class="gp-act-btn" style="flex:1;font-size:11px;" onclick="gpInsertAbove()" title="Insert empty slot above — push this player and everyone below down one">↓ Insert above &amp; push down</button>
+    </div>
     <div style="margin-bottom:10px;">
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:7px 10px;background:rgba(180,140,60,.08);border:1.5px solid rgba(180,140,60,.25);border-radius:8px;">
         <input type="checkbox" id="gp-filler-chk" style="width:14px;height:14px;accent-color:#8b6914;cursor:pointer;" onchange="gpToggleFiller()">
@@ -2175,19 +2178,24 @@ function renderGrid(){
       tdN.textContent=slot.name;
       if(slot.isFiller){const fb=document.createElement('span');fb.className='filler-badge';fb.textContent='F';tdN.appendChild(fb);}
       tr.appendChild(tdN);
-      // pref time — right after name, show per-day if available
+      // pref time — show all windows stacked
       const tdPrefInline=document.createElement('td');tdPrefInline.className='col-pref-inline';
+      tdPrefInline.style.whiteSpace='normal';tdPrefInline.style.lineHeight='1.4';tdPrefInline.style.verticalAlign='middle';
       const dayKey=currentDay;
       const dayPrefT = slot.dayPrefTimes&&slot.dayPrefTimes[dayKey]&&slot.dayPrefTimes[dayKey].length
         ? slot.dayPrefTimes[dayKey] : null;
       const allPrefT = slot.prefTimes&&slot.prefTimes.length ? slot.prefTimes : null;
-      if(dayPrefT){
-        // Show day-specific pref with label
-        const label='D'+dayKey+': ';
-        tdPrefInline.textContent=label+dayPrefT.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?'–'+t.e:'')).join('|');
-      } else if(allPrefT){
-        // Show all ranges, prefix with each day they apply to
-        tdPrefInline.textContent=allPrefT.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?'–'+t.e:'')).join(' | ');
+      const prefSrc = dayPrefT || allPrefT;
+      if(prefSrc&&prefSrc.length){
+        const label = dayPrefT ? 'D'+dayKey+':' : '';
+        const lines = prefSrc.map(t=>t.s+(t.e&&t.e!==t.s&&t.e!==''?'–'+t.e:''));
+        if(lines.length===1){
+          tdPrefInline.textContent=(label?label+' ':'')+lines[0];
+        } else {
+          // Multiple windows — stack as separate divs
+          tdPrefInline.innerHTML=(label?'<span style="font-weight:700;color:#4a3428;">'+label+'</span><br>':'')+
+            lines.map(l=>'<span>'+l+'</span>').join('<br>');
+        }
       } else if(slot.prefStart){
         tdPrefInline.textContent=slot.prefStart+(slot.prefEnd&&slot.prefEnd!==slot.prefStart?'–'+slot.prefEnd:'');
       } else {
@@ -2409,11 +2417,47 @@ function bulkDelete(){
   toast('Removed from schedule.');
 }
 
+function insertSlot(day, idx) {
+  if (!isUnlocked) { openPinModal(); toast('🔒 Officer PIN required'); return; }
+  const grid = day===1?state.day1:day===2?state.day2:state.day4;
+  if (grid[47]) {
+    if (!confirm('The last slot ('+slotTime(47)+') is filled and will be pushed out. Continue?')) return;
+  }
+  for (let i=47; i>idx; i--) grid[i]=grid[i-1];
+  grid[idx]=null;
+  debouncedSave(); renderGrid(); renderQueue(); renderStats();
+  toast('Everyone from '+slotTime(idx)+' shifted down one slot.');
+}
+
+function pullSlotUp(day, idx) {
+  if (!isUnlocked) { openPinModal(); toast('🔒 Officer PIN required'); return; }
+  const grid = day===1?state.day1:day===2?state.day2:state.day4;
+  if (grid[idx]) { toast('This slot is filled — can only pull up an empty slot.'); return; }
+  // Shift everyone from idx+1 upward by 1, leave last slot empty
+  for (let i=idx; i<47; i++) grid[i]=grid[i+1];
+  grid[47]=null;
+  debouncedSave(); renderGrid(); renderQueue(); renderStats();
+  toast('Everyone from '+slotTime(idx+1)+' shifted up one slot.');
+}
+
 function gpToggleFiller(){
   const grid=gpDay===1?state.day1:gpDay===2?state.day2:state.day4;
   if(!grid[gpIdx]) return;
   grid[gpIdx].isFiller=document.getElementById('gp-filler-chk').checked;
   debouncedSave(); renderGrid();
+}
+function gpInsertAbove(){
+  if(!isUnlocked){openPinModal();toast('🔒 Officer PIN required');return;}
+  const grid=gpDay===1?state.day1:gpDay===2?state.day2:state.day4;
+  if(grid[47]){
+    if(!confirm('The last slot ('+slotTime(47)+') is filled and will be pushed out. Continue?'))return;
+  }
+  // Shift everyone from gpIdx down by 1
+  for(let i=47;i>gpIdx;i--) grid[i]=grid[i-1];
+  grid[gpIdx]=null;
+  closeGearPopover();
+  debouncedSave();renderGrid();renderQueue();renderStats();
+  toast('Empty slot inserted at '+slotTime(gpIdx)+' — everyone shifted down.');
 }
 function gpMove(){
   const v=parseInt(document.getElementById('gp-move-sel').value);if(isNaN(v)){toast('Pick a slot.');return;}
@@ -2569,6 +2613,18 @@ function actionSheetQueue() {
   closeActionSheet();
 }
 
+function actionSheetInsertAbove() {
+  if(!isUnlocked){openPinModal();toast('🔒 Officer PIN required');return;}
+  const grid=asDay===1?state.day1:asDay===2?state.day2:state.day4;
+  if(grid[47]){
+    if(!confirm('The last slot ('+slotTime(47)+') is filled and will be pushed out. Continue?'))return;
+  }
+  for(let i=47;i>asIdx;i--) grid[i]=grid[i-1];
+  grid[asIdx]=null;
+  closeActionSheet();
+  debouncedSave();renderGrid();renderQueue();renderStats();
+  toast('Empty slot inserted at '+slotTime(asIdx)+' — everyone shifted down.');
+}
 function actionSheetDelete() {
   deleteSlot(asDay, asIdx);
   closeActionSheet();
