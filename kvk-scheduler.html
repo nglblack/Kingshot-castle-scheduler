@@ -777,6 +777,10 @@ True Gold: __126__
         <span style="font-size:10px;color:#8b7a5a;margin-left:auto;">Shows italic + amber</span>
       </label>
     </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px;">
+      <button class="gp-act-btn" style="flex:1;font-size:13px;font-weight:900;" onclick="gpShift(-1)" title="Swap with slot above">▲ Move up</button>
+      <button class="gp-act-btn" style="flex:1;font-size:13px;font-weight:900;" onclick="gpShift(1)"  title="Swap with slot below">▼ Move down</button>
+    </div>
     <div class="gp-act-row">
       <button class="gp-act-btn" onclick="gpQueue()">↩ Return to queue</button>
       <button class="gp-act-btn del-btn" onclick="gpDelete()">✕ Remove</button>
@@ -2452,6 +2456,22 @@ function pullSlotUp(day, idx) {
   toast('Everyone from '+slotTime(idx+1)+' shifted up one slot.');
 }
 
+function gpShift(dir) {
+  const grid = gpDay===1?state.day1:gpDay===2?state.day2:state.day4;
+  const newIdx = gpIdx + dir;
+  if (newIdx < 0 || newIdx > 47) { toast('Already at the ' + (dir<0?'top':'bottom') + '.'); return; }
+  // Swap — works whether target is empty or filled
+  const tmp = grid[newIdx];
+  grid[newIdx] = grid[gpIdx];
+  grid[gpIdx] = tmp;
+  gpIdx = newIdx; // follow the player
+  debouncedSave(); renderGrid(); renderQueue(); renderStats();
+  // Re-open popover at new position so user can keep pressing ▲▼
+  const newBtn = document.querySelector('#sched-body tr[data-idx="'+newIdx+'"] .gear-btn');
+  if(newBtn) openActionSheet(gpDay, newIdx, newBtn);
+  else { closeGearPopover(); toast('Moved ' + (dir<0?'up':'down') + '.'); }
+}
+
 function gpToggleFiller(){
   const grid=gpDay===1?state.day1:gpDay===2?state.day2:state.day4;
   if(!grid[gpIdx]) return;
@@ -2627,6 +2647,22 @@ function actionSheetMove() {
 function actionSheetQueue() {
   returnToQueue(asDay, asIdx);
   closeActionSheet();
+}
+
+function asShift(dir) {
+  const grid = asDay===1?state.day1:asDay===2?state.day2:state.day4;
+  const newIdx = asIdx + dir;
+  if (newIdx < 0 || newIdx > 47) { toast('Already at the '+(dir<0?'top':'bottom')+'.'); return; }
+  const tmp = grid[newIdx]; grid[newIdx] = grid[asIdx]; grid[asIdx] = tmp;
+  asIdx = newIdx;
+  debouncedSave(); renderGrid(); renderQueue(); renderStats();
+  // Update action sheet to reflect new position
+  const newSlot = grid[newIdx];
+  if(newSlot) {
+    document.getElementById('as-name').textContent = newSlot.name + (newSlot.pid?' #'+newSlot.pid:'');
+    document.getElementById('as-time').textContent = slotTime(newIdx)+' – '+slotEnd(newIdx)+' UTC · Day '+asDay;
+  }
+  toast('Moved '+(dir<0?'up':'down')+'.');
 }
 
 function actionSheetInsertAbove() {
