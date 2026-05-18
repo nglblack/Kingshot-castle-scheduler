@@ -1287,19 +1287,39 @@ async function cloudSave() {
     .select().single();
 
   if (error || !data) {
-    // Conflict — someone else saved since we last loaded. Don't overwrite.
     ignoreNext = Math.max(0, ignoreNext - 1);
-    setSyncStatus('error');
-    console.warn('Save conflict: DB version ahead of ours (v'+scheduleVer+'). Reloading.');
+    console.warn('Save conflict: DB version ahead of ours (v'+scheduleVer+'). Reloading and retrying.');
 
-    // Reload DB version as authoritative — DO NOT merge, just take what's there
+    // Reload current DB state
     const { data: fresh } = await sb.from(TABLE).select('*').eq('id', scheduleId).single();
-    if (fresh) {
+    if (!fresh) { setSyncStatus('error'); return; }
+
+    // Keep our local changes (grids + queue) but update version to match DB
+    // Then retry the save with the correct version
+    scheduleVer = fresh.version;
+    ignoreNext++;
+    const { data: retry, error: retryErr } = await sb.from(TABLE)
+      .update({
+        day1: state.day1, day2: state.day2, day4: state.day4,
+        queue: state.queue, version: scheduleVer + 1,
+        pin_hash: schedulePinHash || null
+      })
+      .eq('id', scheduleId)
+      .eq('version', scheduleVer)
+      .select().single();
+
+    if (retryErr || !retry) {
+      // Still conflicting — give up and take server version
+      ignoreNext = Math.max(0, ignoreNext - 1);
       applyRow(fresh);
       renderQueue(); renderGrid(); renderStats();
       setSyncStatus('live');
-      setSaveInfo('⚠️ Conflict — schedule reloaded from cloud (v'+fresh.version+')');
-      toast('⚠️ Another user saved while you were editing. Schedule reloaded — your local snapshot is preserved in 💾 Export.');
+      setSaveInfo('⚠️ Conflict — reloaded from cloud');
+      toast('⚠️ Another user saved at the same time — schedule reloaded. Check 💾 Export to recover your changes.');
+    } else {
+      scheduleVer = retry.version;
+      setSaveInfo('Saved ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+      setSyncStatus('live');
     }
     return;
   }
@@ -1369,21 +1389,22 @@ function subscribeRealtime(id) {
     }, payload => {
       if (ignoreNext > 0) { ignoreNext--; return; }   // our own write — skip
       const row = payload.new;
-      // Only apply if incoming version is newer than what we have
-      if (row.version <= scheduleVer) {
+      // Only ignore truly stale updates (strictly older)
+      if (row.version < scheduleVer) {
         console.log('Ignoring stale realtime update v'+row.version+' (have v'+scheduleVer+')');
         return;
       }
-      // Snapshot current state before overwriting with incoming update
+      // Snapshot before overwriting
       saveSnapshot('before-remote-update');
-      state.day1  = (Array.isArray(row.day1)&&row.day1.length===48) ? row.day1 : new Array(48).fill(null);
-      state.day2  = (Array.isArray(row.day2)&&row.day2.length===48) ? row.day2 : new Array(48).fill(null);
-      state.day4  = (Array.isArray(row.day4)&&row.day4.length===48) ? row.day4 : new Array(48).fill(null);
-      state.queue = row.queue || [];
+      const prevDay1 = state.day1, prevDay2 = state.day2, prevDay4 = state.day4, prevQueue = state.queue;
+      state.day1  = (Array.isArray(row.day1)&&row.day1.length===48) ? row.day1 : state.day1;
+      state.day2  = (Array.isArray(row.day2)&&row.day2.length===48) ? row.day2 : state.day2;
+      state.day4  = (Array.isArray(row.day4)&&row.day4.length===48) ? row.day4 : state.day4;
+      state.queue = Array.isArray(row.queue) ? row.queue : state.queue;
       scheduleVer = row.version;
       renderQueue(); renderGrid(); renderStats();
       setSaveInfo('Updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) + ' by another user');
-      toast('📡 Schedule updated by another user — previous state saved in 💾 Export');
+      toast('📡 Schedule updated by another user');
     })
     .subscribe(status => {
       if (status === 'SUBSCRIBED') setSyncStatus('live');
